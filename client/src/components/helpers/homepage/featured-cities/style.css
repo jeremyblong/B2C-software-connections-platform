@@ -1,0 +1,24 @@
+#miami {
+    background-image: url("../../../../assets/images/miami.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#NYC {
+    background-image: url("../../../../assets/images/new-york.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#LA {
+    background-image: url("../../../../assets/images/la.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+#san-fran {
+    background-image: url("../../../../assets/images/san-fran.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+.overlay-blue {
+    background-color: blue !important;
+    color: white !important;
+}

@@ -1,0 +1,2 @@
+export const AUTH = "AUTH";
+export const HOTEL_BOOKING_DATA_SEARCH = "HOTEL_BOOKING_DATA_SEARCH";

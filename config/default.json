@@ -1,0 +1,3 @@
+{
+    "mongoURI": "mongodb://jeremyablong:jeremyablong@cluster0-shard-00-00.dds2b.mongodb.net:27017,cluster0-shard-00-01.dds2b.mongodb.net:27017,cluster0-shard-00-02.dds2b.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-130tw6-shard-0&authSource=admin&retryWrites=true&w=majority"
+}

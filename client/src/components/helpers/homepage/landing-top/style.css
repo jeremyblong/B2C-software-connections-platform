@@ -1,0 +1,16 @@
+#banner-one:before {
+    background-image: url(../../../../assets/images/landing-2.jpg) !important;
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    min-height: 80vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    background-blend-mode: multiply;
+}
+.counter {
+    color: blue !important;
+}
+@media only screen and (max-width: 800px) {
+    .intro-search-field {
+        margin-top: 100px !important;
+    }
+}
