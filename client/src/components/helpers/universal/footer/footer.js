@@ -1,53 +1,54 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import { Link } from "react-router-dom";
 
 class FooterFooter extends Component {
     render() {
         return (
             <div>
                 <div id="footer">
-                    <div class="footer-top-section">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xl-12">
-                                    <div class="footer-rows-container">
-                                        <div class="footer-rows-left">
-                                            <div class="footer-row">
-                                                <div class="footer-row-inner footer-logo">
+                    <div className="footer-top-section">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xl-12">
+                                    <div className="footer-rows-container">
+                                        <div className="footer-rows-left">
+                                            <div className="footer-row">
+                                                <div className="footer-row-inner footer-logo">
                                                     {/* logo goes here... */}
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="footer-rows-right">
-                                            <div class="footer-row">
-                                                <div class="footer-row-inner">
-                                                    <ul class="footer-social-links">
+                                        <div className="footer-rows-right">
+                                            <div className="footer-row">
+                                                <div className="footer-row-inner">
+                                                    <ul className="footer-social-links">
                                                         <li>
                                                             <a href="#" title="Facebook" data-tippy-placement="bottom" data-tippy-theme="light">
-                                                                <i class="icon-brand-facebook-f"></i>
+                                                                <i className="icon-brand-facebook-f"></i>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="#" title="Twitter" data-tippy-placement="bottom" data-tippy-theme="light">
-                                                                <i class="icon-brand-twitter"></i>
+                                                                <i className="icon-brand-twitter"></i>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="#" title="Google Plus" data-tippy-placement="bottom" data-tippy-theme="light">
-                                                                <i class="icon-brand-google-plus-g"></i>
+                                                                <i className="icon-brand-google-plus-g"></i>
                                                             </a>
                                                         </li>
                                                         <li>
                                                             <a href="#" title="LinkedIn" data-tippy-placement="bottom" data-tippy-theme="light">
-                                                                <i class="icon-brand-linkedin-in"></i>
+                                                                <i className="icon-brand-linkedin-in"></i>
                                                             </a>
                                                         </li>
                                                     </ul>
-                                                    <div class="clearfix"></div>
+                                                    <div className="clearfix"></div>
                                                 </div>
                                             </div>
-                                            <div class="footer-row">
-                                                <div class="footer-row-inner">
-                                                    <select class="selectpicker language-switcher" data-selected-text-format="count" data-size="5">
+                                            <div className="footer-row">
+                                                <div className="footer-row-inner">
+                                                    <select className="selectpicker language-switcher" data-selected-text-format="count" data-size="5">
                                                         <option selected>English</option>
                                                         <option>Français</option>
                                                         <option>Español</option>
@@ -61,11 +62,11 @@ class FooterFooter extends Component {
                             </div>
                         </div>
                     </div>
-                    <div class="footer-middle-section">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xl-2 col-lg-2 col-md-3">
-                                    <div class="footer-links">
+                    <div className="footer-middle-section">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xl-2 col-lg-2 col-md-3">
+                                    <div className="footer-links">
                                         <h3>For Candidates</h3>
                                         <ul>
                                             <li><a href="#"><span>Browse Jobs</span></a></li>
@@ -75,8 +76,8 @@ class FooterFooter extends Component {
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-3">
-                                    <div class="footer-links">
+                                <div className="col-xl-2 col-lg-2 col-md-3">
+                                    <div className="footer-links">
                                         <h3>For Employers</h3>
                                         <ul>
                                             <li><a href="#"><span>Browse Candidates</span></a></li>
@@ -86,18 +87,18 @@ class FooterFooter extends Component {
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-3">
-                                    <div class="footer-links">
+                                <div className="col-xl-2 col-lg-2 col-md-3">
+                                    <div className="footer-links">
                                         <h3>Helpful Links</h3>
                                         <ul>
-                                            <li><a href="#"><span>Contact</span></a></li>
+                                            <li><Link to="/contact"><span>Contact</span></Link></li>
                                             <li><a href="#"><span>Privacy Policy</span></a></li>
                                             <li><a href="#"><span>Terms of Use</span></a></li>
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-xl-2 col-lg-2 col-md-3">
-                                    <div class="footer-links">
+                                <div className="col-xl-2 col-lg-2 col-md-3">
+                                    <div className="footer-links">
                                         <h3>Account</h3>
                                         <ul>
                                             <li><a href="#"><span>Log In</span></a></li>
@@ -105,21 +106,21 @@ class FooterFooter extends Component {
                                         </ul>
                                     </div>
                                 </div>
-                                <div class="col-xl-4 col-lg-4 col-md-12">
-                                    <h3><i class="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
+                                <div className="col-xl-4 col-lg-4 col-md-12">
+                                    <h3><i className="icon-feather-mail"></i> Sign Up For a Newsletter</h3>
                                     <p>Weekly breaking news, analysis and cutting edge advices on job searching.</p>
-                                    <form action="#" method="get" class="newsletter">
+                                    <form action="#" method="get" className="newsletter">
                                         <input type="text" name="fname" placeholder="Enter your email address"/>
-                                        <button type="submit"><i class="icon-feather-arrow-right"></i></button>
+                                        <button type="submit"><i className="icon-feather-arrow-right"></i></button>
                                     </form>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="footer-bottom-section">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-xl-12">
+                    <div className="footer-bottom-section">
+                        <div className="container">
+                            <div className="row">
+                                <div className="col-xl-12">
                                     © 2019 <strong>[Company Name Here...]</strong>. All Rights Reserved.
                                 </div>
                             </div>

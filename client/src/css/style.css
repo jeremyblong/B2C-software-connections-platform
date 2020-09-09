@@ -783,7 +783,7 @@ a.header-notifications-button i {
 .user-avatar img {
 	width: 100%;
 	display: inline-block;
-	border-radius: 50%;
+	border-radius: 40%;
 	image-rendering: -webkit-optimize-contrast;
 }
 

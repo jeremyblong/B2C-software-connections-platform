@@ -5,11 +5,11 @@ class LandingTopHelper extends Component {
     render() {
         return (
             <div>
-                <div class="intro-banner" id="banner-one">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="banner-headline">
+                <div className="intro-banner" id="banner-one">
+                    <div className="container">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="banner-headline">
                                     <h3>
                                         <strong className="text-white"><strong style={{ color: "blue" }}>Hire experts</strong> or be hired for <strong style={{ color: "blue" }}>any</strong> job, any time.</strong>
                                         <br/>
@@ -18,39 +18,39 @@ class LandingTopHelper extends Component {
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="intro-banner-search-form margin-top-95">
-                                    <div class="intro-search-field with-autocomplete">
-                                        <label for="autocomplete-input" class="field-title ripple-effect">Where?</label>
-                                        <div class="input-with-icon">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <div className="intro-banner-search-form margin-top-95">
+                                    <div className="intro-search-field with-autocomplete">
+                                        <label for="autocomplete-input" className="field-title ripple-effect">Where?</label>
+                                        <div className="input-with-icon">
                                             <input id="autocomplete-input" type="text" placeholder="Online Job"/>
-                                            <i class="icon-material-outline-location-on"></i>
+                                            <i className="icon-material-outline-location-on"></i>
                                         </div>
                                     </div>
-                                    <div class="intro-search-field">
-                                        <label for ="intro-keywords" class="field-title ripple-effect">What job you want?</label>
+                                    <div className="intro-search-field">
+                                        <label for ="intro-keywords" className="field-title ripple-effect">What job you want?</label>
                                         <input id="intro-keywords" type="text" placeholder="Job Title or Keywords"/>
                                     </div>
-                                    <div class="intro-search-button">
-                                        <button class="button ripple-effect" onclick="window.location.href='jobs-list-layout-full-page-map.html'">Search</button>
+                                    <div className="intro-search-button">
+                                        <button className="button ripple-effect" onclick="window.location.href='jobs-list-layout-full-page-map.html'">Search</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-md-12">
-                                <ul class="intro-stats margin-top-45 hide-under-992px">
+                        <div className="row">
+                            <div className="col-md-12">
+                                <ul className="intro-stats margin-top-45 hide-under-992px">
                                     <li className="custom-list-item">
-                                        <strong class="counter">1,586</strong>
+                                        <strong className="counter">1,586</strong>
                                         <span className="text-white">Jobs Posted</span>
                                     </li>
                                     <li className="custom-list-item">
-                                        <strong class="counter">3,543</strong>
+                                        <strong className="counter">3,543</strong>
                                         <span className="text-white">Tasks Posted</span>
                                     </li>
                                     <li className="custom-list-item">
-                                        <strong class="counter">1,232</strong>
+                                        <strong className="counter">1,232</strong>
                                         <span className="text-white">Freelancers</span>
                                     </li>
                                 </ul>

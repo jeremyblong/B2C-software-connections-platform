@@ -1,0 +1,165 @@
+.header-notifications-content {
+    min-width: 50vw !important;
+    max-height: 350px !important;
+    background-color: white !important;
+}
+#change {
+    max-width: 100px !important;
+}
+#Popover1 {
+    padding-left: 13px;
+}
+#list {
+    max-height: 300px;
+    overflow-y: scroll !important;
+}
+.btn-blue {
+    background-color: blue !important;
+    color: white !important;
+}
+#circle {
+    background-color: blue;
+    color: white;
+    padding: 5px;
+    border-radius: 25px;
+}
+.main {
+    margin-left: -500px !important;
+}
+.popover-body {
+    border: 2px solid grey;
+}
+.header-widget {
+    border-left: none !important;
+}
+.popover-header {
+    border: 2px solid grey;
+}
+
+@media only screen and (max-width: 750px) {
+    .header-notifications-content {
+        min-width: 100vw !important;
+    }
+    #circle {
+        background-color: blue;
+        color: white;
+        padding: 5px;
+        border-radius: 25px;
+    }
+    .main {
+        margin-left: 13px !important;
+        width: 100vw !important;
+    }
+}
+@media only screen and (min-width: 751px) and (max-width: 1100px) {
+    .header-notifications-content {
+        min-width: 80vw !important;
+    }
+
+    #circle {
+        background-color: blue;
+        color: white;
+        padding: 5px;
+        border-radius: 25px;
+    }
+    .main {
+        margin-left: -35% !important;
+        width: 80vw !important;
+    }
+    .popover-body {
+        border: 2px solid grey;
+    }
+    .popover-header {
+        border: 2px solid grey;
+    }
+    .popover-inner {
+        width: 80vw !important;
+        border:none !important;
+        box-shadow:none !important;
+        outline:none !important;
+    }
+    .popover {
+        border:none !important;
+        box-shadow:none !important;
+        outline:none !important;
+    }
+}
+@media only screen and (min-width: 1000px) and (max-width: 1099px) {
+    .header-notifications-content {
+        min-width: 80vw !important;
+    }
+    #circle {
+        background-color: blue;
+        color: white;
+        padding: 5px;
+        border-radius: 25px;
+    }
+    .main {
+        margin-left: -40% !important;
+        width: 80vw !important;
+    }
+    .popover-body {
+        border: 2px solid grey;
+    }
+    .popover-header {
+        border: 2px solid grey;
+    }
+    .popover-inner {
+        width: 80vw !important;
+        border:none !important;
+        box-shadow:none !important;
+        outline:none !important;
+    }
+    .popover {
+        border:none !important;
+        box-shadow:none !important;
+        outline:none !important;
+    }
+}
+@media only screen and (max-width: 550px) {
+    .header-widget {
+        display: none !important;
+    }
+}
+#special-move-left {
+    margin-left: -250px !important;
+    min-width: 350px !important;
+    margin-top: 23px !important;
+}
+.drop-drop {
+    list-style-type: square;
+}
+@media only screen and (max-width: 875px) {
+    .header-widget {
+        display: none !important;
+    }
+}
+.user-avatar-main {
+    margin-right: -50px !important;
+}
+.arrow {
+    display: none !important;
+}
+.body-popover {
+    background-color: white !important;
+}
+.nav-link-special {
+    list-style-type: none;
+}
+.user-avatar-main {
+    min-width: 50px !important;
+    min-height: 0px !important;
+    bottom: -20px;
+}
+#profile-pic {
+    min-height: 40px !important;
+    min-width: 40px !important;
+}
+.bs-popover-auto {
+    background-color: transparent !important;
+    border: none !important;
+}
+.status-online:after {
+    right: 0px !important;
+    bottom: -5px !important;
+}

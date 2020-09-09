@@ -5,7 +5,7 @@ const fs = require('fs');
 const mongo = require("mongodb");
 const config = require("config");
 const cors = require('cors');
-const User = require("../../models-schemas/auth/register.js");
+const User = require("../../schemas/auth/register.js");
 const S3 = require('aws-sdk/clients/s3');
 const AWS = require('aws-sdk');
 const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
@@ -31,37 +31,27 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
         const collection = db.collection("users");
 
-        const { 
-            firstName, 
-            lastName, 
-            country, 
-            zipCode, 
-            email, 
-            password, 
-            message,
-            avatar
-        } = req.body;
+        const { email, accountType, password, username, experience, phoneNumber, avatar } = req.body;
 
         console.log(req.body);
 
         const bufferImage = new Buffer(avatar.replace(/^data:image\/\w+;base64,/, ""),'base64');
 
         const UserData = new User({
-            firstName: firstName.trim(),
-            lastName: lastName.trim(),
+            username: username.trim(),
+            accountType: accountType.trim(),
             password: password.trim(),
             email: email.toLowerCase().trim(),
-            country: country.trim(),
+            experience: experience.trim(),
             // phoneNumber: phoneNumber.replace(/[- )(]/g,''),
             avatar: generatedID,
             profilePics: [{
                 date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
                 picture: generatedID,
-                poster: `${firstName} ${lastName}`,
+                poster: username,
                 id: uuidv4()
             }],
-            zipCode: zipCode.trim(),
-            message: message.trim()
+            phoneNumber: phoneNumber.trim()
         });
         
         UserData.save((err, data) => {
@@ -70,7 +60,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
             } else {
                 s3.putObject({
                     Body: bufferImage,
-                    Bucket: "hotel-booking-app",
+                    Bucket: "software-gateway-platform",
                     Key: generatedID,
                     ContentEncoding: 'base64'
                 }, (errorr, dataaa) => {

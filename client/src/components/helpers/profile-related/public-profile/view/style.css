@@ -1,0 +1,11 @@
+.apply-now-button {
+    background-color: blue !important;
+}
+.boxed-list-headline {
+    background-color: blue !important;
+}
+.boxed-list-headline:hover {
+    background-color: grey !important;
+    transition-duration: 0.5s;
+    transition: 0.5s ease-out;
+}
