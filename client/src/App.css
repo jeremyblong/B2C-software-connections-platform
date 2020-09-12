@@ -36,3 +36,19 @@
     transform: rotate(360deg);
   }
 }
+.black-btn {
+  background-color: black !important;
+  color: white !important;
+}
+.red-btn {
+  background-color: darkred !important;
+}
+.red-btn:hover {
+  background-color: grey !important;
+}
+.blue-btn:hover {
+  background-color: lightblue !important;
+  color: black !important;
+  border: 2px solid black !important;
+  transition-delay: 0.5ms;
+}

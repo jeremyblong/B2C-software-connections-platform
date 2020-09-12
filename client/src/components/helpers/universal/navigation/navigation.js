@@ -69,22 +69,20 @@ const Navigation = (props) => {
     }, 500);
   }
   const renderContent = () => {
-      if (props.avatar) {
-          console.log("props.avatar", props.avatar)
-      }
+      console.log("PROPS ------------ ", props);
       if (props.email) {
           return (
                 <Fragment>
                     <div className="header-widget">
                         <div className="header-notifications user-menu">
                             <div className="header-notifications-trigger">
-                                <a id="Popover3" onClick={toggleThirdPopover}><div className="user-avatar user-avatar-main status-online"><img id="profile-pic" src={props.avatar ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${props.avatar}` : "/images/user-avatar-small-01.jpg"} alt="random" /></div></a>
+                                <a id="Popover3" onClick={toggleThirdPopover}><div className="user-avatar user-avatar-main status-online"><img id="profile-pic" src={props.profilePics ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${props.profilePics[props.profilePics.length - 1].picture}` : "/images/user-avatar-small-01.jpg"} alt="random" /></div></a>
                             </div>
                             <Popover id="special-move-left" placement="bottom" isOpen={popoverOpenThree} target="Popover3">
                                     <PopoverHeader>
                                         <div className="user-status">
                                             <div className="user-details">
-                                                <div className="user-avatar status-online"><img id="profile-pic" src={props.avatar ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${props.avatar}` : "/images/user-avatar-small-01.jpg"} alt="random" /></div>
+                                                <div className="user-avatar status-online"><img id="profile-pic" src={props.profilePics ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${props.profilePics[props.profilePics.length - 1].picture}` : "/images/user-avatar-small-01.jpg"} alt="random" /></div>
                                                 <div className="user-name">
                                                     {props.username ? props.username : "----"} <span> {props.accountType ? `${props.accountType} account`: "----"}</span>
                                                 </div>
@@ -101,7 +99,7 @@ const Navigation = (props) => {
                                         <div className="drop-drop">           
                                             <ul className="user-menu-small-nav">
                                                 <li><Link style={{ color: "black" }} to="/dashboard"><i className="icon-material-outline-dashboard"></i> Dashboard</Link></li>
-                                                <li><a href="/"><i className="icon-material-outline-settings"></i> Settings</a></li>
+                                                <li><Link style={{ color: "black" }} to="/dashboard/settings/main"><i className="icon-material-outline-settings"></i> Settings</Link></li>
                                                 <li><Link style={{ color: "black" }} to="/view/personal/profile"><i className="icon-material-outline-dashboard"></i>View Public Profile</Link></li>
                                                 {props.email ? <li><button onClick={logUserOut} style={{ color: "white", width: "80%" }} className="btn blue-btn">Log-Out</button> </li> : null}
                                             </ul>
@@ -302,9 +300,9 @@ const Navigation = (props) => {
                 <DropdownItem>
                     <Link className="dropdown-link" to="/">Find A Developer</Link>
                 </DropdownItem>
-                <DropdownItem className="dropdown-link">
-                    <Link className="dropdown-link" to="/">General Account Settings</Link>
-                </DropdownItem>
+                {props.accountType === "business" ? <DropdownItem className="dropdown-link">
+                    <Link className="dropdown-link" to="/businesses/post/job/listing">Post A Job Listing</Link>
+                </DropdownItem> : null}
                 <DropdownItem className="dropdown-link" divider />
                 <DropdownItem>
                     <Link className="dropdown-link" to="/">Profile</Link>
@@ -328,23 +326,7 @@ const Navigation = (props) => {
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-            <UncontrolledDropdown className="drop" nav inNavbar>
-              <DropdownToggle className="link" nav caret>
-                DropDown Two
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>
-                    <Link className="dropdown-link" to="/">Marriot - Dummy link</Link>
-                </DropdownItem>
-                <DropdownItem className="dropdown-link">
-                    <Link className="dropdown-link" to="/">General Account Settings</Link>
-                </DropdownItem>
-                <DropdownItem className="dropdown-link" divider />
-                <DropdownItem>
-                    <Link className="dropdown-link" to="/">Profile</Link>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
+            
             
             {props.auth === true ? <UncontrolledDropdown className="drop" nav inNavbar>
               <DropdownToggle style={{ color: "blue" }} className="link" nav caret>
@@ -374,24 +356,21 @@ const Navigation = (props) => {
   );
 }
 const mapStateToProps = state => {
-  console.log("state.... :", state);
   for (const key in state.auth) {
     const obj = state.auth;
-    console.log("obj", obj);
     if (obj.authenticated.hasOwnProperty("email")) {
-      console.log("has email...");
       return {
         auth: true,
         email: state.auth.authenticated.email,
-        avatar: state.auth.authenticated.avatar,
         username: state.auth.authenticated.username,
+        accountType: state.auth.authenticated.accountType,
+        profilePics: state.auth.authenticated.profilePics,
         accountType: state.auth.authenticated.accountType
       }
     } else {
-      console.log("doesnt have email");
-      return {
-        auth: false
-      }
+        return {
+            auth: false
+        }
     }
   }
 }

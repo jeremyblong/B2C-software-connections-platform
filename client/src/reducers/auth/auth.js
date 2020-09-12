@@ -1,7 +1,10 @@
 import { AUTH } from "../../actions/types.js";
 
 const initialState = {
-
+	authenticated: {
+		email: "",
+		username: ""
+	}
 }
  
 export default (state = initialState, action) => {

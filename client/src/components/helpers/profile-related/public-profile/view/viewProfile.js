@@ -54,10 +54,10 @@ constructor(props) {
     renderContent = () => {
         const { user } = this.state;
 
-        if (this.state.user !== null) {
+        if (user !== null) {
             return (
                <Fragment>
-                    <div className="single-page-header freelancer-header" data-background-image="images/single-freelancer.jpg">
+                    <div className="single-page-header freelancer-header">
                     <div className="container">
                         <div className="row">
                             <div className="col-md-12">
@@ -68,7 +68,7 @@ constructor(props) {
                                             <h3>{user.username} <span> {`${user.experience} years of experience`}</span></h3>
                                             <ul>
                                                 <li><div className="star-rating" data-rating="5.0"></div></li>
-                                                <li><img className="flag" src="/images/flags/de.svg" alt=""/> Germany</li>
+                                                {user.nationality ? <li><i class="fa fa-globe"></i> {user.nationality}</li> : <li>No Nationality Specified...</li>}
                                                 <li><div className="verified-badge-with-title">Verified</div></li>
                                             </ul>
                                         </div>
@@ -83,9 +83,7 @@ constructor(props) {
                         <div className="col-xl-8 col-lg-8 content-right-offset">
                             <div className="single-page-section">
                                 <h3 className="margin-bottom-25">About Me</h3>
-                                <p>Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.</p>
-
-                                <p>Capitalize on low hanging fruit to identify a ballpark value added activity to beta test. Override the digital divide with additional clickthroughs from DevOps. Nanotechnology immersion along the information highway will close the loop on focusing solely on the bottom line.</p>
+                                {this.state.user.introduction ? <p>{this.state.user.introduction}</p> : <p>This user has not completed their profile "about-me" section yet...</p>}
                             </div>
                             <div className="boxed-list margin-bottom-60">
                                 <div className="boxed-list-headline">
@@ -216,7 +214,7 @@ constructor(props) {
                                 
               
                                 <div className="profile-overview">
-                                    <div className="overview-item"><strong>$35</strong><span>Hourly Rate</span></div>
+                                    {user.hourlyRate ? <div className="overview-item"><strong>${user.hourlyRate}</strong><span>Hourly Rate</span></div> : <div className="overview-item"><strong>Incomplete profile</strong> - no hourly rate posted...</div>}
                                     <div className="overview-item"><strong>53</strong><span>Jobs Done</span></div>
                                     <div className="overview-item"><strong>22</strong><span>Rehired</span></div>
                                 </div>
@@ -265,20 +263,22 @@ constructor(props) {
                                     </div>
                                 </div>
 
-                                
-                                <div className="sidebar-widget">
+                                {user.skills ? <div className="sidebar-widget">
                                     <h3>Skills</h3>
                                     <div className="task-tags">
-                                        <span>iOS</span>
-                                        <span>Android</span>
-                                        <span>mobile apps</span>
-                                        <span>design</span>
-                                        <span>Python</span>
-                                        <span>Flask</span>
-                                        <span>PHP</span>
-                                        <span>WordPress</span>
+                                        {user.skills.map((skill, index) => {
+                                            return (
+                                                <span style={{ margin: "5px", backgroundColor: "blue", color: "white" }}>{skill}</span>
+                                            );
+                                        })}
                                     </div>
-                                </div>
+                                </div> : <div className="sidebar-widget">
+                                    <h3>Skills</h3>
+                                    <div className="task-tags">
+                                        <h3 className="text-dark"><strong>Profile Incomplete</strong> - No skills posted...</h3>
+                                    </div>
+                                </div>}
+                                
 
                                 
                                 <div className="sidebar-widget">
@@ -387,16 +387,15 @@ constructor(props) {
             );
         } else {
             return (
-                <Fragment>
-                    <div className="mx-auto" style={{ minHeight: "100vh" }}>
-                        <ReactLoading  type={"balls"} color={"blue"} height={250} width={"100vw"} /> 
-                    </div>
-                </Fragment>
+                <div style={{ minHeight: "100vh" }}>
+                    <h1 style={{ marginTop: "300px" }} className="text-center text-dark">Loading...</h1>
+                </div>
             );
         }
     }
     render() {
         const { user } = this.state;
+        console.log("ViewProfile state... :", this.state);
         return (
             <div style={{ borderTop: "3px solid lightgrey" }}>
                 {this.renderContent()}

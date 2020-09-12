@@ -37,7 +37,17 @@ app.use("/register", require("./routes/auth/register.js"));
 app.use("/login", require("./routes/auth/sign-in.js"));
 app.use("/gather/specific/user/username", require("./routes/specific/getUserByUsername.js"));
 app.use("/upload/new/profile/picture", require("./routes/profile/pictures/uploadNewPicture.js"));
-
+app.use("/update/profile/main/info", require("./routes/profile/settings-data/basic/changeBasicInfomation.js"));
+app.use("/check/email/taken", require("./routes/validate-accounts/checkEmailTaken.js"));
+app.use("/update/hourly/pay", require("./routes/profile/settings-data/rates-files-skills/index.js"));
+app.use("/update/skills/profile", require("./routes/profile/settings-data/basic/updateSkills.js"));
+app.use("/upload/resume/profile", require("./routes/profile/file-uploads/uploadResume.js"));
+app.use("/upload/profile/data/introduction", require("./routes/profile/settings-data/basic/uploadIntroduction.js"));
+app.use("/upload/profile/data/nationality", require("./routes/profile/settings-data/basic/uploadNationality.js"));
+app.use("/upload/profile/data/tagline", require("./routes/profile/settings-data/basic/updateTagline.js"));
+app.use("/create/profile/update/page/one", require("./routes/profile/signup/pageOne.js"));
+app.use("/figure/out/page/number", require("./routes/pageNumber.js"));
+app.use("/create/profile/update/expertise/level", require("./routes/profile/signup/expertiseLevel.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

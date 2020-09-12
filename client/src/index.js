@@ -11,13 +11,16 @@ import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
+import { BrowserRouter } from "react-router-dom";
 
 
 ReactDOM.render(
   <React.StrictMode>
   <SkeletonTheme color="lightgrey" highlightColor="#444">
     <Provider store={store}>
-    <App />
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
     </Provider>
     </SkeletonTheme>
   </React.StrictMode>,

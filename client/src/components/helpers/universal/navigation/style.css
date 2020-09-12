@@ -150,10 +150,12 @@
     min-width: 50px !important;
     min-height: 0px !important;
     bottom: -20px;
+    max-height: 40px !important;
 }
 #profile-pic {
     min-height: 40px !important;
     min-width: 40px !important;
+    max-height: 40px !important;
 }
 .bs-popover-auto {
     background-color: transparent !important;

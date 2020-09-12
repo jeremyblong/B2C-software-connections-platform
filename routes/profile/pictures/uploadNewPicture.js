@@ -34,7 +34,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
         collection.findOne({ username }).then((user) => {
             if (user) {
-                
+
                 const bufferImage = new Buffer(base64.replace(/^data:image\/\w+;base64,/, ""),'base64');
 
                 user.profilePics.push({
@@ -58,7 +58,8 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                     
                     res.json({
                         message: "Successfully uploaded new photo!",
-                        image: generatedID
+                        image: generatedID,
+                        user
                     })
                 });
             } else {

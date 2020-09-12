@@ -196,7 +196,7 @@ constructor(props) {
                         <div class="dashboard-content-inner" >
                             <div class="dashboard-headline">
                                 <h3 className="text-left">Howdy, {user !== null ? user.username : "-----"}!</h3>
-                                <span className="text-left">We are glad to see you again!</span>
+                                <span className="text-left">We are glad to see you again, {user.firstName ? user.firstName : "----"} {user.lastName ? user.lastName : "----" }!</span>
 
                                 <nav id="breadcrumbs" class="dark">
                                     <ul>

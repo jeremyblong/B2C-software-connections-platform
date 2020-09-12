@@ -22,6 +22,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import SlidingPane from "react-sliding-pane";
 import LoadingOverlay from 'react-loading-overlay';
+import ProfileHelperSettingsOne from "./helpers/settingsHelperProfile.js";
 
 class SettingsHelper extends Component {
 constructor(props) {
@@ -38,7 +39,11 @@ constructor(props) {
         file: null,
         normalFile: null,
         updatedPhoto: null,
-        loading: false
+        loading: false,
+        freelancerChecked: false,
+        businessChecked: false,
+        emailErr: "",
+        emailTaken: ""
     }
 }
     uploadNewProfilePic = () => {
@@ -61,7 +66,11 @@ constructor(props) {
                             loading: false,
                             isPaneOpen: false
                         }, () => {
-                            alert("Uploaded new profile picture successfully!")
+                            this.props.authentication(res.data.user);
+                            
+                            setTimeout(() => {
+                                alert("Uploaded new profile picture successfully!")
+                            }, 400);
                         })
                     } else if (res.data.message === "Could NOT locate any users with this field.") {
                         this.setState({
@@ -108,6 +117,79 @@ constructor(props) {
             );
         }
     }
+    updateBasicInfomation = () => {
+        const { freelancerChecked, businessChecked, firstName, lastName, email, user } = this.state;
+
+        const email_regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/i;
+
+        if (email.match(email_regex)) {
+            console.log("MATCH.");
+            if (firstName.length > 0 && lastName.length > 0) {
+                if (freelancerChecked === true || businessChecked === true) {
+                    console.log("DID CHECK ACCOUNT CHANGE TYPE!!");
+                    // IF someone checked the "change" account type box - run this api call
+                    axios.post("/update/profile/main/info", {
+                        checked: freelancerChecked ? "freelancer" : businessChecked ? "business" : null,
+                        firstName,
+                        lastName,
+                        email: this.state.email === 0 ? user.email : this.state.email,
+                        username: user.username
+                    }).then((res) => {
+                        console.log(res.data);
+                        if (res.data.message === "Successfully updated information!") {
+                            this.props.authentication(res.data.user);
+                            this.setState({
+                                firstName: "",
+                                lastName: "",
+                                email: "",
+                                businessChecked: false,
+                                freelancerChecked: false
+                            })
+                            setTimeout(() => {
+                                alert(res.data.message);
+                            }, 500);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                } else {
+                    console.log("DIDNT check account type.");
+                    // if someone DIDNT check the change account type, leave it as is and update the remainder of the information
+                    axios.post("/update/profile/main/info", {
+                        firstName,
+                        lastName,
+                        email: this.state.email === 0 ? user.email : this.state.email,
+                        username: user.username
+                    }).then((res) => {
+                        console.log(res.data);
+                        if (res.data.message === "Successfully updated information!") {
+                            this.props.authentication(res.data.user);
+                            this.setState({
+                                firstName: "",
+                                lastName: "",
+                                email: "",
+                                businessChecked: false,
+                                freelancerChecked: false
+                            })
+                            setTimeout(() => {
+                                alert(res.data.message);
+                            }, 500);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                }
+            } else {
+                alert("You must enter your first and last name to change your email...");
+            }
+        } else {
+            console.log("no match.");
+            this.setState({
+                emailErr: "Please enter a valid email..."
+            })
+        }
+
+    }
     componentDidMount() {
 
         setTimeout(() => {
@@ -118,12 +200,14 @@ constructor(props) {
                     console.log("Found user... :", res.data);
 
                     this.setState({
-                        user: res.data.user
+                        user: res.data.user,
+                        email: res.data.user.email
                     })
                 } else if (res.data.message === "Could NOT find any user by that username") {
                     console.log("Did NOT find user... :", res.data);
                     this.setState({
-                        user: "Could NOT locate user..."
+                        user: "Could NOT locate user...",
+                        email: this.props.email
                     })
                 }
             }).catch((err) => {
@@ -136,6 +220,31 @@ constructor(props) {
         this.setState({
             isPaneOpen: !this.state.isPaneOpen
         })
+    }
+    checkValidEmail = () => {
+        console.log("unfocussed.");
+
+        if (this.props.email === this.state.user.email) {
+            return null;
+        } else {
+            axios.post("/check/email/taken", {
+                email: this.state.email
+            }).then((res) => {
+                console.log(res.data);
+                if (res.data.message === "Email is already taken!") {
+                    this.setState({
+                        emailTaken: res.data.message,
+                        email: ""
+                    })
+                } else {
+                    this.setState({
+                        emailTaken: ""
+                    })
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        }
     }
     renderConditional = () => {
         const { user } = this.state;
@@ -316,12 +425,22 @@ constructor(props) {
                                                                 <h5>Account Type</h5>
                                                                 <div class="account-type">
                                                                     <div>
-                                                                        <input type="radio" name="account-type-radio" id="freelancer-radio" class="account-type-radio" checked={false}/>
+                                                                        <input onClick={() => {
+                                                                            this.setState({
+                                                                                freelancerChecked: true,
+                                                                                businessChecked: false
+                                                                            })
+                                                                        }} type="radio" name="account-type-radio" id="freelancer-radio" class="account-type-radio" checked={this.state.freelancerChecked ? true : false}/>
                                                                         <label for="freelancer-radio" class="ripple-effect-dark"><i class="icon-material-outline-account-circle"></i> Freelancer</label>
                                                                     </div>
 
                                                                     <div>
-                                                                        <input type="radio" name="account-type-radio" id="employer-radio" class="account-type-radio" checked={false}/>
+                                                                        <input onClick={() => {
+                                                                            this.setState({
+                                                                                freelancerChecked: false,
+                                                                                businessChecked: true
+                                                                            })
+                                                                        }} type="radio" name="account-type-radio" id="employer-radio" class="account-type-radio" checked={this.state.businessChecked ? true : false}/>
                                                                         <label for="employer-radio" class="ripple-effect-dark"><i class="icon-material-outline-business-center"></i> Employer</label>
                                                                     </div>
                                                                 </div>
@@ -331,11 +450,15 @@ constructor(props) {
                                                         <div class="col-xl-6">
                                                             <div class="submit-field">
                                                                 <h5>Email</h5>
-                                                                <input onChange={(e) => {
+                                                                <input onBlur={this.checkValidEmail} onChange={(e) => {
                                                                     this.setState({
-                                                                        email: e.target.value
+                                                                        email: e.target.value,
+                                                                        emailErr: ""
                                                                     })
-                                                                }} value={this.state.email} type="text" class="with-border" placeholder="tom@example.com"/>
+                                                                }} value={this.state.email.length !== 0 ? this.state.email : this.state.user.email} type="text" class="with-border" placeholder={this.state.user.email}/>
+                                                                {this.state.emailErr.length !== 0 ? <h4 style={{ color: "red" }} className="text-center">{this.state.emailErr}</h4> : null}
+
+                                                                {this.state.emailTaken.length !== 0 ? <h4 style={{ color: "red" }} className="text-center">{this.state.emailTaken}</h4> : null}
                                                             </div>
                                                         </div>
 
@@ -343,206 +466,15 @@ constructor(props) {
                                                 </div>
                                                 
                                             </div>
-                                            {this.state.firstName.length > 0 || this.state.lastName.length > 0 || this.state.email.length > 0 || this.state.accountType !== null ? <div className="row">
-                                                <button className="btn blue-btn" style={{ width: "100%", color: "white" }}>Submit Changes</button>
+                                            {this.state.firstName.length > 0 || this.state.lastName.length > 0 || this.state.email.length > 0 || this.state.accountType !== null || this.state.businessChecked || this.state.freelancerChecked ? <div className="row">
+                                                <button onClick={this.updateBasicInfomation} className="btn blue-btn" style={{ width: "100%", color: "white" }}>Submit Changes</button>
                                             </div> : null}
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="col-xl-12">
-                                    <div class="dashboard-box">
-
-                                    
-                                        <div class="headline">
-                                            <h3><i class="icon-material-outline-face"></i> My Profile</h3>
-                                        </div>
-
-                                        <div class="content">
-                                            <ul class="fields-ul">
-                                            <li>
-                                                <div class="row">
-                                                    <div class="col-xl-4">
-                                                        <div class="submit-field">
-                                                            <div class="bidding-widget">
-                                                                
-                                                                <span class="bidding-detail">Set your <strong>minimal hourly rate</strong></span>
-
-                                                            
-                                                                <div class="bidding-value margin-bottom-10">$<span id="biddingVal"></span></div>
-                                                                <input class="bidding-slider" type="text" value="" data-slider-handle="custom" data-slider-currency="$" data-slider-min="5" data-slider-max="150" data-slider-value="35" data-slider-step="1" data-slider-tooltip="hide" />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-xl-4">
-                                                        <div class="submit-field">
-                                                            <h5>Skills <i class="help-icon" data-tippy-placement="right" title="Add up to 10 skills"></i></h5>
-
-                                                            <div class="keywords-container">
-                                                                <div class="keyword-input-container">
-                                                                    <input type="text" class="keyword-input with-border" placeholder="e.g. Angular, Laravel"/>
-                                                                    <button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
-                                                                </div>
-                                                                <div class="keywords-list">
-                                                                    <span class="keyword"><span class="keyword-remove"></span><span class="keyword-text">Angular</span></span>
-                                                                    <span class="keyword"><span class="keyword-remove"></span><span class="keyword-text">Vue JS</span></span>
-                                                                    <span class="keyword"><span class="keyword-remove"></span><span class="keyword-text">iOS</span></span>
-                                                                    <span class="keyword"><span class="keyword-remove"></span><span class="keyword-text">Android</span></span>
-                                                                    <span class="keyword"><span class="keyword-remove"></span><span class="keyword-text">Laravel</span></span>
-                                                                </div>
-                                                                <div class="clearfix"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-xl-4">
-                                                        <div class="submit-field">
-                                                            <h5>Attachments</h5>
-                                                            
-                                                    
-                                                            <div class="attachments-container margin-top-0 margin-bottom-0">
-                                                                <div class="attachment-box ripple-effect">
-                                                                    <span>Cover Letter</span>
-                                                                    <i>PDF</i>
-                                                                    <button class="remove-attachment" data-tippy-placement="top" title="Remove"></button>
-                                                                </div>
-                                                                <div class="attachment-box ripple-effect">
-                                                                    <span>Contract</span>
-                                                                    <i>DOCX</i>
-                                                                    <button class="remove-attachment" data-tippy-placement="top" title="Remove"></button>
-                                                                </div>
-                                                            </div>
-                                                            <div class="clearfix"></div>
-                                                            
-                                                
-                                                            <div class="uploadButton margin-top-0">
-                                                                <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple/>
-                                                                <label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
-                                                                <span class="uploadButton-file-name">Maximum file size: 10 MB</span>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="row">
-                                                    <div class="col-xl-6">
-                                                        <div class="submit-field">
-                                                            <h5>Tagline</h5>
-                                                            <input type="text" class="with-border" value="iOS Expert + Node Dev"/>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-xl-6">
-                                                        <div class="submit-field">
-                                                            <h5>Nationality</h5>
-                                                            <select class="selectpicker with-border" data-size="7" title="Select Job Type" data-live-search="true">
-                                                                <option value="AR">Argentina</option>
-                                                                <option value="AM">Armenia</option>
-                                                                <option value="AW">Aruba</option>
-                                                                <option value="AU">Australia</option>
-                                                                <option value="AT">Austria</option>
-                                                                <option value="AZ">Azerbaijan</option>
-                                                                <option value="BS">Bahamas</option>
-                                                                <option value="BH">Bahrain</option>
-                                                                <option value="BD">Bangladesh</option>
-                                                                <option value="BB">Barbados</option>
-                                                                <option value="BY">Belarus</option>
-                                                                <option value="BE">Belgium</option>
-                                                                <option value="BZ">Belize</option>
-                                                                <option value="BJ">Benin</option>
-                                                                <option value="BM">Bermuda</option>
-                                                                <option value="BT">Bhutan</option>
-                                                                <option value="BG">Bulgaria</option>
-                                                                <option value="BF">Burkina Faso</option>
-                                                                <option value="BI">Burundi</option>
-                                                                <option value="KH">Cambodia</option>
-                                                                <option value="CM">Cameroon</option>
-                                                                <option value="CA">Canada</option>
-                                                                <option value="CV">Cape Verde</option>
-                                                                <option value="KY">Cayman Islands</option>
-                                                                <option value="CO">Colombia</option>
-                                                                <option value="KM">Comoros</option>
-                                                                <option value="CG">Congo</option>
-                                                                <option value="CK">Cook Islands</option>
-                                                                <option value="CR">Costa Rica</option>
-                                                                <option value="CI">Côte d'Ivoire</option>
-                                                                <option value="HR">Croatia</option>
-                                                                <option value="CU">Cuba</option>
-                                                                <option value="CW">Curaçao</option>
-                                                                <option value="CY">Cyprus</option>
-                                                                <option value="CZ">Czech Republic</option>
-                                                                <option value="DK">Denmark</option>
-                                                                <option value="DJ">Djibouti</option>
-                                                                <option value="DM">Dominica</option>
-                                                                <option value="DO">Dominican Republic</option>
-                                                                <option value="EC">Ecuador</option>
-                                                                <option value="EG">Egypt</option>
-                                                                <option value="GP">Guadeloupe</option>
-                                                                <option value="GU">Guam</option>
-                                                                <option value="GT">Guatemala</option>
-                                                                <option value="GG">Guernsey</option>
-                                                                <option value="GN">Guinea</option>
-                                                                <option value="GW">Guinea-Bissau</option>
-                                                                <option value="GY">Guyana</option>
-                                                                <option value="HT">Haiti</option>
-                                                                <option value="HN">Honduras</option>
-                                                                <option value="HK">Hong Kong</option>
-                                                                <option value="HU">Hungary</option>
-                                                                <option value="IS">Iceland</option>
-                                                                <option value="IN">India</option>
-                                                                <option value="ID">Indonesia</option>
-                                                                <option value="NO">Norway</option>
-                                                                <option value="OM">Oman</option>
-                                                                <option value="PK">Pakistan</option>
-                                                                <option value="PW">Palau</option>
-                                                                <option value="PA">Panama</option>
-                                                                <option value="PG">Papua New Guinea</option>
-                                                                <option value="PY">Paraguay</option>
-                                                                <option value="PE">Peru</option>
-                                                                <option value="PH">Philippines</option>
-                                                                <option value="PN">Pitcairn</option>
-                                                                <option value="PL">Poland</option>
-                                                                <option value="PT">Portugal</option>
-                                                                <option value="PR">Puerto Rico</option>
-                                                                <option value="QA">Qatar</option>
-                                                                <option value="RE">Réunion</option>
-                                                                <option value="RO">Romania</option>
-                                                                <option value="RU">Russian Federation</option>
-                                                                <option value="RW">Rwanda</option>
-                                                                <option value="SZ">Swaziland</option>
-                                                                <option value="SE">Sweden</option>
-                                                                <option value="CH">Switzerland</option>
-                                                                <option value="TR">Turkey</option>
-                                                                <option value="TM">Turkmenistan</option>
-                                                                <option value="TV">Tuvalu</option>
-                                                                <option value="UG">Uganda</option>
-                                                                <option value="UA">Ukraine</option>
-                                                                <option value="GB">United Kingdom</option>
-                                                                <option value="US" selected>United States</option>
-                                                                <option value="UY">Uruguay</option>
-                                                                <option value="UZ">Uzbekistan</option>
-                                                                <option value="YE">Yemen</option>
-                                                                <option value="ZM">Zambia</option>
-                                                                <option value="ZW">Zimbabwe</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="col-xl-12">
-                                                        <div class="submit-field">
-                                                            <h5>Introduce Yourself</h5>
-                                                            <textarea cols="30" rows="5" class="with-border">Leverage agile frameworks to provide a robust synopsis for high level overviews. Iterative approaches to corporate strategy foster collaborative thinking to further the overall value proposition. Organically grow the holistic world view of disruptive innovation via workplace diversity and empowerment.</textarea>
-                                                        </div>
-                                                    </div>
-
-                                                </div>
-                                            </li>
-                                        </ul>
-                                        </div>
-                                    </div>
+                                <div className="col-md-12 col-lg-12 col-sm-12 col-xs-12">
+                                    <ProfileHelperSettingsOne />
                                 </div>
 
                     
@@ -602,7 +534,7 @@ constructor(props) {
                                 <div class="small-footer-copyrights">
                                     © 2019 <strong>[Comapny Name(s)]</strong>. All Rights Reserved.
                                 </div>
-                                <ul class="footer-social-links">
+                                {/* <ul class="footer-social-links">
                                     <li>
                                         <a href="#" title="Facebook" data-tippy-placement="top">
                                             <i class="icon-brand-facebook-f"></i>
@@ -623,7 +555,7 @@ constructor(props) {
                                             <i class="icon-brand-linkedin-in"></i>
                                         </a>
                                     </li>
-                                </ul>
+                                </ul> */}
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -771,9 +703,9 @@ constructor(props) {
                                 </div>
                                 
                             
-                                <div class="col-xl-12">
+                                {/* <div class="col-xl-12">
                                     <a href="#" class="button ripple-effect big margin-top-30">Save Changes</a>
-                                </div>
+                                </div> */}
 
                             </div>
                     
@@ -781,31 +713,7 @@ constructor(props) {
                     
                             <div class="dashboard-footer-spacer"></div>
                             <div class="small-footer margin-top-15">
-                                <div class="small-footer-copyrights">
-                                    © 2019 <strong>[Comapny Name(s)]</strong>. All Rights Reserved.
-                                </div>
-                                <ul class="footer-social-links">
-                                    <li>
-                                        <a href="#" title="Facebook" data-tippy-placement="top">
-                                            <i class="icon-brand-facebook-f"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" title="Twitter" data-tippy-placement="top">
-                                            <i class="icon-brand-twitter"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" title="Google Plus" data-tippy-placement="top">
-                                            <i class="icon-brand-google-plus-g"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#" title="LinkedIn" data-tippy-placement="top">
-                                            <i class="icon-brand-linkedin-in"></i>
-                                        </a>
-                                    </li>
-                                </ul>
+                                
                                 <div class="clearfix"></div>
                             </div>
                         </div>
@@ -842,7 +750,7 @@ constructor(props) {
     render() {
         const { user } = this.state;
         return (
-            <div>
+            <div style={{ borderTop: "3px solid lightgrey" }}>
                 {this.renderConditional()}
                 <SlidingPane
                     className="sliding-pane"
@@ -852,7 +760,7 @@ constructor(props) {
                     subtitle="Hotels see this photo as it helps them identify each visitor booked through our platform..."
                     onRequestClose={() => {
                     // triggered on "<" on left top click or on outside click
-                    this.setState({ isPaneOpen: false });
+                     this.setState({ isPaneOpen: false });
                     }}
                 >
                     <div class="container py-5">
@@ -905,7 +813,8 @@ const mapStateToProps = state => {
         const obj = state.auth;
         if (obj.authenticated.hasOwnProperty("email")) {
             return {
-                username: state.auth.authenticated.username
+                username: state.auth.authenticated.username,
+                email: state.auth.authenticated.email
             }
         }
     }

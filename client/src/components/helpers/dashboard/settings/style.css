@@ -158,3 +158,15 @@
     right: 0;
     z-index: 99999999999 !important;
 }
+#employer-radio:checked {
+    background-color: blue !important;
+    color: white !important;
+}
+#freelancer-radio:checked {
+    background-color: blue !important;
+    color: white !important;
+}
+.account-type input.account-type-radio:checked ~ label {
+    background-color: blue !important;
+    color: white !important;
+}
