@@ -17,13 +17,14 @@ constructor(props) {
         schoolName: "",
         areaOfStudy: "",
         degree: "",
-        startDate: new Date(),
-        endDate: new Date(),
+        startDate: null,
+        endDate: null,
         description: ""
     }
 }
     skipStep = () => {
-        console.log("clicked.")
+        console.log("clicked.");
+        this.props.history.push("/signup/freelancer/page/3");
     }
     handleChange = date => {
         this.setState({
@@ -34,6 +35,32 @@ constructor(props) {
         this.setState({
             endDate: date._d
         })
+    }
+    handleSchoolSubmission = () => {
+        console.log("submitted");
+
+        const { schoolName, areaOfStudy, degree, startDate, endDate, description } = this.state;
+
+        if (schoolName.length > 0 && degree.length > 0) {
+            axios.post("/update/profile/school/data", {
+                username: this.props.username,
+                schoolName,
+                degree,
+                areaOfStudy: areaOfStudy.length > 0 ? areaOfStudy : "Not-Provided.",
+                startDate: startDate !== null ? startDate : "Not-Provided.",
+                endDate: endDate !== null ? endDate : "Not-Provided.",
+                description: description.length > 0 ? description : "Not-Provided."
+            }).then((res) => {
+                if (res.data.message === "Successfully updated account!") {
+                    console.log(res.data);
+                    this.props.history.push("/signup/freelancer/page/3");
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            alert("Please complete at least 'School Name' & 'Degree'...")
+        }
     }
     render() {
         console.log("this.state --- second - index... ", this.state);
@@ -68,7 +95,7 @@ constructor(props) {
 
                             
 
-                            <h1 className="text-center" style={{ marginBottom: "40px" }}>Expertise level</h1>
+                            <h1 className="text-center" style={{ marginBottom: "40px" }}>Education</h1>
                                 <div className="row">
                                     
                                 <div className="col-xl-12">
@@ -104,7 +131,7 @@ constructor(props) {
                                 <div className="col-xl-12">
                                     <button onClick={() => {
                                         console.log("clicked.")
-                                        this.props.history.push("/");
+                                        this.props.history.push("/signup/freelancer/page/1");
                                     }} style={{ width: "50%" }} className="button btn-danger red-btn ripple-effect big margin-top-30">Back to previous page</button>
                                 </div>
 

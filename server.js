@@ -48,6 +48,8 @@ app.use("/upload/profile/data/tagline", require("./routes/profile/settings-data/
 app.use("/create/profile/update/page/one", require("./routes/profile/signup/pageOne.js"));
 app.use("/figure/out/page/number", require("./routes/pageNumber.js"));
 app.use("/create/profile/update/expertise/level", require("./routes/profile/signup/expertiseLevel.js"));
+app.use("/update/profile/school/data", require("./routes/profile/signup/schoolData.js"));
+app.use("/update/profile/employment/professional/work/experience", require("./routes/profile/signup/employmentHistory.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

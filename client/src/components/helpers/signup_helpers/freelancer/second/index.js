@@ -25,7 +25,7 @@ constructor(props) {
 
                 console.log(res.data);
 
-                this.props.history.push(`/signup/freelancer/page/2`);
+                this.props.history.push("/signup/freelancer/page/2");
             }
         }).catch((err) => {
             console.log(err);

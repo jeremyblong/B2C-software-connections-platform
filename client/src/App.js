@@ -16,7 +16,7 @@ import PostNewJobPage from "./components/pages/jobs/business-listings/postJob.js
 import InitialSignupPageFreelancer from "./components/pages/signup_pages/freelancer/initial/initialPage.js";
 import SecondPageSignupFreelancer from "./components/pages/signup_pages/freelancer/second/index.js";
 import ThirdPageFreelancerSignUp from "./components/pages/signup_pages/freelancer/third/index.js";
-
+import FourthPageSignupFreelancer from "./components/pages/signup_pages/freelancer/fourth/index.js";
 
 class App extends Component {
 constructor(props) {
@@ -75,6 +75,7 @@ constructor(props) {
               <Route exact path="/" component={InitialSignupPageFreelancer} />
               <Route exact path={`/signup/freelancer/page/1`} component={SecondPageSignupFreelancer} />
               <Route exact path={`/signup/freelancer/page/2`} component={ThirdPageFreelancerSignUp} />
+              <Route exact path={`/signup/freelancer/page/3`} component={FourthPageSignupFreelancer} />
             </div>
           </Fragment>
         );

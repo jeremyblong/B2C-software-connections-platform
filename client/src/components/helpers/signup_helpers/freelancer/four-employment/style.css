@@ -1,0 +1,16 @@
+.card-image {
+    max-height: 150px;
+}
+.cardy {
+    margin-top: 20px;
+}
+.special-label {
+    text-decoration-line: underline;
+    color: blue; 
+    font-weight: bold;
+}
+@media only screen and (max-width: 750px) {
+    .skip {
+        margin-top: 30px;
+    }
+}
