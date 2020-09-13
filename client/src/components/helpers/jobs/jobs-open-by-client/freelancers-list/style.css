@@ -1,0 +1,18 @@
+.freelancer-contain {
+    margin-bottom: 50%;
+}
+@media only screen and (max-width: 1400px) {
+    .freelancer-contain {
+        margin-bottom: 110%;
+    }
+}
+@media only screen and (max-width: 1000px) {
+    .freelancer-contain {
+        margin-bottom: 20%;
+    }
+}
+@media only screen and (max-width: 700px) {
+    .freelancer-contain {
+        margin-bottom: 10px;
+    }
+}

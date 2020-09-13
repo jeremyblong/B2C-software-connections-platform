@@ -201,6 +201,10 @@
   .rdtCounter .rdtBtn:hover {
     background: #eee;
   }
+  .five-btn {
+    width: 50%;
+  }
+
   .rdtCounter .rdtCount {
     height: 20%;
     font-size: 1.2em;
@@ -221,3 +225,11 @@
   .rdtTime td {
     cursor: default;
   }
+@media only screen and (max-width: 750px) {
+  .five-btn {
+    width: 100%;
+  }
+  .hide-mobile {
+    display: none;
+  }
+}

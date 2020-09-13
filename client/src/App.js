@@ -17,6 +17,15 @@ import InitialSignupPageFreelancer from "./components/pages/signup_pages/freelan
 import SecondPageSignupFreelancer from "./components/pages/signup_pages/freelancer/second/index.js";
 import ThirdPageFreelancerSignUp from "./components/pages/signup_pages/freelancer/third/index.js";
 import FourthPageSignupFreelancer from "./components/pages/signup_pages/freelancer/fourth/index.js";
+import FifthPageSignupFreelancer from "./components/pages/signup_pages/freelancer/fifth/index.js";
+import SixthPageFreelancerSignUp from "./components/pages/signup_pages/freelancer/sixth/index.js";
+import SeventhFreelancerSignupPage from "./components/pages/signup_pages/freelancer/seventh/index.js";
+import { confirmAlert } from 'react-confirm-alert'; 
+import 'react-confirm-alert/src/react-confirm-alert.css';
+import { authentication } from "./actions/auth/auth.js";
+import FreelancersListPage from "./components/pages/businesses/find-freelancers/find.js";
+
+// places api - foursquare api
 
 class App extends Component {
 constructor(props) {
@@ -24,7 +33,8 @@ constructor(props) {
   
   this.state = {
     pageNumber: null,
-    loaded: false
+    loaded: false,
+    un_registered: false
   }
 }
   componentDidMount() {
@@ -34,24 +44,70 @@ constructor(props) {
       }).then((res) => {
         if (res.data.message === "FOUND user!") {
           console.log("!!! :", res.data);
+          
+          if (res.data.user.completed_signup === true) {
+              this.setState({
+                un_registered: true,
+                loaded: true
+              })
+          } else {
+            this.setState({
+              pageNumber: res.data.page,
+              loaded: true
+            }, () => {
+              this.submit();
+              // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
+            });
+          }
+        } else {
           this.setState({
-            pageNumber: res.data.page,
+            un_registered: true,
             loaded: true
-          }, () => {
-            this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
-          });
+          })
         }
       }).catch((err) => {
         console.log(err);
       })
     }, 500);
   }
+  submit = () => {
+    confirmAlert({
+      title: 'Would you like to set your profile up now?',
+      message: 'This is a requirement once registering as a freelancer if you want to interact with our site...',
+      buttons: [
+        {
+          label: 'Yes',
+          onClick: () => {
+            if (this.state.pageNumber) {
+              this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
+            } else {
+              this.props.history.push(`/`);
+            }
+          }
+        },
+        {
+          label: 'No',
+          onClick: () => {
+            this.setState({
+              un_registered: true
+            }, () => {
+              this.props.authentication({});
+              localStorage.clear();
+              setTimeout(() => {
+                this.props.history.push("/");
+              }, 500);
+            })
+          }
+        }
+      ]
+    });
+  };
   renderSignedUpOrNot = () => {
 
     const { loaded, pageNumber } = this.state;
 
     if (loaded === true) {
-      if (this.props.finishedSignup === true) {
+      if (this.props.finishedSignup === true || this.state.un_registered === true || this.props.force === false) {
         return (
           <Fragment>
             <div className="App">
@@ -65,6 +121,7 @@ constructor(props) {
               <Route exact path="/dashboard/settings/main" component={SettingsPageMain} />
               <Route exact path="/dashboard/messages" component={MessagesPage} />
               <Route exact path="/businesses/post/job/listing" component={PostNewJobPage} />
+              <Route exact path="/freelancers/list/view" component={FreelancersListPage} />
             </div>
           </Fragment>
         );
@@ -76,6 +133,9 @@ constructor(props) {
               <Route exact path={`/signup/freelancer/page/1`} component={SecondPageSignupFreelancer} />
               <Route exact path={`/signup/freelancer/page/2`} component={ThirdPageFreelancerSignUp} />
               <Route exact path={`/signup/freelancer/page/3`} component={FourthPageSignupFreelancer} />
+              <Route exact path={`/signup/freelancer/page/4`} component={FifthPageSignupFreelancer} />
+              <Route exact path={`/signup/freelancer/page/5`} component={SixthPageFreelancerSignUp} />
+              <Route exact path={`/signup/freelancer/page/6`} component={SeventhFreelancerSignupPage} />
             </div>
           </Fragment>
         );
@@ -83,6 +143,7 @@ constructor(props) {
     }
   }
   render () {
+    console.log(this.state);
     return (
       <Fragment>
           {this.renderSignedUpOrNot()}
@@ -96,9 +157,10 @@ const mapStateToProps = (state) => {
       const obj = state.auth;
       if (obj.authenticated.hasOwnProperty("email")) {
           return {
-            username: state.auth.authenticated.username
+            username: state.auth.authenticated.username,
+            force: state.auth.forced
           }
       } 
   }
 }
-export default withRouter(connect(mapStateToProps, { })(App));
+export default withRouter(connect(mapStateToProps, { authentication })(App));

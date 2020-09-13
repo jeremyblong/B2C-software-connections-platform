@@ -45,6 +45,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
             experience: experience.trim(),
             // phoneNumber: phoneNumber.replace(/[- )(]/g,''),
             avatar: generatedID,
+            completed_signup: false,
             profilePics: [{
                 date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
                 picture: generatedID,

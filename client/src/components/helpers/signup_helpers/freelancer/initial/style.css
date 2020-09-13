@@ -13,6 +13,12 @@
     width: 40vw !important;
     position: relative;
 }
+@media only screen and (max-width: 750px) {
+    .ReactTags__tagInputField {
+        width: 100vw !important;
+        min-width: 100vw !important;
+    }
+}
 #contain {
     max-width: 40vw !important;
 }
@@ -36,3 +42,10 @@
     color: white !important;
 }
 
+.magic-btn {
+    width: 100%;
+}
+
+.dashboard-box {
+    padding-bottom: 50px;
+}

@@ -24,7 +24,10 @@ const UserSchema = new mongoose.Schema({
     },
     profilePics: {
         type: Array
-    }
+	},
+	completed_signup: {
+		type: Boolean
+	}
 });
 
 module.exports = User = mongoose.model("user", UserSchema);

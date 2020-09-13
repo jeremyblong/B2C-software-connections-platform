@@ -3,16 +3,25 @@ import "./style.css";
 import axios from "axios";
 import { connect } from "react-redux";
 import ReactLoading from 'react-loading';
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
 
 class ViewProfileHelperPublic extends Component {
 constructor(props) {
     super(props)
     
     this.state = {
-        user: null
+        user: null,
+        open: false
     }
 }
-
+    onOpenModal = () => {
+        this.setState({ open: true });
+    };
+ 
+    onCloseModal = () => {
+        this.setState({ open: false });
+    };
     componentDidMount() {
         setTimeout(() => {
             console.log(this.props.username);
@@ -63,7 +72,7 @@ constructor(props) {
                             <div className="col-md-12">
                                 <div className="single-page-header-inner">
                                     <div className="left-side">
-                                        <div className="header-image freelancer-avatar"><img src="/images/user-avatar-big-02.jpg" alt="" /></div>
+                                        <div onClick={this.onOpenModal} className="header-image freelancer-avatar"><img src={this.state.user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.user.profilePics[this.state.user.profilePics.length - 1].picture}` : "/images/user-avatar-big-02.jpg"} alt="" /></div>
                                         <div className="header-details">
                                             <h3>{user.username} <span> {`${user.experience} years of experience`}</span></h3>
                                             <ul>
@@ -164,27 +173,34 @@ constructor(props) {
                                     <h3 className="text-white"><i className="icon-material-outline-business"></i> Employment History</h3>
                                 </div>
                                 <ul className="boxed-list-ul">
-                                    <li>
-                                        <div className="boxed-list-item">
-                                          
-                                            <div className="item-image">
-                                                <img src="/images/browse-companies-03.png" alt=""/>
-                                            </div>
-                                            
-                                            
-                                            <div className="item-content">
-                                                <h4>Development Team Leader</h4>
-                                                <div className="item-details margin-top-7">
-                                                    <div className="detail-item"><a href="#"><i className="icon-material-outline-business"></i> Acodia</a></div>
-                                                    <div className="detail-item"><i className="icon-material-outline-date-range"></i> May 2019 - Present</div>
+                                    {this.state.user.freelancerData.employment_history.length !== 0 ? this.state.user.freelancerData.employment_history.map((data, index) => {
+                                        console.log("data", data);
+                                        return (
+                                            <li>
+                                                <div className="boxed-list-item">
+                                                
+                                                    <div className="item-image">
+                                                        <img src="/images/browse-companies-03.png" alt=""/>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div className="item-content">
+                                                        <h4>{data.technical_title}</h4>
+                                                        <div className="item-details margin-top-7">
+                                                            <div className="detail-item"><a href="#"><i className="icon-material-outline-business"></i>{data.company_name}</a></div>
+                                                            <div className="detail-item"><i className="icon-material-outline-date-range"></i> {data.employment_start_date} - {data.employment_end_date}</div>
+                                                        </div>
+                                                        <div className="item-description">
+                                                            <p>{data.description}</p>
+                                                        
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div className="item-description">
-                                                    <p>Focus the team on the tasks at hand or the internal and external customer requirements.</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
+                                            </li>
+                                        );
+                                    }) : null}
+                                    
+                                    {/* <li>
                                         <div className="boxed-list-item">
                                             
                                             <div className="item-image">
@@ -202,7 +218,7 @@ constructor(props) {
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                             </div>
                         
@@ -394,11 +410,137 @@ constructor(props) {
         }
     }
     render() {
-        const { user } = this.state;
+        const { user, open } = this.state;
         console.log("ViewProfile state... :", this.state);
         return (
             <div style={{ borderTop: "3px solid lightgrey" }}>
                 {this.renderContent()}
+
+                <Modal open={open} onClose={this.onCloseModal} center>
+                    <div className="modal-body-container">
+                    <div class="container bootstrap snippets bootdey">
+                            <div class="panel panel-white post panel-shadow">
+                                <div class="post-heading">
+                                    
+                                    <div class="pull-left meta">
+                                        <div class="title h5">
+                                            <a href="#"><b>{user !== null ? user.username : null} </b></a>
+                                             - profile picture
+                                        </div>
+                                        <h6 class="text-muted time">{user !== null ? user.profilePics[user.profilePics.length - 1].date : null}</h6>
+                                    </div>
+                                </div> 
+                                <div class="post-description"> 
+                                    <img src={user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}` : null} className="cover-img" />
+                                    <div class="stats">
+                                        <a href="#" class="btn btn-default stat-item">
+                                            <i class="fa fa-thumbs-up icon"></i>2
+                                        </a>
+                                        <a href="#" class="btn btn-default stat-item">
+                                            <i class="fa fa-share icon"></i>12
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="post-footer">
+                                    <div class="input-group"> 
+                                        <input class="form-control" placeholder="Add a comment" type="text" />
+                                        <span class="input-group-addon">
+                                            <a href="#"><i class="fa fa-edit fa-3x"></i></a>  
+                                        </span>
+                                    </div>
+                                    <ul class="comments-list">
+                                        <li class="comment">
+                                            <a class="pull-left" href="#">
+                                                <img class="avatarrr" src="https://bootdey.com/img/Content/user_1.jpg" alt="avatar" />
+                                            </a>
+                                            <div class="comment-body">
+                                                <div class="comment-heading">
+                                                    <h4 class="user">Gavino Free</h4>
+                                                    <h5 class="time">5 minutes ago</h5>
+                                                </div>
+                                                <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
+                                            </div>
+                                            <ul class="comments-list">
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Ryan Haywood</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Relax my friend</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Gavino Free</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Ok, cool.</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Ryan Haywood</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Relax my friend</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Gavino Free</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Ok, cool.</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_3.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Ryan Haywood</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Relax my friend</p>
+                                                    </div>
+                                                </li> 
+                                                <li class="comment">
+                                                    <a class="pull-left" href="#">
+                                                        <img class="avatarrr" src="https://bootdey.com/img/Content/user_2.jpg" alt="avatar"/>
+                                                    </a>
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">Gavino Free</h4>
+                                                            <h5 class="time">3 minutes ago</h5>
+                                                        </div>
+                                                        <p>Ok, cool.</p>
+                                                    </div>
+                                                </li> 
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </Modal>
             </div>
         )
     }

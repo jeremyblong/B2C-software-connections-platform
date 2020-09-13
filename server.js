@@ -50,6 +50,15 @@ app.use("/figure/out/page/number", require("./routes/pageNumber.js"));
 app.use("/create/profile/update/expertise/level", require("./routes/profile/signup/expertiseLevel.js"));
 app.use("/update/profile/school/data", require("./routes/profile/signup/schoolData.js"));
 app.use("/update/profile/employment/professional/work/experience", require("./routes/profile/signup/employmentHistory.js"));
+app.use("/delete/employment/listing", require("./routes/profile/signup/delete/employment.js"));
+app.use("/profile/build/freelancer/languages", require("./routes/profile/signup/languages.js"));
+app.use("/profile/build/freelancer/hourly/rates", require("./routes/profile/signup/hourlyRates.js"));
+app.use("/places/api", require("./routes/API_places/places_api.js"));
+app.use("/profile/build/freelancer/update/location", require("./routes/profile/signup/location.js"));
+
+
+
+
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

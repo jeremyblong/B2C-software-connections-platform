@@ -4,7 +4,7 @@ import { Link, withRouter } from "react-router-dom";
 import ImageUploader from 'react-images-upload';
 import axios from "axios";
 import { connect } from "react-redux";
-import { authentication } from "../../../../actions/auth/auth.js";
+import { authentication, forceSignup } from "../../../../actions/auth/auth.js";
 
 class RegisterHelper extends Component {
 constructor(props) {
@@ -59,8 +59,12 @@ constructor(props) {
 
                     this.props.authentication(res.data.data);
 
+                    this.props.forceSignup(true);
+
                     setTimeout(() => {
                         this.props.history.push("/");
+
+                        window.location.reload();
                     }, 750);
                 }
             }).catch((err) => {
@@ -251,4 +255,4 @@ constructor(props) {
         )
     }
 }
-export default withRouter(connect(null, { authentication })(RegisterHelper));
+export default withRouter(connect(null, { authentication, forceSignup })(RegisterHelper));

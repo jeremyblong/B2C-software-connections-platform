@@ -111,6 +111,23 @@ constructor(props) {
             alert("Please complete the following required fields... Company name, location(city), title and current status. Thanks!")
         }
     }
+    delete = (job) => {
+        console.log("delete... :", job);
+
+        axios.put("/delete/employment/listing", {
+            job,
+            username: this.props.username
+        }).then((res) => {
+            if (res.data.message === "Successfully updated account!") {
+                console.log(res.data);
+                this.setState({
+                    user: res.data.user
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     renderAddedHistory = () => {
         const { user } = this.state;
 
@@ -121,8 +138,11 @@ constructor(props) {
                         {this.state.user.freelancerData.employment_history ? this.state.user.freelancerData.employment_history.map((job, index) => {
                             return (
                                 <div className="col-md-4 col-lg-4 col-xl-4 col-xs-12 col-sm-12">
+                                
                                     <div class="card cardy" style={{ width: "100%" }}>
-                                    
+                                    <div onClick={() => {
+                                        this.delete(job);
+                                    }} style={{ position: "absolute", left: 10, top: 10 }}><i class="fa fa-trash fa-2x"></i></div>
                                         <div class="card-body">
                                             <h5 class="card-title" style={{ color: "blue", fontSize: "20px", textDecoration: "underline" }}>{job.company_name}</h5>
                                             <p class="card-text">{job.description}</p>
@@ -169,7 +189,7 @@ constructor(props) {
                                         <li>Languages</li>
                                         <li>Hourly Rate</li>
                                         <li>Location</li>
-                                        <li>Contact Info</li>
+                                       
                                     </ul>
                                 </nav>
                             </div>
@@ -183,7 +203,7 @@ constructor(props) {
                                         <div className="dashboard-box margin-top-0">
 
                                             <div className="headline">
-                                                <h3><i className="icon-feather-folder-plus"></i>Education</h3>
+                                                <h3><i className="icon-feather-folder-plus"></i>Employment</h3>
                                             </div>
 
                                             <div style={{ minHeight: "400px", padding: "40px" }} className="content">
@@ -202,7 +222,7 @@ constructor(props) {
                                                 <br />
                                                 <br />
 
-                                                <div className="hover-text" onClick={() => {
+                                                <div className="hover-text" style={{ maxWidth: "200px" }} onClick={() => {
                                                     this.skipStep()
                                                 }}><h4 className="text-left skip" style={{ textDecoration: "underline" }}>Skip This Step...</h4></div>
 
@@ -216,12 +236,16 @@ constructor(props) {
                                     <button onClick={() => {
                                         console.log("clicked.")
                                         this.props.history.push("/signup/freelancer/page/2");
-                                    }} style={{ width: "50%" }} className="button btn-danger red-btn ripple-effect big margin-top-30">Back to previous page</button>
+                                    }} className="button btn-danger custom-width red-btn ripple-effect big margin-top-30">Back to previous page</button>
                                     <hr className="my-4" />
-                                    <button onClick={() => {
-                                        console.log("clicked.")
-                                        this.props.history.push("/signup/freelancer/page/4");
-                                    }} style={{ width: "80%" }} className="button blue-btn ripple-effect big margin-top-30">Continue to next page</button>
+                                    <div style={{ marginTop: "150px" }}>
+                                        <button onClick={() => {
+                                            console.log("clicked.")
+                                            this.props.history.push("/");
+
+                                            
+                                        }} style={{ width: "80%" }} className="button blue-btn ripple-effect big margin-top-30">Continue to home-page</button>
+                                    </div>
                                 </div>
 
                         

@@ -57,7 +57,7 @@ constructor(props) {
                                         <li>Languages</li>
                                         <li>Hourly Rate</li>
                                         <li>Location</li>
-                                        <li>Contact Info</li>
+                                      
                                     </ul>
                                 </nav>
                             </div>

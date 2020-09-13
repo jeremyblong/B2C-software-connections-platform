@@ -7,6 +7,7 @@ import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import Datetime from "react-datetime";
 
+
 class ThirdSignupPageHelper extends Component {
 constructor(props) {
     super(props)
@@ -88,7 +89,7 @@ constructor(props) {
                                         <li>Languages</li>
                                         <li>Hourly Rate</li>
                                         <li>Location</li>
-                                        <li>Contact Info</li>
+                                       
                                     </ul>
                                 </nav>
                             </div>
@@ -132,7 +133,7 @@ constructor(props) {
                                     <button onClick={() => {
                                         console.log("clicked.")
                                         this.props.history.push("/signup/freelancer/page/1");
-                                    }} style={{ width: "50%" }} className="button btn-danger red-btn ripple-effect big margin-top-30">Back to previous page</button>
+                                    }} className="button five-btn btn-danger red-btn ripple-effect big margin-top-30">Back to previous page</button>
                                 </div>
 
                         

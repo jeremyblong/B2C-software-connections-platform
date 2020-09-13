@@ -10,16 +10,27 @@ const cors = require('cors');
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
     router.post("/", (req, res) => {
 
-        const { username } = req.body;
+        const { username, native, secondary } = req.body;
 
         const collection = db.collection("users");
 
+        console.log("req.body ---- :", req.body);
+
         collection.findOne({ username }).then((user) => {
             if (user) {
+
+                console.log("user ---- :", user);
+
+                user.freelancerData.native_english_language = native;
+                user.freelancerData.secondary_languages = secondary;
+
+                user.currentSignupPageCompleted = 5;
+
+                collection.save(user);
+
                 res.json({
-                    message: "FOUND user!",
-                    user,
-                    page: user.currentSignupPageCompleted
+                    message: "Successfully updated account!",
+                    user
                 })
             } else {
                 console.log("NO user found.");
@@ -27,7 +38,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                     message: "NO user found."
                 })
             }
-        });
+        })
     });
 });
 

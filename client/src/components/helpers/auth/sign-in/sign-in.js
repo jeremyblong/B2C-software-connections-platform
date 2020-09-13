@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import "./style.css";
 import { Link, withRouter } from "react-router-dom";
-import { authentication } from "../../../../actions/auth/auth.js";
+import { authentication, forceSignup } from "../../../../actions/auth/auth.js";
 import { connect } from "react-redux";
 import axios from "axios";
 
@@ -33,7 +33,21 @@ constructor(props) {
                         localStorage.setItem("token", res.data.token);
 
                         setTimeout(() => {
-                            this.props.history.push("/");
+                            if (res.data.user.completed_signup === true) {
+                                console.log("completed_signup = true ran");
+                                this.props.history.push("/");
+                            } else {
+                                if (res.data.user.currentSignupPageCompleted) {
+                                    console.log("res.data.user.currentSignupPageCompleted");
+                                    this.props.history.push(`/signup/freelancer/page/${res.data.user.currentSignupPageCompleted}`);   
+                                } else {
+                                    console.log("elseeeeeeeee ran");
+                                    this.props.forceSignup(true);
+                                    
+                                    window.location.reload();
+                                }
+                                
+                            }
                         }, 750);
                     break;
                 case "Password/email did match our records...":
@@ -113,4 +127,4 @@ constructor(props) {
         )
     }
 }
-export default withRouter(connect(null, { authentication })(SignInHelper));
+export default withRouter(connect(null, { authentication, forceSignup })(SignInHelper));

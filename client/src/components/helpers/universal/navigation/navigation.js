@@ -18,7 +18,7 @@ import "./style.css";
 import { connect } from "react-redux";
 import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { authentication } from "../../../../actions/auth/auth.js";
-
+import { completedSignup } from "../../../../actions/signup/signedUpOrNot.js";
 
 const modifiers = {
     preventOverflow: {
@@ -40,6 +40,7 @@ const Navigation = (props) => {
   const logOut = () => {
     localStorage.clear();
     console.log(props.email);
+    props.completedSignup(false);
     setTimeout(() => {
     //   props.authentication({});
 
@@ -63,6 +64,7 @@ const Navigation = (props) => {
   }
   const logUserOut = () => {
     props.authentication({});
+    props.completedSignup(false);
     
     setTimeout(() => {
         props.history.push("/");
@@ -298,7 +300,7 @@ const Navigation = (props) => {
               </DropdownToggle>
               <DropdownMenu right>
                 <DropdownItem>
-                    <Link className="dropdown-link" to="/">Find A Developer</Link>
+                    <Link className="dropdown-link" to="/freelancers/list/view">Find A Developer</Link>
                 </DropdownItem>
                 {props.accountType === "business" ? <DropdownItem className="dropdown-link">
                     <Link className="dropdown-link" to="/businesses/post/job/listing">Post A Job Listing</Link>
@@ -375,6 +377,6 @@ const mapStateToProps = state => {
   }
 }
 
-export default withRouter(connect(mapStateToProps, { authentication })(Navigation));
+export default withRouter(connect(mapStateToProps, { authentication, completedSignup })(Navigation));
 
  

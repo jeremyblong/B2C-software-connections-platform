@@ -129,7 +129,7 @@ constructor(props) {
                                         <li>Languages</li>
                                         <li>Hourly Rate</li>
                                         <li>Location</li>
-                                        <li>Contact Info</li>
+                                       
                                     </ul>
                                 </nav>
                             </div>
@@ -141,7 +141,9 @@ constructor(props) {
                                 <div class="col-xl-12">
                                     <div class="dashboard-box margin-top-0">
 
-                                      
+                                    <div style={{ marginBottom: "30px" }} class="col-xl-12">
+                                        <button onClick={this.handleSubmission} class="button magic-btn blue-btn ripple-effect big margin-top-30">Continue to next page </button>
+                                    </div>
                                         <div class="headline">
                                             <h3><i class="icon-feather-folder-plus"></i>Complete Profile - Page One</h3>
                                         </div>
@@ -173,7 +175,7 @@ constructor(props) {
                                                 </div>
                                             
 
-                                                <div class="col-xl-6 col-sm-12 col-xs-12" id="contain">
+                                                <div class="col-xl-6 col-sm-12 col-xs-12">
                                                 <h5 style={{ fontSize: "16px", fontWeight: "bold", marginBottom: "20px" }}>What skills do you offer clients? <i class="help-icon"></i></h5>
                                                         <ReactTags 
                                                             tags={tags} 
@@ -224,9 +226,7 @@ constructor(props) {
                                     
                                 </div>
 
-                                <div class="col-xl-12">
-                                    <button style={{ width: "100%" }} onClick={this.handleSubmission} class="button blue-btn ripple-effect big margin-top-30">Continue to next page </button>
-                                </div>
+                                
 
                             </div>
                        

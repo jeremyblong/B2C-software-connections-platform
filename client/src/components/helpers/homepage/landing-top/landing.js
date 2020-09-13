@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import "./style.css";
+import { withRouter } from "react-router-dom";
 
 class LandingTopHelper extends Component {
     render() {
@@ -33,7 +34,9 @@ class LandingTopHelper extends Component {
                                         <input id="intro-keywords" type="text" placeholder="Job Title or Keywords"/>
                                     </div>
                                     <div className="intro-search-button">
-                                        <button className="button ripple-effect" onclick="window.location.href='jobs-list-layout-full-page-map.html'">Search</button>
+                                        <button className="button ripple-effect" onClick={() => {
+                                            this.props.history.push("/display/jobs/main");
+                                        }}>Search</button>
                                     </div>
                                 </div>
                             </div>
@@ -63,4 +66,4 @@ class LandingTopHelper extends Component {
         )
     }
 }
-export default LandingTopHelper;
+export default withRouter(LandingTopHelper);
