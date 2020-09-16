@@ -2,3 +2,13 @@
     background-color: blue !important;
     color: white !important;
 }
+._loading_overlay_wrapper {
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+    z-index: -1;
+    top: 0 !important;
+}
+.collll {
+    z-index: -2222 !important;
+}

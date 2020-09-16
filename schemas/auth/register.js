@@ -27,6 +27,9 @@ const UserSchema = new mongoose.Schema({
 	},
 	completed_signup: {
 		type: Boolean
+	},
+	unique_id: {
+		type: String
 	}
 });
 

@@ -39,7 +39,9 @@ constructor(props) {
                             } else {
                                 if (res.data.user.currentSignupPageCompleted) {
                                     console.log("res.data.user.currentSignupPageCompleted");
-                                    this.props.history.push(`/signup/freelancer/page/${res.data.user.currentSignupPageCompleted}`);   
+                                    this.props.history.push(`/signup/freelancer/page/${res.data.user.currentSignupPageCompleted}`); 
+                                    
+                                    window.location.reload();
                                 } else {
                                     console.log("elseeeeeeeee ran");
                                     this.props.forceSignup(true);

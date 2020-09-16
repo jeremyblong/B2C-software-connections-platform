@@ -52,6 +52,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                 poster: username,
                 id: uuidv4()
             }],
+            unique_id: uuidv4(),
             phoneNumber: phoneNumber.trim()
         });
         

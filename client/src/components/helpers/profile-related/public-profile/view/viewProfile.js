@@ -5,6 +5,9 @@ import { connect } from "react-redux";
 import ReactLoading from 'react-loading';
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import SlidingPane from "react-sliding-pane";
+import "react-sliding-pane/dist/react-sliding-pane.css";
+import Dropzone from 'react-dropzone'
 
 class ViewProfileHelperPublic extends Component {
 constructor(props) {
@@ -12,7 +15,11 @@ constructor(props) {
     
     this.state = {
         user: null,
-        open: false
+        open: false,
+        isPaneOpen: false,
+        uploadedFile: null,
+        coverPhoto: null,
+        result: null
     }
 }
     onOpenModal = () => {
@@ -62,19 +69,25 @@ constructor(props) {
     }
     renderContent = () => {
         const { user } = this.state;
-
+        console.log("user", user);
         if (user !== null) {
             return (
                <Fragment>
-                    <div className="single-page-header freelancer-header">
-                    <div className="container">
+                    <div className="single-page-header freelancer-header" style={{  
+                        backgroundImage: `url(https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.coverPhoto !== null ? this.state.coverPhoto : user.coverPhoto.picture ? user.coverPhoto.picture : null})`,
+                        backgroundPosition: 'center',
+                        backgroundSize: 'cover',
+                        backgroundRepeat: 'no-repeat',
+                        minHeight: "450px"
+                    }}>
+                    <div className="container give-background">
                         <div className="row">
                             <div className="col-md-12">
                                 <div className="single-page-header-inner">
                                     <div className="left-side">
-                                        <div onClick={this.onOpenModal} className="header-image freelancer-avatar"><img src={this.state.user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.user.profilePics[this.state.user.profilePics.length - 1].picture}` : "/images/user-avatar-big-02.jpg"} alt="" /></div>
+                                        <div onClick={this.onOpenModal} className="header-image freelancer-avatar"><img id="shift" src={this.state.user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.user.profilePics[this.state.user.profilePics.length - 1].picture}` : "/images/user-avatar-big-02.jpg"} alt="" /></div>
                                         <div className="header-details">
-                                            <h3>{user.username} <span> {`${user.experience} years of experience`}</span></h3>
+                                            <h3 className="text-white"><div className="tan">{user.username}</div> <span style={{ color: "white" }}> {`${user.experience} years of experience`}</span></h3>
                                             <ul>
                                                 <li><div className="star-rating" data-rating="5.0"></div></li>
                                                 {user.nationality ? <li><i class="fa fa-globe"></i> {user.nationality}</li> : <li>No Nationality Specified...</li>}
@@ -90,6 +103,7 @@ constructor(props) {
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-8 col-lg-8 content-right-offset">
+                        
                             <div className="single-page-section">
                                 <h3 className="margin-bottom-25">About Me</h3>
                                 {this.state.user.introduction ? <p>{this.state.user.introduction}</p> : <p>This user has not completed their profile "about-me" section yet...</p>}
@@ -279,12 +293,12 @@ constructor(props) {
                                     </div>
                                 </div>
 
-                                {user.skills ? <div className="sidebar-widget">
+                                {user.freelancerData.skills ? <div className="sidebar-widget">
                                     <h3>Skills</h3>
                                     <div className="task-tags">
-                                        {user.skills.map((skill, index) => {
+                                        {user.freelancerData.skills.map((skill, index) => {
                                             return (
-                                                <span style={{ margin: "5px", backgroundColor: "blue", color: "white" }}>{skill}</span>
+                                                <span style={{ margin: "5px", backgroundColor: "blue", color: "white" }}>{skill.text}</span>
                                             );
                                         })}
                                     </div>
@@ -334,6 +348,11 @@ constructor(props) {
                                             </ul>
                                         </div>
                                     </div>
+                                    <div className="top-left" onClick={() => {
+                                        this.setState({
+                                            isPaneOpen: !this.state.isPaneOpen
+                                        })
+                                    }}><label>Upload Background Photo</label><img src={require("../../../../../assets/icons/upload.png")} style={{ width: "50px", height: "50px" }} /> </div>
                                 </div>
 
                             </div>
@@ -409,13 +428,122 @@ constructor(props) {
             );
         }
     }
+    handleCoverPhotoSubmission = () => {
+        console.log("submitted.");
+
+        axios.post("/upload/cover/photo", {
+            username: this.props.username,
+            picture: this.state.result
+        }).then((res) => {
+            if (res.data.message === "Successfully uploaded new photo!") {
+                console.log("RES.DATA :", res.data);
+
+                this.setState({
+                    coverPhoto: res.data.image,
+                    isPaneOpen: false
+                }, () => {
+                    alert("Successfully updated your cover photo!")
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    getBase64 = (file, cb) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+    callback = (result) => {
+        console.log("Callback RESULT... :", result);
+
+        let trimmed;
+        // prepare for axios upload - trim
+        if (result.includes("data:image/jpeg;base64,")) {
+            trimmed = result.split("data:image/jpeg;base64,")[1];
+        } else if (result.includes("data:image/png;base64,")) {
+            trimmed = result.split("data:image/png;base64,")[1];
+        }
+        // set state for axios call
+        this.setState({
+            callbackRan: true,
+            result: trimmed
+        });
+    }
     render() {
         const { user, open } = this.state;
         console.log("ViewProfile state... :", this.state);
         return (
             <div style={{ borderTop: "3px solid lightgrey" }}>
                 {this.renderContent()}
+                <SlidingPane
+                    className="panel-panel"
+                    overlayClassName="panel-overlay-special"
+                    isOpen={this.state.isPaneOpen}
+                    title="Select your profile background photo..."
+                    subtitle="Select a large photo that will be displayed behind your profile information"
+                    onRequestClose={() => {
+                    // triggered on "<" on left top click or on outside click
+                        this.setState({ isPaneOpen: false });
+                    }}
+                >
+                <div className="content with-padding padding-bottom-10">
+                <div class="container">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><strong>Upload Files</strong> <small> - Cover wall photo</small></div>
+                        <div class="panel-body">
 
+               
+                        
+                 
+                        <h4>Or drag and drop files below</h4>
+                        <Dropzone onDrop={acceptedFiles => {
+                            console.log("acceptedFiles :", acceptedFiles);
+                            
+                            this.setState({
+                                uploadedFile: acceptedFiles
+                            }, () => {
+                                this.getBase64(this.state.uploadedFile[0], this.callback);
+                            })
+                        }}>
+                            {({getRootProps, getInputProps}) => (
+                                <section>
+                                    <div {...getRootProps()}>
+                                        <input {...getInputProps()} />
+                                        <div class="upload-drop-zone" id="drop-zone">
+                                            Just drag and drop files here
+                                        </div>
+                                    </div>
+                                </section>
+                            )}
+                        </Dropzone>
+                       
+                        <div class="js-upload-finished">
+                            <h3>Processed files</h3>
+                                <div class="list-group">
+                                   {this.state.uploadedFile !== null ?  <a class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">Success</span>{this.state.uploadedFile[0].name}</a> : null}
+                                   
+                            </div>
+                        </div>
+                        <hr className="my-4" />
+                        {this.state.uploadedFile !== null ? <div className="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-xs-12">
+                            <button style={{ width: "100%", color: "white" }} onClick={() => {
+                                this.handleCoverPhotoSubmission();
+                            }} className="btn blue-btn">Submit Cover Photo</button>
+                        </div> : null}
+                        </div>
+                    </div>
+                    </div>
+
+                    
+                   
+                </div>
+                </SlidingPane>
                 <Modal open={open} onClose={this.onCloseModal} center>
                     <div className="modal-body-container">
                     <div class="container bootstrap snippets bootdey">

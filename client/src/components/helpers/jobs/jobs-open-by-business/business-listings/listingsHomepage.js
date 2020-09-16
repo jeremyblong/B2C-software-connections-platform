@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import "./style.css";
+import { Link } from "react-router-dom";
 
 class BusinessPostingsHomepage extends Component {
     render() {
@@ -36,7 +37,7 @@ class BusinessPostingsHomepage extends Component {
                             <div className="listings-container compact-list-layout margin-top-35 margin-bottom-25">
                                 
                         
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                 
                                     <div className="job-listing-details">
@@ -64,11 +65,11 @@ class BusinessPostingsHomepage extends Component {
                                     
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>	
+                                </Link>	
 
 
                                 
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                 
                                     <div className="job-listing-details">
@@ -96,9 +97,9 @@ class BusinessPostingsHomepage extends Component {
                                     
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
                             
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                             
                                     <div className="job-listing-details">
@@ -126,11 +127,11 @@ class BusinessPostingsHomepage extends Component {
                                 
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
                                 
 
                             
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                 
                                     <div className="job-listing-details">
@@ -157,10 +158,10 @@ class BusinessPostingsHomepage extends Component {
                                     
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
 
                                 
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                 
                                     <div className="job-listing-details">
@@ -187,9 +188,9 @@ class BusinessPostingsHomepage extends Component {
                             
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
 
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                     <div className="job-listing-details">
 
@@ -214,10 +215,10 @@ class BusinessPostingsHomepage extends Component {
                                         
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
 
 
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                     <div className="job-listing-details">
 
@@ -240,9 +241,9 @@ class BusinessPostingsHomepage extends Component {
 
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
 
-                                <a href="/" className="job-listing">
+                                <Link to="/business/individual/listing" className="job-listing">
 
                                     <div className="job-listing-details">
 
@@ -268,7 +269,7 @@ class BusinessPostingsHomepage extends Component {
 
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </a>
+                                </Link>
 
                             </div>
                         </div>

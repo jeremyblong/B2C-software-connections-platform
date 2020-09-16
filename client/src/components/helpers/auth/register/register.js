@@ -1,10 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import "./style.css";
 import { Link, withRouter } from "react-router-dom";
 import ImageUploader from 'react-images-upload';
 import axios from "axios";
 import { connect } from "react-redux";
 import { authentication, forceSignup } from "../../../../actions/auth/auth.js";
+import LoadingOverlay from 'react-loading-overlay';
 
 class RegisterHelper extends Component {
 constructor(props) {
@@ -21,7 +22,8 @@ constructor(props) {
         username: "",
         experience: "1",
         phoneNumber: "",
-        picture: null
+        picture: null,
+        isActive: false
     }
 }
     onChange = (date) => {
@@ -43,8 +45,15 @@ constructor(props) {
 
         if (email.length > 0 && accountType.length > 0 && password.length > 0 && username.length > 0 && experience.length > 0 && NUMBER && picture !== null) {
             
-            const trimmed = data.split("data:image/jpeg;base64,")[1];
+            let trimmed;
 
+            if (data.includes("data:image/jpeg;base64,")) {
+                trimmed = data.split("data:image/jpeg;base64,")[1];    
+            } else if (data.includes("data:image/png;base64,")) {
+                trimmed = data.split("data:image/png;base64,")[1];
+            } else if (data.includes("data:image/jpg;base64,")) {
+                trimmed = data.split("data:image/jpg;base64,")[1];
+            }
             axios.post("/register", {
                 email,  
                 accountType,  
@@ -57,43 +66,95 @@ constructor(props) {
                 if (res.data.message === "Successfully registered!") {
                     console.log(res.data);
 
-                    this.props.authentication(res.data.data);
+                    this.setState({
+                        isActive: false
+                    }, () => {
+                        this.props.authentication(res.data.data);
 
-                    this.props.forceSignup(true);
+                        this.props.forceSignup(true);
 
-                    setTimeout(() => {
-                        this.props.history.push("/");
+                        setTimeout(() => {
+                            this.props.history.push("/");
 
-                        window.location.reload();
-                    }, 750);
+                            window.location.reload();
+
+                        }, 750);
+                    })
                 }
             }).catch((err) => {
                 console.log(err);
+                this.setState({
+                    isActive: false
+                })
             })
         } else {
-            alert("Please complete the entire registration form including selecting a profile image & account type...")
+            this.setState({
+                isActive: false
+            }, () => {
+                alert("Please complete the entire registration form including selecting a profile image & account type...");
+            })
         }
     }
     handleSubmission = (e) => {
         e.preventDefault();
+
+        this.setState({
+            isActive: true
+        }, () => {
+            const getBase64 = (file, cb) => {
+                let reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = function () {
+                    cb(reader.result);
+                };
+                reader.onerror = function (error) {
+                    console.log('Error: ', error);
+                };
+            }
+    
+            if (this.state.picture !== null) {
+                getBase64(this.state.picture[0], this.makeCall)
+            } else {
+                this.setState({
+                    isActive: false
+                }, () => {
+                    alert("Please complete the entire registration form including selecting a profile image & account type...")
+                })
+            }
+        })
         
         console.log("clicked - submitted...");
-
-        const getBase64 = (file, cb) => {
-            let reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function () {
-                cb(reader.result);
-            };
-            reader.onerror = function (error) {
-                console.log('Error: ', error);
-            };
-        }
-
-        if (this.state.picture !== null) {
-            getBase64(this.state.picture[0], this.makeCall)
-        } else {
-            alert("Please complete the entire registration form including selecting a profile image & account type...")
+    }
+    renderConditionalContent = () => {
+        if (this.state.accountType === "freelancer") {
+            return (
+                <Fragment>
+                    <div className="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
+                        <label>How many years of coding experience do you have?</label>
+                        <select onChange={(e) => {
+                            this.setState({
+                                experience: e.target.value
+                            })
+                        }} placeholder={"Amount of years programming..."} className="form-control">
+                            <option value={"-----"}>---- Select a value -----</option>
+                            <option value={"1"}>1 Year of Experience</option>
+                            <option value={"2"}>2 Years Experience</option>
+                            <option value={"3"}>3 Years Experience</option>
+                            <option value={"4"}>4 Years Experience</option>
+                            <option value={"5"}>5 Years Experience</option>
+                            <option value={"6"}>6 Years Experience</option>
+                            <option value={"7"}>7 Years Experience</option>
+                            <option value={"8"}>8 Years Experience</option>
+                            <option value={"9"}>9 Years Experience</option>
+                            <option value={"10+"}>10+ Years Experience</option>
+                            <option value={"15+"}>15+ Years Experience</option>
+                            <option value={"20+"}>20+ Years Experience</option>
+                        </select>
+                    </div>
+                </Fragment>
+            );
+        } else if (this.state.accountType === "business") {
+            return null;
         }
     }
     render() {
@@ -122,7 +183,7 @@ constructor(props) {
 
                 <div className="container">
                     <div className="row">
-                        <div className="col-xl-5 offset-xl-3">
+                        <div className={this.state.isActive ? "col-xl-5 offset-xl-3 collll" : "col-xl-5 offset-xl-3"}>
 
                             <div className="login-register-page">
                                 
@@ -131,7 +192,7 @@ constructor(props) {
                                     <span>Already have an account? <Link to="/sign-in">Log In!</Link></span>
                                 </div>
 
-                            {/* <form onSubmit={this.handleSubmission} id="register-account-form"> */}
+                             {/* <form onSubmit={this.handleSubmission} id="register-account-form"> */}
                                 <label>Select your account type</label>
                                 <div className="account-type">
                                 
@@ -192,27 +253,7 @@ constructor(props) {
                                         }} type="text" className="input-text with-border" name="username" id="password-register" placeholder="Username" required/>
                                     </div>
                                    
-                                    <div className="input-with-icon-left" title="Should be at least 8 characters long" data-tippy-placement="bottom">
-                                    <label>How many years of coding experience do you have?</label>
-                                        <select onChange={(e) => {
-                                            this.setState({
-                                                experience: e.target.value
-                                            })
-                                        }} placeholder={"Amount of years programming..."} className="form-control">
-                                            <option value={"1"}>1 Year of Experience</option>
-                                            <option value={"2"}>2 Years Experience</option>
-                                            <option value={"3"}>3 Years Experience</option>
-                                            <option value={"4"}>4 Years Experience</option>
-                                            <option value={"5"}>5 Years Experience</option>
-                                            <option value={"6"}>6 Years Experience</option>
-                                            <option value={"7"}>7 Years Experience</option>
-                                            <option value={"8"}>8 Years Experience</option>
-                                            <option value={"9"}>9 Years Experience</option>
-                                            <option value={"10+"}>10+ Years Experience</option>
-                                            <option value={"15+"}>15+ Years Experience</option>
-                                            <option value={"20+"}>20+ Years Experience</option>
-                                        </select>
-                                    </div>
+                                    {this.renderConditionalContent()}
 
                                     <div className="input-with-icon-left">
                                         <i className="icon-material-outline-lock"></i>
@@ -249,6 +290,13 @@ constructor(props) {
                     </div>
                 </div>
 
+                <LoadingOverlay
+                    active={this.state.isActive}
+                    spinner
+                    text='Communicating with server, please wait while we authenticate your account...'
+                    >
+                    
+                </LoadingOverlay>
 
                 <div className="margin-top-70"></div>
             </div>

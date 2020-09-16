@@ -1,10 +1,7 @@
 #banner-one:before {
-    background-image: url(../../../../assets/images/landing-2.jpg) !important;
     background-repeat: no-repeat !important;
     background-size: cover !important;
     min-height: 80vh;
-    background-color: rgba(0, 0, 0, 0.3);
-    background-blend-mode: multiply;
 }
 .counter {
     color: blue !important;
@@ -13,4 +10,39 @@
     .intro-search-field {
         margin-top: 100px !important;
     }
+}
+#background-video {
+    height: 100% !important;
+    z-index: 999999 !important;
+    min-height: 100vh !important;
+    min-width: 100vw !important;
+    width: 100% !important;
+    position: absolute;
+    margin-left: -100vw !important;
+}
+video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+}
+
+.jumbotron {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    color: inherit;
+    background-color: #eee;
+    height: 80vh;
+    overflow: hidden;
+    position: relative;
+}
+
+.container-custom {
+    position: relative;
+    background-color: rgba(0, 0, 0, 0.6);
+    padding: 30px;
+    border-radius: 25px;
+    min-height: 500px !important;
 }

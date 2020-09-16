@@ -13,10 +13,20 @@ const rp = require("request-promise");
 const { v4: uuidv4 } = require('uuid');
 const nodeAddress = uuidv4().split("-").join("");
 const paypal = require('paypal-rest-sdk');
+const flash = require('connect-flash');
+const session = require('express-session');
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
- 
+
+app.use(flash());
+app.use(session({ 
+  cookie: { maxAge: 60000 }, 
+  secret: 'woot',
+  resave: false, 
+  saveUninitialized: false
+}));
+
 mongoDB();
 
 paypal.configure({
@@ -55,10 +65,14 @@ app.use("/profile/build/freelancer/languages", require("./routes/profile/signup/
 app.use("/profile/build/freelancer/hourly/rates", require("./routes/profile/signup/hourlyRates.js"));
 app.use("/places/api", require("./routes/API_places/places_api.js"));
 app.use("/profile/build/freelancer/update/location", require("./routes/profile/signup/location.js"));
-
-
-
-
+app.use("/gather/freelancers", require("./routes/freelancers/getFreelancers.js"));
+app.use("/gather/user/by/id", require("./routes/getUserById.js"));
+app.use("/upload/cover/photo", require("./routes/profile/pictures/uploadCoverPhoto.js"));
+app.use("/success", require("./routes/paypal/success.js"));
+app.use("/cancel", require("./routes/paypal/cancel.js"));
+app.use("/paypal/initital", require("./routes/paypal/initital.js"));
+app.use("/business/signup/posting/title", require("./routes/profile/business-signup/initial.js"));
+app.use("/business/signup/description/update", require("./routes/profile/business-signup/description.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

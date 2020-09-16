@@ -8,7 +8,6 @@ const SettingsPageMain = (props) => {
         <Fragment>
             <Navigation />
             <SettingsHelper />
-            <FooterFooter />
         </Fragment>
     );
 }

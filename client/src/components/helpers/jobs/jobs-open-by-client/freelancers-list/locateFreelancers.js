@@ -2,20 +2,45 @@ import React, { Component } from 'react';
 import "./style.css";
 import { Link, withRouter } from "react-router-dom";
 import Slider from 'react-rangeslider'
-import 'react-rangeslider/lib/index.css'
+import 'react-rangeslider/lib/index.css';
+import axios from "axios";
 
 class FreelancerListView extends Component {
 constructor(props) {
     super(props)
     
     this.state = {
-        volume: 0
+        volume: 0,
+        users: []
     }
 }
     handleOnChange = (value) => {
         this.setState({
         volume: value
         })
+    }
+    componentDidMount() {
+        axios.get("/gather/freelancers").then((res) => {
+            if (res.data.message === "Successfully gathered freelancers!") {
+                console.log("res.data.... :", res.data);
+                
+                this.setState({
+                    users: res.data.users
+                })
+            } else {
+                console.log("could NOT locate desired result...");
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    redirectPage = (user) => {
+        this.props.history.push({
+            pathname: `/freelancer/individual/page/public/${user.unique_id}`,
+            state: { 
+                user
+            }
+        });
     }
     render() {
         const { volume } = this.state
@@ -84,15 +109,15 @@ constructor(props) {
                                     <div class="tags-container">
                                         <div class="tag">
                                             <input type="checkbox" id="tag1"/>
-                                            <label for="tag1">front-end dev</label>
+                                            <label className="label-spc" for="tag1">front-end dev</label>
                                         </div>
                                         <div class="tag">
                                             <input type="checkbox" id="tag2"/>
-                                            <label for="tag2">angular</label>
+                                            <label className="label-spc" for="tag2">angular</label>
                                         </div>
                                         <div class="tag">
                                             <input type="checkbox" id="tag3"/>
-                                            <label for="tag3">react</label>
+                                            <label className="label-spc" for="tag3">react</label>
                                         </div>
                                         <div class="tag">
                                             <input type="checkbox" id="tag4"/>
@@ -164,50 +189,54 @@ constructor(props) {
 
                   
                             <div class="freelancers-container freelancers-grid-layout margin-top-35">
-                                
-                              
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
+                                {this.state.users.length !== 0 ? this.state.users.map((user, index) => {
+                                    if (user.completed_signup === true) {
+                                        console.log("user", user);
+                                            return (
+                                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
+                                                    <div class="freelancer-overview">
+                                                        <div class="freelancer-overview-inner">
+                                                            
+                                                        
+                                                            <span class="bookmark-icon"></span>
+                                                            
+                                                            
+                                                            <div class="freelancer-avatar">
+                                                                <div class="verified-badge"></div>
+                                                                <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
+                                                            </div>
 
-                           
-                                    <div class="freelancer-overview">
-                                        <div class="freelancer-overview-inner">
-                                            
-                                         
-                                            <span class="bookmark-icon"></span>
-                                            
-                                            
-                                            <div class="freelancer-avatar">
-                                                <div class="verified-badge"></div>
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-big-01.jpg" alt=""/></a>
-                                            </div>
+                                                        
+                                                            <div class="freelancer-name">
+                                                                <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
+                                                                <span>{user.freelancerData.main_service_offered}</span>
+                                                            </div>
 
-                                           
-                                            <div class="freelancer-name">
-                                                <h4><a href="single-freelancer-profile.html">Tom Smith <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
-                                                <span>UI/UX Designer</span>
-                                            </div>
+                                                            <div class="freelancer-rating">
+                                                                <div class="star-rating" data-rating="4.9"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                
+                                                    <div class="freelancer-details">
+                                                        <div class="freelancer-details-list">
+                                                            <ul>
+                                                                {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
+                                                                <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
+                                                                <li>Job Success <strong>95%</strong></li>
+                                                            </ul>
+                                                        </div>
+                                                        <button onClick={() => {
+                                                            this.redirectPage(user);
+                                                        }} class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
+                                                    </div>
+                                                </div>
+                                            );
+                                    }
+                                }) : null}
 
-                                            <div class="freelancer-rating">
-                                                <div class="star-rating" data-rating="4.9"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                 
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> London</strong></li>
-                                                <li>Rate <strong>$60 / hr</strong></li>
-                                                <li>Job Success <strong>95%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
-                                </div>
-                          
-
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
+                                {/* <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
 
                                   
                                     <div class="freelancer-overview">
@@ -218,7 +247,7 @@ constructor(props) {
                                           
                                             <div class="freelancer-avatar">
                                                 <div class="verified-badge"></div>
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-big-02.jpg" alt=""/></a>
+                                                <a href="/"><img src="/images/user-avatar-big-02.jpg" alt=""/></a>
                                             </div>
 
                                        
@@ -243,7 +272,7 @@ constructor(props) {
                                                 <li>Job Success <strong>88%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
                                     </div>
                                 </div>
                           
@@ -259,7 +288,7 @@ constructor(props) {
                                             
                                     
                                             <div class="freelancer-avatar">
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
+                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
                                             </div>
 
                                             
@@ -281,7 +310,7 @@ constructor(props) {
                                                 <li>Job Success <strong>100%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
                                     </div>
                                 </div>
                         
@@ -298,7 +327,7 @@ constructor(props) {
                                           
                                             <div class="freelancer-avatar">
                                                 <div class="verified-badge"></div>
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-big-03.jpg" alt=""/></a>
+                                                <a href="/"><img src="/images/user-avatar-big-03.jpg" alt=""/></a>
                                             </div>
 
                                           
@@ -322,7 +351,7 @@ constructor(props) {
                                                 <li>Job Success <strong>100%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
                                     </div>
                                 </div>
                               
@@ -337,7 +366,7 @@ constructor(props) {
                                             
                                            
                                             <div class="freelancer-avatar">
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
+                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
                                             </div>
 
                                       
@@ -362,7 +391,7 @@ constructor(props) {
                                                 <li>Job Success <strong>89%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
                                     </div>
                                 </div>
                               
@@ -378,7 +407,7 @@ constructor(props) {
                                             
                                           
                                             <div class="freelancer-avatar">
-                                                <a href="single-freelancer-profile.html"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
+                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
                                             </div>
 
                                            
@@ -403,9 +432,9 @@ constructor(props) {
                                                 <li>Job Success <strong>100%</strong></li>
                                             </ul>
                                         </div>
-                                        <a href="single-freelancer-profile.html" class="button button-sliding-icon ripple-effect">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
+                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
                                     </div>
-                                </div>
+                                </div> */}
                               
 
                             </div>
@@ -471,4 +500,4 @@ constructor(props) {
         )
     }
 }
-export default FreelancerListView;
+export default withRouter(FreelancerListView);

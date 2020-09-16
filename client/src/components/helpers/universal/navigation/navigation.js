@@ -11,12 +11,15 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem,
-  NavbarText
+  NavbarText,
+  Button, 
+  Popover, 
+  PopoverHeader, 
+  PopoverBody
 } from 'reactstrap';
 import { Link, withRouter } from "react-router-dom";
 import "./style.css";
 import { connect } from "react-redux";
-import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { authentication } from "../../../../actions/auth/auth.js";
 import { completedSignup } from "../../../../actions/signup/signedUpOrNot.js";
 

@@ -217,6 +217,7 @@ constructor(props) {
                                         degree: e.target.value
                                     })
                                 }} className="form-control">
+                                    <option value="----">--- Select a value --- *required*</option>
                                     <option value="technical-school">Technical School</option>
                                     <option value="associates-degree">Associates Degree</option>
                                     <option value="bachelors-degree">bachelor's Degree</option>

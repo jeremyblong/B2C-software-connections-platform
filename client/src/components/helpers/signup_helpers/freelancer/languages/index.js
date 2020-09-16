@@ -18,18 +18,22 @@ constructor(props) {
 
         const { speakingLevel, otherLanguages } = this.state;
 
-        axios.post("/profile/build/freelancer/languages", {
-            native: speakingLevel,
-            secondary: otherLanguages,
-            username: this.props.username
-        }).then((res) => {
-            if (res.data.message === "Successfully updated account!") {
-                console.log(res.data);
-                this.props.history.push("/signup/freelancer/page/5");
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+        if (speakingLevel.length > 0 && otherLanguages.length > 0) {
+            axios.post("/profile/build/freelancer/languages", {
+                native: speakingLevel,
+                secondary: otherLanguages,
+                username: this.props.username
+            }).then((res) => {
+                if (res.data.message === "Successfully updated account!") {
+                    console.log(res.data);
+                    this.props.history.push("/signup/freelancer/page/5");
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            alert("Please fill out both fields - if you only speak english please enter 'Not Applicable' in secondary languages...")
+        }
     }
     render() {
         console.log(this.state);
@@ -84,6 +88,7 @@ constructor(props) {
                                                                     speakingLevel: e.target.value
                                                                 })
                                                             }} data-size="7" title="Select Category">
+                                                                <option value={"----"}>----- Select a value ---- </option>
                                                                 <option value={"basic"}>Basic - I write in this language decently</option>
                                                                 <option value={"conversational"}>Conversational - I write and speak this language well</option>
                                                                 <option value={"fluent"}>Fluent - I write and speak this language almost perfectly</option>

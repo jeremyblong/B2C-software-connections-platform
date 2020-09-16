@@ -464,7 +464,7 @@ constructor(props) {
                                         }} type="text" value={this.state.tagline} className="form-control" placeholder={"iOS Expert + Node Dev"}/>
                                         
                                     </div>
-                                    {this.state.tagline.length !== 0 ? <button onClick={this.handleSubmissionTagline} className="btn blue-btn" style={{ color: "white", width: "100%" }}>Submit Tagline Changes</button> : null}
+                                    {this.state.tagline.length !== 0 ? <div><button onClick={this.handleSubmissionTagline} className="btn blue-btn" style={{ color: "white", width: "100%" }}>Submit Tagline Changes</button></div> : null}
                                 </div>
 
                                 <div className="col-xl-6">

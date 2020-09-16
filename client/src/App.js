@@ -24,6 +24,12 @@ import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
 import { authentication } from "./actions/auth/auth.js";
 import FreelancersListPage from "./components/pages/businesses/find-freelancers/find.js";
+import FreelancerProfileIndividualPublic from "./components/pages/businesses/find-freelancers/individual/freelancerProfile.js";
+import BusinessIndividualListing from "./components/pages/businesses/business-individual/individual.js";
+import PaymentMemebershipPage from "./components/pages/memberships/createMembership.js";
+import ThankYouPage from "./components/pages/thankYouPage.js";
+import InitialSignupPageBusiness from "./components/pages/signup_pages/business/initial/init.js";
+import BusinessSignupPageDescription from "./components/pages/signup_pages/business/description/descriptionPageSignup.js";
 
 // places api - foursquare api
 
@@ -34,7 +40,9 @@ constructor(props) {
   this.state = {
     pageNumber: null,
     loaded: false,
-    un_registered: false
+    un_registered: false,
+    user: null,
+    businessPageNumber: null
   }
 }
   componentDidMount() {
@@ -45,19 +53,40 @@ constructor(props) {
         if (res.data.message === "FOUND user!") {
           console.log("!!! :", res.data);
           
-          if (res.data.user.completed_signup === true) {
+          if (res.data.user.businessSignupPageCompleted) {
+            if (res.data.user.completed_signup === true) {
+                this.setState({
+                  un_registered: true,
+                  loaded: true,
+                  user: res.data.user
+                })
+            } else {
               this.setState({
-                un_registered: true,
-                loaded: true
-              })
+                businessPageNumber: res.data.user.businessSignupPageCompleted,
+                loaded: true,
+                user: res.data.user
+              }, () => {
+                this.submit();
+                // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
+              });
+            }
           } else {
-            this.setState({
-              pageNumber: res.data.page,
-              loaded: true
-            }, () => {
-              this.submit();
-              // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
-            });
+            if (res.data.user.completed_signup === true) {
+                this.setState({
+                  un_registered: true,
+                  loaded: true,
+                  user: res.data.user
+                })
+            } else {
+              this.setState({
+                pageNumber: res.data.page,
+                loaded: true,
+                user: res.data.user
+              }, () => {
+                this.submit();
+                // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
+              });
+            }
           }
         } else {
           this.setState({
@@ -78,8 +107,8 @@ constructor(props) {
         {
           label: 'Yes',
           onClick: () => {
-            if (this.state.pageNumber) {
-              this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
+            if (this.state.pageNumber || this.state.businessPageNumber) {
+              this.props.history.push(this.state.businessPageNumber !== null ? `/signup/business/page/${this.state.businessPageNumber}` : `/signup/freelancer/page/${this.state.pageNumber}`);
             } else {
               this.props.history.push(`/`);
             }
@@ -106,6 +135,8 @@ constructor(props) {
 
     const { loaded, pageNumber } = this.state;
 
+    console.log("state...... this : ", this.state);
+
     if (loaded === true) {
       if (this.props.finishedSignup === true || this.state.un_registered === true || this.props.force === false) {
         return (
@@ -122,10 +153,14 @@ constructor(props) {
               <Route exact path="/dashboard/messages" component={MessagesPage} />
               <Route exact path="/businesses/post/job/listing" component={PostNewJobPage} />
               <Route exact path="/freelancers/list/view" component={FreelancersListPage} />
+              <Route exact path="/freelancer/individual/page/public/:id" component={FreelancerProfileIndividualPublic} />
+              <Route exact path="/business/individual/listing" component={BusinessIndividualListing} />
+              <Route exact path="/payment/create/membership" component={PaymentMemebershipPage} />
+              <Route exact path="/thank/you/for/your/payment" component={ThankYouPage} />
             </div>
           </Fragment>
         );
-      } else {
+      } else if (this.state.user.accountType === "freelancer") {
         return (
           <Fragment>
             <div className="App">
@@ -136,6 +171,15 @@ constructor(props) {
               <Route exact path={`/signup/freelancer/page/4`} component={FifthPageSignupFreelancer} />
               <Route exact path={`/signup/freelancer/page/5`} component={SixthPageFreelancerSignUp} />
               <Route exact path={`/signup/freelancer/page/6`} component={SeventhFreelancerSignupPage} />
+            </div>
+          </Fragment>
+        );
+      } else if (this.state.user.accountType === "business") {
+        return (
+          <Fragment>
+            <div className="App">
+              <Route exact path="/" component={InitialSignupPageBusiness} />
+              <Route exact path="/signup/business/page/1" component={BusinessSignupPageDescription} />
             </div>
           </Fragment>
         );

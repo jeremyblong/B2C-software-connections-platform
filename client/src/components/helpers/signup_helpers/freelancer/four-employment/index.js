@@ -241,10 +241,8 @@ constructor(props) {
                                     <div style={{ marginTop: "150px" }}>
                                         <button onClick={() => {
                                             console.log("clicked.")
-                                            this.props.history.push("/");
-
-                                            
-                                        }} style={{ width: "80%" }} className="button blue-btn ripple-effect big margin-top-30">Continue to home-page</button>
+                                            this.props.history.push("/signup/freelancer/page/4");
+                                        }} style={{ width: "80%" }} className="button blue-btn ripple-effect big margin-top-30">Continue to languages</button>
                                     </div>
                                 </div>
 
