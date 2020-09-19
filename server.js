@@ -73,6 +73,12 @@ app.use("/cancel", require("./routes/paypal/cancel.js"));
 app.use("/paypal/initital", require("./routes/paypal/initital.js"));
 app.use("/business/signup/posting/title", require("./routes/profile/business-signup/initial.js"));
 app.use("/business/signup/description/update", require("./routes/profile/business-signup/description.js"));
+app.use("/business/signup/questions/post", require("./routes/profile/business-signup/questions.js"));
+app.use("/business/signup/account/details/technical", require("./routes/profile/business-signup/programming-details.js"));
+app.use("/business/signup/save/location/preference", require("./routes/profile/business-signup/location.js"));
+app.use("/business/signup/visibility/update", require("./routes/profile/business-signup/visibility.js"));
+app.use("/business/signup/billing/rate/update", require("./routes/profile/business-signup/billing-rate.js"));
+app.use("/business/complete/signup", require("./routes/profile/business-signup/complete-signup.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

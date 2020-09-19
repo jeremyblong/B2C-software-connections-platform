@@ -1,0 +1,22 @@
+.rangeslider__handle-tooltip {
+    min-width: 100px !important;
+}
+.stretch-mobile {
+    width: 50%;
+}
+@media only screen and (max-width: 750px) {
+    .stretch-mobile {
+        width: 100%;
+    }
+}
+.custom-body {
+    background-color: #2bacbd !important;
+    border-bottom: 3px solid blue;
+    font-weight: bold;
+    color: white;
+}
+.header-two {
+    font-size: 1rem !important;
+    color: black;
+    font-weight: bold;
+}

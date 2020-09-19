@@ -30,7 +30,12 @@ import PaymentMemebershipPage from "./components/pages/memberships/createMembers
 import ThankYouPage from "./components/pages/thankYouPage.js";
 import InitialSignupPageBusiness from "./components/pages/signup_pages/business/initial/init.js";
 import BusinessSignupPageDescription from "./components/pages/signup_pages/business/description/descriptionPageSignup.js";
-
+import TypeOfProjectPage from "./components/pages/signup_pages/business/type-of-project/type-page.js";
+import ExpertisePage from "./components/pages/signup_pages/business/expertise/index.js";
+import LocationBusinessSignupPage from "./components/pages/signup_pages/business/location/index.js";
+import VisibilitySignupBusinessPage from "./components/pages/signup_pages/business/visibility/visibility.js";
+import BillingBusinessPage from "./components/pages/signup_pages/business/billing-rates/billing.js";
+import BusinessSignupOverviewFinalReviewPage from "./components/pages/signup_pages/business/overview/final.js";
 // places api - foursquare api
 
 class App extends Component {
@@ -180,6 +185,12 @@ constructor(props) {
             <div className="App">
               <Route exact path="/" component={InitialSignupPageBusiness} />
               <Route exact path="/signup/business/page/1" component={BusinessSignupPageDescription} />
+              <Route exact path="/signup/business/page/2" component={TypeOfProjectPage} /> 
+              <Route exact path="/signup/business/page/3" component={ExpertisePage} />
+              <Route exact path="/signup/business/page/4" component={LocationBusinessSignupPage} />
+              <Route exact path="/signup/business/page/5" component={VisibilitySignupBusinessPage} />
+              <Route exact path="/signup/business/page/6" component={BillingBusinessPage} />
+              <Route exact path="/signup/business/page/7" component={BusinessSignupOverviewFinalReviewPage} />
             </div>
           </Fragment>
         );

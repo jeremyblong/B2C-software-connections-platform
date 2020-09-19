@@ -151,7 +151,7 @@ constructor(props) {
                                                                 descErr: ""
                                                             })
                                                         }} class="form-control rounded-0" id="exampleFormControlTextarea1" rows="7" placeholder={"Enter your description here, you must enter AT LEAST 100 characters long or more..."}></textarea>
-
+                                                        <label className="text-right">{this.state.description.length}/500</label>
                                                     </div>
                                                     {this.state.descErr.length !== 0 ? <h3 className="text-center red-text">{this.state.descErr}</h3> : null}
                                                     <label className="text-left" style={{ color: "blue" }}>A good description includes...</label>

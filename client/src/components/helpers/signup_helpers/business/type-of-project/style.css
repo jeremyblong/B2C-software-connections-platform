@@ -1,0 +1,32 @@
+.heading-three {
+    color: #DD2D4A;
+    margin-top: 20px;
+    text-decoration: underline;
+}
+#bottom-right-align {
+    bottom: 10;
+    left: 10;
+    position: absolute;
+}
+.overlay-class {
+    z-index: 999999999999;
+}
+.keyword {
+    background-color: #880D1E !important;
+    font-weight: bold;
+}
+.custom-btn {
+    width: 50%;
+}
+@media only screen and (max-width: 750px) {
+    .keywords-list {
+        overflow-x: auto !important
+    }
+    .frb-group .card {
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .custom-btn {
+        width: 100%;
+    }
+}

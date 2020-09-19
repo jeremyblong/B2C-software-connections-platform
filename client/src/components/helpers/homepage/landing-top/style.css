@@ -4,7 +4,7 @@
     min-height: 80vh;
 }
 .counter {
-    color: blue !important;
+    color: #F26A8D !important;
 }
 @media only screen and (max-width: 800px) {
     .intro-search-field {

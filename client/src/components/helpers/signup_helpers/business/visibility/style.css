@@ -1,0 +1,9 @@
+.blue-header {
+    background-color: #CBEEF3 !important;
+    color: black !important;
+}
+.header {
+    font-size: 1.5rem;
+    font-weight: bold;
+    padding: 10px 0px;
+}

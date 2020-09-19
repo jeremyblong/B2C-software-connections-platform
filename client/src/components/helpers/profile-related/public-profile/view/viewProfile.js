@@ -74,7 +74,7 @@ constructor(props) {
             return (
                <Fragment>
                     <div className="single-page-header freelancer-header" style={{  
-                        backgroundImage: `url(https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.coverPhoto !== null ? this.state.coverPhoto : user.coverPhoto.picture ? user.coverPhoto.picture : null})`,
+                        backgroundImage: `url(https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.coverPhoto !== null ? this.state.coverPhoto : user.coverPhoto ? user.coverPhoto.picture : null})`,
                         backgroundPosition: 'center',
                         backgroundSize: 'cover',
                         backgroundRepeat: 'no-repeat',

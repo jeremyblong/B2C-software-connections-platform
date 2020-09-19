@@ -40,11 +40,13 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                 let filesArray = [];
 
+                const first = user.businessData.job_postings[0];
+
                 for (let i = 0; i < target.length; i++) {
 
                     const element = target[i];
         
-                    if (element.id === id) {
+                    if (first.id === id) {
 
                         console.log("match.")
 

@@ -7,7 +7,7 @@ class FooterFooter extends Component {
         return (
             <div>
                 <div id="footer">
-                    <div className="footer-top-section">
+                    {/* <div className="footer-top-section">
                         <div className="container">
                             <div className="row">
                                 <div className="col-xl-12">
@@ -15,7 +15,7 @@ class FooterFooter extends Component {
                                         <div className="footer-rows-left">
                                             <div className="footer-row">
                                                 <div className="footer-row-inner footer-logo">
-                                                    {/* logo goes here... */}
+                                                 
                                                 </div>
                                             </div>
                                         </div>
@@ -62,7 +62,7 @@ class FooterFooter extends Component {
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="footer-middle-section">
                         <div className="container">
                             <div className="row">

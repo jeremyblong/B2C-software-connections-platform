@@ -1,0 +1,14 @@
+.red-header {
+    background-color: #DD2D4A !important;
+    color: white !important;
+    font-weight: bold;
+}
+.two-red {
+    background-color: #DD2D4A !important;
+    color: white !important;
+}
+.two-red:hover {
+    background-color: lightgrey !important;
+    color: black !important;
+    border: 2px solid black;
+}

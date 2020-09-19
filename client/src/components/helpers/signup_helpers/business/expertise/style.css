@@ -1,0 +1,24 @@
+.boxed {
+    left: 75px !important;
+    position: absolute !important;
+}
+@media only screen and (max-width: 750px) {
+    .boxed {
+        left: 60px !important;;
+        position: absolute !important;;
+    }
+}
+#slide-up-bottom-overlay {
+    background-color: white !important;
+
+}
+.overlay-sliding-panel {
+    background-color: white !important;
+
+}
+#create-space {
+    margin-bottom: 200px !important;
+}
+#no-space {
+    margin-bottom: 0px !important;
+}
