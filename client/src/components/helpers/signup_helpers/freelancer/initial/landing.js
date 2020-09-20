@@ -141,9 +141,7 @@ constructor(props) {
                                 <div class="col-xl-12">
                                     <div class="dashboard-box margin-top-0">
 
-                                    <div style={{ marginBottom: "30px" }} class="col-xl-12">
-                                        <button onClick={this.handleSubmission} class="button magic-btn blue-btn ripple-effect big margin-top-30">Continue to next page </button>
-                                    </div>
+                                    
                                         <div class="headline">
                                             <h3><i class="icon-feather-folder-plus"></i>Complete Profile - Page One</h3>
                                         </div>
@@ -216,6 +214,10 @@ constructor(props) {
                                                                 err: ""
                                                             })
                                                         }}>Click here to clear selection</div></h3> : null}
+                                                        <hr className="black-line" />
+                                                        <div style={{ marginBottom: "30px" }} class="col-xl-12">
+                                                            <button onClick={this.handleSubmission} class="button magic-btn change-index blue-btn ripple-effect big margin-top-30">Continue to next page </button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>

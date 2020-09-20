@@ -12,3 +12,7 @@
     color: black !important;
     border: 2px solid black;
 }
+.card-selected .card-header {
+    background-color: lightgrey !important;
+    color: black !important;
+}

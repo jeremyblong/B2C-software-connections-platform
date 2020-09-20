@@ -22,3 +22,7 @@
 #no-space {
     margin-bottom: 0px !important;
 }
+.selected-card .card-body {
+    background-color: #CBEEF3;
+    color: black !important;
+}

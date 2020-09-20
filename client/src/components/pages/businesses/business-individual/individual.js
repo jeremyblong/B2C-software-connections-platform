@@ -8,7 +8,7 @@ const BusinessIndividualListing = props => {
     return (
         <div>
             <Navigation />
-            <BusinessPostingsIndividual />
+            <BusinessPostingsIndividual job={props.location.data} />
             <FooterFooter />
         </div>
     );

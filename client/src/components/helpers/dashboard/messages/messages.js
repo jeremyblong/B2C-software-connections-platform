@@ -48,10 +48,11 @@ constructor(props) {
                                         <div class="dashboard-nav-inner">
 
                                             <ul data-submenu-title="Start">
-                                                <li class="active"><Link to="/dashboard"><i class="icon-material-outline-dashboard"></i> Dashboard</Link></li>
-                                                <li><a href="dashboard-messages.html"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
+                                                <li><Link to="/dashboard"><i class="icon-material-outline-dashboard"></i> Dashboard</Link></li>
+                                                <li class="active"><a style={{ color: "white" }} href="dashboard-messages.html"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></a></li>
                                                 <li><a href="dashboard-bookmarks.html"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
                                                 <li><a href="dashboard-reviews.html"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
+                                                <li><Link to="/bids/active"><i class="icon-material-outline-dashboard"></i> Active Bids</Link></li>
                                             </ul>
                                             
                                             <ul data-submenu-title="Organize and Manage">

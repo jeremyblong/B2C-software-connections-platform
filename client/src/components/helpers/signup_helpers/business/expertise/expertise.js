@@ -350,7 +350,7 @@ constructor(props) {
                                             <div className="row" style={{ marginTop: "40px" }}>
 
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.experienceLevel === "entry-level" ? "card selected-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             Entry-Level
                                                         </div>
@@ -367,7 +367,7 @@ constructor(props) {
                                                 </div>
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
                                                 <div class="frb-group">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.experienceLevel === "intermediate" ? "card selected-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             Intermediate
                                                         </div>
@@ -385,7 +385,7 @@ constructor(props) {
                                                 </div>
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
                                                 <div class="frb-group">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.experienceLevel === "expert-level" ? "card selected-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             Expert-Level
                                                         </div>

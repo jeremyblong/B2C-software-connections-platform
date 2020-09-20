@@ -174,7 +174,7 @@ constructor(props) {
                                             <div className="row">
 
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.selection === "one-time-project" ? "card grey-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             One-Time Project
                                                         </div>
@@ -185,13 +185,13 @@ constructor(props) {
                                                                 this.setState({
                                                                     selection: "one-time-project"
                                                                 })
-                                                            }} href="#" class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
+                                                            }} class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
                                                 <div class="frb-group">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.selection === "on-going-project" ? "card grey-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             On-going Project
                                                         </div>
@@ -202,14 +202,14 @@ constructor(props) {
                                                                 this.setState({
                                                                     selection: "on-going-project"
                                                                 })
-                                                            }} href="#" class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
+                                                            }} class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 </div>
                                                 <div className="col-md-4 col-lg-4 col-xl-4 col-sm-12 col-xs-12">
                                                 <div class="frb-group">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.selection === "complex-project" ? "card grey-card" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header">
                                                             Complex Project
                                                         </div>
@@ -220,7 +220,7 @@ constructor(props) {
                                                                 this.setState({
                                                                     selection: "complex-project"
                                                                 })
-                                                            }} href="#" class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
+                                                            }} class="btn blue-btn" style={{ color: "white" }}>Select Option</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -228,11 +228,11 @@ constructor(props) {
                                               
                                             
                                             </div>
-                                            {this.state.selection.length !== 0 ? <div className="row">
+                                            {/* {this.state.selection.length !== 0 ? <div className="row">
                                                 <div className="col-md-12 col-lg-12 col-xl-12 col-sm-12 col-xs-12">
                                                     <h3 className="text-center heading-three">You have selected a <strong>{this.renderConversions()}</strong></h3>
                                                 </div>
-                                            </div> : null}
+                                            </div> : null} */}
                                             {this.state.questions === false ? <Fragment><div className="row" style={{ marginTop: "50px" }}>
                                             <label style={{ paddingLeft: "15px", color: "#DD2D4A", fontWeight: "bold" }}>Screening Questions (Optional)</label>
                                                 {/* content goes here ... */}

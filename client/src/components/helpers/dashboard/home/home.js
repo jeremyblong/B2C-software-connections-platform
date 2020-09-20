@@ -103,7 +103,7 @@ constructor(props) {
                                         <div class="dashboard-nav-inner">
 
                                             <ul data-submenu-title="Start">
-                                                <li class="active"><a href={null}><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
+                                                <li class="active"><a style={{ color: "white" }} href={null}><i class="icon-material-outline-dashboard"></i> Dashboard</a></li>
                                                 <li><Link to="/dashboard/messages"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></Link></li>
                                                 <li><a href="dashboard-bookmarks.html"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
                                                 <li><a href="dashboard-reviews.html"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
@@ -210,21 +210,21 @@ constructor(props) {
                                 <div class="fun-fact" data-fun-fact-color="#36bd78">
                                     <div class="fun-fact-text">
                                         <span>Task Bids Won</span>
-                                        <h4>22</h4>
+                                        <h4>0</h4>
                                     </div>
                                     <div class="fun-fact-icon"><i class="icon-material-outline-gavel"></i></div>
                                 </div>
                                 <div class="fun-fact" data-fun-fact-color="#b81b7f">
                                     <div class="fun-fact-text">
                                         <span>Jobs Applied</span>
-                                        <h4>4</h4>
+                                        <h4>{user.submitted_applications.length || 0}</h4>
                                     </div>
                                     <div class="fun-fact-icon"><i class="icon-material-outline-business-center"></i></div>
                                 </div>
                                 <div class="fun-fact" data-fun-fact-color="#efa80f">
                                     <div class="fun-fact-text">
                                         <span>Reviews</span>
-                                        <h4>28</h4>
+                                        <h4>0</h4>
                                     </div>
                                     <div class="fun-fact-icon"><i class="icon-material-outline-rate-review"></i></div>
                                 </div>
@@ -232,7 +232,7 @@ constructor(props) {
                                 <div class="fun-fact" data-fun-fact-color="#2a41e6">
                                     <div class="fun-fact-text">
                                         <span>This Month Views</span>
-                                        <h4>987</h4>
+                                        <h4>0</h4>
                                     </div>
                                     <div class="fun-fact-icon"><i class="icon-feather-trending-up"></i></div>
                                 </div>
@@ -366,24 +366,29 @@ constructor(props) {
                                 <div class="col-xl-6">
                                     <div class="dashboard-box">
                                         <div class="headline">
-                                            <h3><i class="icon-material-outline-assignment"></i> Orders</h3>
+                                            <h3><i class="icon-material-outline-assignment"></i> Current Pending/Accepted Applications - Submitted Applications</h3>
                                         </div>
                                         <div class="content">
                                             <ul class="dashboard-box-list">
-                                                <li>
-                                                    <div class="invoice-list-item">
-                                                    <strong>Professional Plan</strong>
-                                                        <ul>
-                                                            <li><span class="unpaid">Unpaid</span></li>
-                                                            <li>Order: #326</li>
-                                                            <li>Date: 12/08/2019</li>
-                                                        </ul>
-                                                    </div>
-                                                    <div class="buttons-to-right">
-                                                        <a href="pages-checkout-page.html" class="button">Finish Payment</a>
-                                                    </div>
-                                                </li>
-                                                <li>
+                                                {user.submitted_applications ? user.submitted_applications.map((application, index) => {
+                                                    return (
+                                                        <li>
+                                                            <div class="invoice-list-item mx-auto">
+                                                            <strong>{application.title}</strong>
+                                                                <ul>
+                                                                    <li><span class="unpaid">Pending</span></li> <br />
+                                                                    <li>Order: {application.id}</li> <br />
+                                                                    <li>Date: {application.date}</li>
+                                                                </ul>
+                                                            </div>
+                                                            <div class="buttons-to-right">
+                                                                <a class="button blue-btn" style={{ color: "white" }}>View Posting</a>
+                                                            </div>
+                                                        </li>
+                                                    );
+                                                }) : null}
+                                                
+                                                {/* <li>
                                                     <div class="invoice-list-item">
                                                     <strong>Professional Plan</strong>
                                                         <ul>
@@ -421,7 +426,7 @@ constructor(props) {
                                                     <div class="buttons-to-right">
                                                         <a href="pages-invoice-template.html" class="button gray">View Invoice</a>
                                                     </div>
-                                                </li>
+                                                </li> */}
                                             </ul>
                                         </div>
                                     </div>

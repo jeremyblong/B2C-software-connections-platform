@@ -69,14 +69,14 @@ constructor(props) {
                     this.setState({
                         isActive: false
                     }, () => {
-                        this.props.authentication(res.data.data);
+                        // this.props.authentication(res.data.data);
 
-                        this.props.forceSignup(true);
+                        // this.props.forceSignup(true);
 
                         setTimeout(() => {
-                            this.props.history.push("/");
+                            this.props.history.push("/verify/phone/number", { passed: res.data.data, sid: res.data.sid });
 
-                            window.location.reload();
+                        //     window.location.reload();
 
                         }, 750);
                     })

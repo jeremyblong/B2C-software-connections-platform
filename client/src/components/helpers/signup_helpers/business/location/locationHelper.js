@@ -46,7 +46,7 @@ constructor(props) {
                                 
                         
                                 <div class="dashboard-headline">
-                                    <h3 className="text-left">Details - Type of project</h3>
+                                    <h3 className="text-left">Location Details</h3>
 
                                     
                                     <nav id="breadcrumbs" class="dark">
@@ -77,7 +77,7 @@ constructor(props) {
                                             <div className="row">
 
                                                 <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-xl-6">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.selection === "USA-ONLY" ? "card card-selected" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header red-header">
                                                             USA - *ONLY* listing
                                                         </div>
@@ -89,13 +89,13 @@ constructor(props) {
                                                                     selection: "USA-ONLY",
                                                                     country: ""
                                                                 })
-                                                            }} href="#" class="btn two-red" style={{ color: "white" }}>Select Option</button>
+                                                            }} class={this.state.selection === "USA-ONLY" ? "btn blue-btn" : "btn two-red"} style={{ color: "white" }}>Select Option</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                                 <div className="col-lg-6 col-md-6 col-sm-12 col-xs-12 col-xl-6">
                                                 <div class="frb-group">
-                                                    <div class="card" style={{ width: "100%" }}>
+                                                    <div class={this.state.selection === "WORLDWIDE" ? "card card-selected" : "card"} style={{ width: "100%" }}>
                                                         <div class="card-header red-header">
                                                             Worldwide Listing
                                                         </div>
@@ -107,7 +107,7 @@ constructor(props) {
                                                                     selection: "WORLDWIDE",
                                                                     state: ""
                                                                 })
-                                                            }} href="#" class="btn two-red" style={{ color: "white" }}>Select Option</button>
+                                                            }} class={this.state.selection === "WORLDWIDE" ? "btn blue-btn" : "btn two-red"} style={{ color: "white" }}>Select Option</button>
                                                         </div>
                                                     </div>
                                                 </div>

@@ -93,7 +93,7 @@ constructor(props) {
     render() {
         console.log("ppppppppp :", this.props, "this.state", this.state);
         return (
-            <div>
+            <div style={{ borderTop: "3px solid lightgrey" }}>
                 <div className="clearfix"></div>
                     <div id="titlebar" className="gradient">
                         <div className="container">

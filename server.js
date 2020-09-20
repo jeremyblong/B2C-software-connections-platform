@@ -79,6 +79,11 @@ app.use("/business/signup/save/location/preference", require("./routes/profile/b
 app.use("/business/signup/visibility/update", require("./routes/profile/business-signup/visibility.js"));
 app.use("/business/signup/billing/rate/update", require("./routes/profile/business-signup/billing-rate.js"));
 app.use("/business/complete/signup", require("./routes/profile/business-signup/complete-signup.js"));
+app.use("/gather/users/job_postings/exists", require("./routes/businesses/jobs/gatherJobs.js"));
+app.use("/twilio/verify/phone/number", require("./routes/public_apis/twillio/verfiy.js"));
+app.use("/gather/posted/job/by/id", require("./routes/businesses/jobs/findByJobId.js"));
+app.use("/submit/proposal/freelancer", require("./routes/businesses/jobs/applyToListing.js"));
+
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

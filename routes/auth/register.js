@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
+const app = express();
 const fs = require('fs');
 const mongo = require("mongodb");
 const config = require("config");
@@ -11,6 +12,11 @@ const AWS = require('aws-sdk');
 const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
+
+const accountSid = 'AC3ef6c21bae251cb9f4677c85e600c2ac';
+const authToken = '4a60ae3bfbfc6089b45b654e6138beee';
+const client = require('twilio')(accountSid, authToken);
+
 
 const accessKeyId = 'J4FR4IVQL0CV0DFTMYBJ';
 const secretAccessKey = 'wuUJoRXlWkSpVfPusz5XEf3ijhgvRtbwXc4oFofP';
@@ -70,11 +76,27 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                        console.log(errorr);
                     }
                     console.log(dataaa);
-                    res.json({
-                        message: "Successfully registered!",
-                        data,
-                        image: generatedID
-                    })
+                    client.verify.services.create({friendlyName: 'My Verify Service'})
+                      .then(service => {
+                          console.log(service.sid);
+
+                          client.verify.services(service.sid)
+                            .verifications
+                            .create({to: `+1${phoneNumber.trim()}`, channel: 'sms'})
+                            .then(verification => {
+                                
+                                console.log(verification.status);
+
+                                app.set('serviceSid', service.sid); 
+
+                                res.json({
+                                    message: "Successfully registered!",
+                                    data,
+                                    image: generatedID,
+                                    sid: service.sid
+                                })
+                            });
+                    });
                 });
             }
         })

@@ -461,7 +461,7 @@ constructor(props) {
                                                 }} value={this.state.city} type="text" className="with-border" placeholder={"Ex. Charlotte - Please don't use abbreviations"} />
                                             </div>
                                         </div>
-                                        <div className="col-xl-4">
+                                        {this.state.country === "United States" ? <div className="col-xl-4">
                                             <div className="submit-field">
                                                 <h5>State</h5>
                                                 <select onChange={(e) => {
@@ -522,7 +522,7 @@ constructor(props) {
                                                     <option value="WY">Wyoming</option>
                                                 </select>	
                                             </div>
-                                        </div>
+                                        </div> : null}
                                         <div className="col-xl-4">
                                             <div className="submit-field">
                                                 <h5>Zip-Code (Only first 5 digits for USA codes)</h5>

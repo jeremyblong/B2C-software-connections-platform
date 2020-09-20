@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import {
   Collapse,
   Navbar,
@@ -22,6 +22,8 @@ import "./style.css";
 import { connect } from "react-redux";
 import { authentication } from "../../../../actions/auth/auth.js";
 import { completedSignup } from "../../../../actions/signup/signedUpOrNot.js";
+import axios from "axios";
+
 
 const modifiers = {
     preventOverflow: {
@@ -37,6 +39,7 @@ const Navigation = (props) => {
   const [popoverOpen, openPopover] = useState(false);
   const [popoverOpenTwo, openPopoverTwo] = useState(false);
   const [popoverOpenThree, openPopoverThree] = useState(false);
+  const [data, setData] = useState([]);
  
   const toggle = () => setIsOpen(!isOpen);
 
@@ -73,6 +76,18 @@ const Navigation = (props) => {
         props.history.push("/");
     }, 500);
   }
+  useEffect(() => {
+    axios.post("/gather/specific/user/username", {
+        username: props.username
+    }).then((res) => {
+        if (res.data.message === "Found Specific User!") {
+            console.log(res.data);
+            setData(res.data.user);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
+  }, [])
   const renderContent = () => {
       console.log("PROPS ------------ ", props);
       if (props.email) {
@@ -133,70 +148,19 @@ const Navigation = (props) => {
                                                 <div className="header-notifications-content">
                                                     <div className="header-notifications-scroll" data-simplebar>
                                                         <ul id="list">
-                                                            <li className="notifications-not-read">
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Michael Shannah</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className=" icon-material-outline-gavel"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Gilbert Allanis</strong> placed a bid on your <span className="color">iOS App Development</span> project
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-autorenew"></i></span>
-                                                                    <span className="notification-text">
-                                                                        Your job listing <span className="color">Full Stack PHP Developer</span> is expiring.
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Sindy Forrest</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li className="notifications-not-read">
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Michael Shannah</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className=" icon-material-outline-gavel"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Gilbert Allanis</strong> placed a bid on your <span className="color">iOS App Development</span> project
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-autorenew"></i></span>
-                                                                    <span className="notification-text">
-                                                                        Your job listing <span className="color">Full Stack PHP Developer</span> is expiring.
-                                                                    </span>
-                                                                </a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="/">
-                                                                    <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
-                                                                    <span className="notification-text">
-                                                                        <strong>Sindy Forrest</strong> applied for a job <span className="color">Full Stack Software Engineer</span>
-                                                                    </span>
-                                                                </a>
-                                                            </li>
+                                                            {data.notifications ? data.notifications.map((notification, index) => {
+                                                                console.log("notification", notification)
+                                                                return (
+                                                                    <li className="notifications-not-read">
+                                                                        <a href="/">
+                                                                            <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
+                                                                            <span className="notification-text">
+                                                                                <strong>{notification.action_taker === props.username ? "You" : notification.action_taker}</strong> {notification.action_specific} <span className="color">{notification.action.title}</span>
+                                                                            </span>
+                                                                        </a>
+                                                                    </li>
+                                                                );
+                                                            }) : null}
                                                         </ul>
                                                     </div>
                                                     <button className="btn btn-blue" style={{ width: "100%" }} onClick={null} >View All Notifications</button>
@@ -287,7 +251,7 @@ const Navigation = (props) => {
   return (
     <div>
       <Navbar color="light" light expand="md">
-        <NavbarBrand><Link style={{ color: "black" }} to="/">Talented Engineers Inc.</Link></NavbarBrand>
+        <NavbarBrand><Link style={{ color: "black" }} to="/">The Real Coders Inc.</Link></NavbarBrand>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="mr-auto" navbar>
@@ -338,9 +302,9 @@ const Navigation = (props) => {
                 Manage Profile
               </DropdownToggle>
               <DropdownMenu right>
-                <DropdownItem>
+                {props.accountType === "freelancer" ? <DropdownItem>
                     <Link className="dropdown-link" to="/view/personal/profile">View Public Profile</Link>
-                </DropdownItem>
+                </DropdownItem> : null}
                 <DropdownItem className="dropdown-link">
                     <Link className="dropdown-link" to="/">Refer A Friend & Get $25</Link>
                 </DropdownItem>
@@ -363,7 +327,7 @@ const Navigation = (props) => {
 const mapStateToProps = state => {
   for (const key in state.auth) {
     const obj = state.auth;
-    if (obj.authenticated.hasOwnProperty("email")) {
+    if (obj.authenticated && (obj.authenticated.hasOwnProperty("email"))) {
       return {
         auth: true,
         email: state.auth.authenticated.email,

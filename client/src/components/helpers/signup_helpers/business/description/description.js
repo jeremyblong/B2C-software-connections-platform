@@ -73,7 +73,7 @@ constructor(props) {
 
         console.log("handle submission...");
 
-        if (this.state.description.length >= 100) {
+        if (this.state.description.length >= 100 && this.state.description.length <= 1000) {
             if (this.state.files.length !== 0) {
                 console.log("both are filled out appropriatly...", this.props.unique_id);
 
@@ -109,7 +109,7 @@ constructor(props) {
                                 
                         
                                 <div class="dashboard-headline">
-                                    <h3 className="text-left">Title</h3>
+                                    <h3 className="text-left">Title & Files</h3>
 
                                     
                                     <nav id="breadcrumbs" class="dark">
@@ -151,7 +151,7 @@ constructor(props) {
                                                                 descErr: ""
                                                             })
                                                         }} class="form-control rounded-0" id="exampleFormControlTextarea1" rows="7" placeholder={"Enter your description here, you must enter AT LEAST 100 characters long or more..."}></textarea>
-                                                        <label className="text-right">{this.state.description.length}/500</label>
+                                                        <label className="text-right">{this.state.description.length}/1000</label>
                                                     </div>
                                                     {this.state.descErr.length !== 0 ? <h3 className="text-center red-text">{this.state.descErr}</h3> : null}
                                                     <label className="text-left" style={{ color: "blue" }}>A good description includes...</label>

@@ -36,7 +36,8 @@ import LocationBusinessSignupPage from "./components/pages/signup_pages/business
 import VisibilitySignupBusinessPage from "./components/pages/signup_pages/business/visibility/visibility.js";
 import BillingBusinessPage from "./components/pages/signup_pages/business/billing-rates/billing.js";
 import BusinessSignupOverviewFinalReviewPage from "./components/pages/signup_pages/business/overview/final.js";
-// places api - foursquare api
+import VerifyPhoneNumberPage from "./components/pages/auth/verify/index.js";
+import PlaceNewBidBusinessPage from "./components/pages/businesses/bids/placeNewBid.js";
 
 class App extends Component {
 constructor(props) {
@@ -51,6 +52,7 @@ constructor(props) {
   }
 }
   componentDidMount() {
+    this.props.authentication({});
     setTimeout(() => {
       axios.post("/figure/out/page/number", {
         username: this.props.username
@@ -161,7 +163,9 @@ constructor(props) {
               <Route exact path="/freelancer/individual/page/public/:id" component={FreelancerProfileIndividualPublic} />
               <Route exact path="/business/individual/listing" component={BusinessIndividualListing} />
               <Route exact path="/payment/create/membership" component={PaymentMemebershipPage} />
-              <Route exact path="/thank/you/for/your/payment" component={ThankYouPage} />
+              <Route exact path="/thank/you/for/your/payment" component={ThankYouPage} /> 
+              <Route exact path="/verify/phone/number" component={VerifyPhoneNumberPage} /> 
+              <Route exact path="/freelancer/place/bid/company/listing" component={PlaceNewBidBusinessPage} />
             </div>
           </Fragment>
         );
@@ -210,7 +214,7 @@ const mapStateToProps = (state) => {
   console.log(state);
   for (const key in state.auth) {
       const obj = state.auth;
-      if (obj.authenticated.hasOwnProperty("email")) {
+      if (obj.authenticated && (obj.authenticated.hasOwnProperty("email"))) {
           return {
             username: state.auth.authenticated.username,
             force: state.auth.forced

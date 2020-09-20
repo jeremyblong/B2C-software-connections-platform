@@ -249,6 +249,8 @@ constructor(props) {
     renderConditional = () => {
         const { user } = this.state;
 
+        console.log("USER :) ---- :", user);
+
         if ((user !== null && user !== "Could NOT locate user...")) {
             return (
                 <div class="dashboard-container">
@@ -268,10 +270,11 @@ constructor(props) {
                                         <div class="dashboard-nav-inner">
 
                                             <ul data-submenu-title="Start">
-                                                <li class="active"><Link to="/dashboard"><i class="icon-material-outline-dashboard"></i> Dashboard</Link></li>
+                                                <li><Link to="/dashboard"><i class="icon-material-outline-dashboard"></i> Dashboard</Link></li>
                                                 <li><Link to="/dashboard/messages"><i class="icon-material-outline-question-answer"></i> Messages <span class="nav-tag">2</span></Link></li>
                                                 <li><a href="dashboard-bookmarks.html"><i class="icon-material-outline-star-border"></i> Bookmarks</a></li>
                                                 <li><a href="dashboard-reviews.html"><i class="icon-material-outline-rate-review"></i> Reviews</a></li>
+                                                <li><Link to="/bids/active"><i class="icon-material-outline-dashboard"></i> Active Bids</Link></li>
                                             </ul>
                                             
                                             <ul data-submenu-title="Organize and Manage">
@@ -293,7 +296,7 @@ constructor(props) {
                                             </ul>
 
                                             <ul data-submenu-title="Account">
-                                                <li><Link to="/dashboard/settings/main"><i class="icon-material-outline-settings"></i> Settings</Link></li>
+                                                <li class="active"><Link style={{ color: "white" }} to="/dashboard/settings/main"><i class="icon-material-outline-settings"></i> Settings</Link></li>
                                                 <li><a onClick={() => {
                                                     this.props.authentication({});
 

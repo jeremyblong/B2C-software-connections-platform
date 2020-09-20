@@ -173,3 +173,9 @@ code {
   border-bottom: 2px dotted black;
   margin: 40px 0px;
 }
+.bold {
+  font-weight: bold;
+}
+.blue-text {
+  color: blue !important;
+}

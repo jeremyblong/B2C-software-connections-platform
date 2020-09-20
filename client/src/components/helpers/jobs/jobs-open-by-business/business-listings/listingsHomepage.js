@@ -1,9 +1,31 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import "./style.css";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
 class BusinessPostingsHomepage extends Component {
+constructor(props) {
+    super(props)
+    
+    this.state = {
+        users: []
+    }
+}
+
+    componentDidMount() {
+        axios.post("/gather/users/job_postings/exists").then((res) => {
+            if (res.data.message === "Successfully found specific users!") {
+                console.log(res.data);
+
+                this.setState({
+                    users: res.data.jobs
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     render() {
         const Map = ReactMapboxGl({
             accessToken:
@@ -37,39 +59,49 @@ class BusinessPostingsHomepage extends Component {
                             <div className="listings-container compact-list-layout margin-top-35 margin-bottom-25">
                                 
                         
-                                <Link to="/business/individual/listing" className="job-listing">
+                                {this.state.users.length !== 0 ? this.state.users.map((job, index) => {
+                                    if (job) {
+                                        console.log("USER~!:", job);
+                                        return (
+                                            <Fragment>
+                                                <Link to={{pathname: "/business/individual/listing", data: { job }}} className="job-listing">
+
+                                                
+                                                    <div className="job-listing-details">
+
+
+                                                        <div className="job-listing-company-logo">
+                                                            <img src="/images/company-logo-01.png" alt=""/>
+                                                        </div>
+
+
+                                                        <div className="job-listing-description">
+                                                            <h3 className="job-listing-title">{job.title.slice(0, 75)}{job.title.length > 75 ? "..." : null}</h3>
+                                                            
+
+                                                            <div className="job-listing-footer">
+                                                                <ul>
+                                                                    <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
+                                                                    <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
+                                                                    <li><i className="icon-material-outline-business-center"></i><strong style={{ color: "blue" }}>{job.experience_level}</strong> skill level</li>
+                                                                    <li><i className="icon-material-outline-access-time"></i>{job.date}</li>
+                                                                    <li><i className="icon-material-outline-money"></i>{`Billed At: ${job.billing.pay} ${job.billing.currency} - ${job.billing.rate}`}</li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <span className="bookmark-icon"></span>
+                                                    </div>
+                                                </Link>
+                                            </Fragment>
+                                        );
+                                    }
+                                }) : null}	
+
 
                                 
-                                    <div className="job-listing-details">
-
-                                
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-01.png" alt=""/>
-                                        </div>
-
-                            
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Bilingual Event Support Specialist</h3>
-
-                                    
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Hexagon <div className="verified-badge" title="Verified Employer" data-tippy-placement="top"></div></li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>	
-
-
-                                
-                                <Link to="/business/individual/listing" className="job-listing">
+                                {/* <Link to="/business/individual/listing" className="job-listing">
 
                                 
                                     <div className="job-listing-details">
@@ -269,7 +301,7 @@ class BusinessPostingsHomepage extends Component {
 
                                         <span className="bookmark-icon"></span>
                                     </div>
-                                </Link>
+                                </Link> */}
 
                             </div>
                         </div>

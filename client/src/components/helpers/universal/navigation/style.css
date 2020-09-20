@@ -23,6 +23,9 @@
     padding: 5px;
     border-radius: 25px;
 }
+.color {
+    color: blue !important;
+}
 .main {
     margin-left: -500px !important;
 }

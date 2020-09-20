@@ -1,0 +1,129 @@
+
+
+strong {
+   font-weight: 600;
+   color: #333;
+   display: inline-block;
+}
+.dotted-box {
+    min-height: 300px;
+    border: 3px dotted black;
+    min-width: 63vw;
+    margin-bottom: 40px;
+}
+
+
+#invoice {
+    background: rgb(248, 239, 239);
+    width: auto;
+    max-width: 900px;
+    padding: 60px;
+    margin: 0px auto 60px auto;
+    border-radius: 4px;
+}
+
+#white-back {
+    background-color: white !important;
+}
+
+#logo img {
+  max-height: 44px;
+  transform: translate3d(0,0,0);
+}
+
+#details { text-align: right; }
+
+table {
+  width: 100%;
+  margin: 0 0 30px;
+  padding: 1px 0;
+  border-spacing: 0;
+  border-bottom: 1px solid #ddd;
+}
+
+th,
+td {
+  padding: 15px 0;
+  text-align: left;
+}
+
+th {
+  font-weight: 700;
+  border-bottom: 1px solid #ddd;
+  font-size: 16px;
+  color: #333;
+}
+
+th:last-child,
+td:last-child {
+  text-align: right;
+}
+
+th span {
+  position: relative;
+  display: inline-block;
+  height: 100%;
+}
+
+th span::after {
+  content: '';
+  width: 100%;
+  bottom: -16px;
+  position: absolute;
+  right: 0;
+  border-bottom: 1px solid #2a41e8;
+}
+
+#footerrr {
+  width: 100%;
+  border-top: 1px solid #ddd;
+  margin: 60px 0 0 0;
+  padding: 20px 0 0 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+#footerrr li {
+  display: inline-block;
+  padding: 0 20px;
+  border-right: 1px solid #ddd;
+  line-height: 11px;
+}
+
+#footerrr li:first-child { padding-left: 0; }
+#footerrr li:last-child { border:none; }
+
+#footerrr li span {
+   color: #2a41e8;
+}
+
+.margin-top-20 { margin-top: 20px; }
+.margin-bottom-5  { margin-bottom: 5px; }
+
+.print-button-container {
+  width: 100%;
+  text-align: center;
+}
+.print-button,
+.print-button:hover {
+   line-height: 24px;
+   font-size: 15px;
+   font-weight: 600;
+   color: #fff;
+   background-color: #333;
+   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+   border-radius: 4px;
+   padding: 10px 20px;
+   display: inline-block;
+   text-align: center;
+   margin: 40px auto 40px auto;
+   transition: 0.3s;
+   text-decoration: none !important;
+   outline: none !important;
+   width: auto;
+}
+
+.print-button:hover {
+   background-color: #444;
+}
+

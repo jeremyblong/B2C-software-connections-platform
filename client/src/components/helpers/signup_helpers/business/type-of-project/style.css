@@ -30,3 +30,13 @@
         width: 100%;
     }
 }
+.grey-card {
+    background-color: #CBEEF3 !important;
+    color: black !important;
+    border-bottom: 5px solid blue !important;
+    font-weight: bold;
+}
+.grey-card .card-title {
+    color: black !important;
+    font-weight: bold;
+}
