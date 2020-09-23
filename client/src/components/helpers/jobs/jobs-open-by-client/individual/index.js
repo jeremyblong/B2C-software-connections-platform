@@ -165,7 +165,7 @@ constructor(props) {
                                         <h3 style={{ color: "white" }}><i className="icon-material-outline-business"></i> Employment History</h3>
                                     </div>
                                     <ul className="boxed-list-ul">
-                                        {user.freelancerData.employment_history.length !== 0 ? user.freelancerData.employment_history.map((item, index) => {
+                                        {typeof user.freelancerData.employment_history !== "undefined" && user.freelancerData.employment_history.length !== 0 ? user.freelancerData.employment_history.map((item, index) => {
                                             console.log("employment job.... :", item);
                                             return (
                                                 <li key={index}>
@@ -189,7 +189,7 @@ constructor(props) {
                                                     </div>
                                                 </li>
                                             );
-                                        }) : null}
+                                        }) : <Fragment><div><h3 style={{ marginTop: "25px", fontWeight: "bold" }} className="text-center">This user has not listed any previous employment yet, they need to update their profile. Consider finding someone with a more complete profile.</h3></div></Fragment>}
                                         {/* <li>
                                             <div className="boxed-list-item">
                                          
@@ -282,7 +282,6 @@ constructor(props) {
                                         <h3>Skills</h3>
                                         <div className="task-tags">
                                             {user.freelancerData.skills.length !== 0 ? user.freelancerData.skills.map((skill, index) => {
-                                                console.log("skill", skill);
                                                 return <span key={index}>{skill.text}</span>
                                             }) : null}
                                         </div>

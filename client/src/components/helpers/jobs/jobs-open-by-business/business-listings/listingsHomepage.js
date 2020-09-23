@@ -3,6 +3,7 @@ import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import "./style.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
+	
 
 class BusinessPostingsHomepage extends Component {
 constructor(props) {
@@ -27,27 +28,155 @@ constructor(props) {
         })
     }
     render() {
-        const Map = ReactMapboxGl({
-            accessToken:
-              'pk.eyJ1IjoiamVyZW15YWJsb25nIiwiYSI6ImNrNzIzemZ6cDA3Mm8zbWxncW5pZDkzeDkifQ.jeLgR1gLLJsaeyfjBUqrdw'
-        });
         return (
-            <div style={{ borderTop: "3px solid lightgrey" }} className="container-fluid">
-            <div className="row">
-                <div className="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                    <div className="full-page-content-container" data-simplebar>
-                        <div className="full-page-content-inner">
+            <div id="margin-adjust-two">
+                <div class="full-page-container">
 
-                            <h3 className="page-title">Search Results</h3>
-
-                            <div className="notify-box margin-top-15">
-                                <div className="switch-container">
-                                    <label className="switch"><input type="checkbox"/><span className="switch-button"></span><span className="switch-text">Turn on email alerts for this search</span></label>
+                    <div class="full-page-sidebar">
+                        <div class="full-page-sidebar-inner">
+                            <div class="sidebar-container">
+                                
+                              
+                                <div class="sidebar-widget">
+                                    <h3>Location</h3>
+                                    <div class="input-with-icon">
+                                        <div id="autocomplete-container">
+                                            <input id="autocomplete-input" type="text" placeholder="Location"/>
+                                        </div>
+                                        <i class="icon-material-outline-location-on"></i>
+                                    </div>
                                 </div>
 
-                                <div className="sort-by">
-                                    <span>Sort by:</span>
-                                    <select className="selectpicker hide-tick">
+                                
+                               
+                                <div class="sidebar-widget">
+                                    <h3>Keywords</h3>
+                                    <div class="keywords-container">
+                                        <div class="keyword-input-container">
+                                            <input type="text" class="keyword-input" placeholder="e.g. job title"/>
+                                            <button class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
+                                        </div>
+                                        <div class="keywords-list">{/* keywords go here */}</div>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                                
+                                 
+                                <div class="sidebar-widget">
+                                    <h3>Category</h3>
+                                    <select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
+                                        <option>Admin Support</option>
+                                        <option>Customer Service</option>
+                                        <option>Data Analytics</option>
+                                        <option>Design & Creative</option>
+                                        <option>Legal</option>
+                                        <option>Software Developing</option>
+                                        <option>IT & Networking</option>
+                                        <option>Writing</option>
+                                        <option>Translation</option>
+                                        <option>Sales & Marketing</option>
+                                    </select>
+                                </div>
+                                
+                               
+                                <div class="sidebar-widget">
+                                    <h3>Job Type</h3>
+
+                                    <div class="switches-list">
+                                        <div class="switch-container">
+                                            <label class="switch"><input type="checkbox" /><span class="switch-button"></span> Freelance</label>
+                                        </div>
+
+                                        <div class="switch-container">
+                                            <label class="switch"><input type="checkbox" /><span class="switch-button"></span> Full Time</label>
+                                        </div>
+
+                                        <div class="switch-container">
+                                            <label class="switch"><input type="checkbox" /><span class="switch-button"></span> Part Time</label>
+                                        </div>
+
+                                        <div class="switch-container">
+                                            <label class="switch"><input type="checkbox" /><span class="switch-button"></span> Internship</label>
+                                        </div>
+                                        <div class="switch-container">
+                                            <label class="switch"><input type="checkbox" /><span class="switch-button"></span> Temporary</label>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="sidebar-widget">
+                                    <h3>Salary</h3>
+                                    <div class="margin-top-55"></div>
+
+                                 
+                                    <input class="range-slider" type="text" value="" data-slider-currency="$" data-slider-min="1500" data-slider-max="15000" data-slider-step="100" data-slider-value="[1500,15000]"/>
+                                </div>
+
+                         
+                                <div class="sidebar-widget">
+                                    <h3>Tags</h3>
+
+                                    <div class="tags-container">
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag1"/>
+                                            <label for="tag1">front-end dev</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag2"/>
+                                            <label for="tag2">angular</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag3"/>
+                                            <label for="tag3">react</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag4"/>
+                                            <label for="tag4">vue js</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag5"/>
+                                            <label for="tag5">web apps</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag6"/>
+                                            <label for="tag6">design</label>
+                                        </div>
+                                        <div class="tag">
+                                            <input type="checkbox" id="tag7"/>
+                                            <label for="tag7">wordpress</label>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                </div>
+
+                            </div>
+                            
+
+                            
+                            <div class="sidebar-search-button-container">
+                                <button class="button ripple-effect">Search</button>
+                            </div>
+                     
+
+                        </div>
+                    </div>
+                  
+
+              
+                    <div class="full-page-content-container">
+                        <div class="full-page-content-inner">
+
+                            <h3 class="page-title">Search Results</h3>
+
+                            <div class="notify-box margin-top-15">
+                                <div class="switch-container">
+                                    <label class="switch"><input type="checkbox"/><span class="switch-button"></span><span class="switch-text">Turn on email alerts for this search</span></label>
+                                </div>
+
+                                <div class="sort-by">
+                                    {/* <span style={{ marginLeft: "-50px" }}>Sort by:</span> */}
+                                    <select class="form-control hide-tick">
                                         <option>Relevance</option>
                                         <option>Newest</option>
                                         <option>Oldest</option>
@@ -56,271 +185,124 @@ constructor(props) {
                                 </div>
                             </div>
 
-                            <div className="listings-container compact-list-layout margin-top-35 margin-bottom-25">
-                                
-                        
-                                {this.state.users.length !== 0 ? this.state.users.map((job, index) => {
-                                    if (job) {
-                                        console.log("USER~!:", job);
-                                        return (
-                                            <Fragment>
-                                                <Link to={{pathname: "/business/individual/listing", data: { job }}} className="job-listing">
+                            <div class="listings-container grid-layout margin-top-35">
+                            {this.state.users.length !== 0 ? this.state.users.map((job, index) => {
+                                if (job) {
+                                    console.log("USER~!:", job);
+                                    return (
+                                        <Fragment>
+                                            <Link to={{pathname: `/business/individual/listing/${job.id}`, data: { job }}} className="job-listing">
+
+                                                <div class="job-listing-details">
+                                                
+                                                    <div class="job-listing-company-logo">
+                                                        <img src="/images/company-logo-01.png" alt=""/>
+                                                    </div>
 
                                                 
-                                                    <div className="job-listing-details">
-
-
-                                                        <div className="job-listing-company-logo">
-                                                            <img src="/images/company-logo-01.png" alt=""/>
-                                                        </div>
-
-
-                                                        <div className="job-listing-description">
-                                                            <h3 className="job-listing-title">{job.title.slice(0, 75)}{job.title.length > 75 ? "..." : null}</h3>
-                                                            
-
-                                                            <div className="job-listing-footer">
-                                                                <ul>
-                                                                    <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
-                                                                    <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
-                                                                    <li><i className="icon-material-outline-business-center"></i><strong style={{ color: "blue" }}>{job.experience_level}</strong> skill level</li>
-                                                                    <li><i className="icon-material-outline-access-time"></i>{job.date}</li>
-                                                                    <li><i className="icon-material-outline-money"></i>{`Billed At: ${job.billing.pay} ${job.billing.currency} - ${job.billing.rate}`}</li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-
-
-                                                        <span className="bookmark-icon"></span>
+                                                    <div class="job-listing-description">
+                                                        <h4 class="job-listing-company">{job.category} <span class="verified-badge" title="Verified Employer" data-tippy-placement="top"></span></h4>
+                                                        <h3 class="job-listing-title">{job.title.slice(0, 55)}{job.title.length > 55 ? "..." : null}</h3>
                                                     </div>
-                                                </Link>
-                                            </Fragment>
-                                        );
-                                    }
-                                }) : null}	
-
-
-                                
-                                {/* <Link to="/business/individual/listing" className="job-listing">
-
-                                
-                                    <div className="job-listing-details">
-
-                                
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-05.png" alt=""/>
-                                        </div>
-
-                                    
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Competition Law Officer</h3>
+                                                </div>
 
                                             
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Laxo</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
+                                                <div class="job-listing-footer">
+                                                    <span class="bookmark-icon"></span>
+                                                    <ul>
+                                                        <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
+                                                        <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
+                                                        <li><i className="icon-material-outline-business-center"></i><strong style={{ color: "blue" }}>{job.experience_level}</strong> skill level</li>
+                                                        <li><i className="icon-material-outline-access-time"></i>{job.date}</li>
+                                                        <li><i className="icon-material-outline-money"></i>{`Billed At: ${job.billing.pay} ${job.billing.currency} - ${job.billing.rate}`}</li>
+                                                    </ul>
+                                                </div>
+                                                {/* <div className="job-listing-details">
 
-                                    
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
+
+                                                    <div className="job-listing-company-logo">
+                                                        <img src="/images/company-logo-01.png" alt=""/>
+                                                    </div>
+
+
+                                                    <div className="job-listing-description">
+                                                        <h3 className="job-listing-title">{job.title.slice(0, 75)}{job.title.length > 75 ? "..." : null}</h3>
+                                                        
+
+                                                        <div className="job-listing-footer">
+                                                            <ul>
+                                                                <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
+                                                                <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
+                                                                <li><i className="icon-material-outline-business-center"></i><strong style={{ color: "blue" }}>{job.experience_level}</strong> skill level</li>
+                                                                <li><i className="icon-material-outline-access-time"></i>{job.date}</li>
+                                                                <li><i className="icon-material-outline-money"></i>{`Billed At: ${job.billing.pay} ${job.billing.currency} - ${job.billing.rate}`}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <span className="bookmark-icon"></span>
+                                                </div> */}
+                                            </Link>
+                                        </Fragment>
+                                    );
+                                }
+                            }) : null}
+                               
                             
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                            
-                                    <div className="job-listing-details">
-
-                                        
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-02.png" alt=""/>
-                                        </div>
-
-                                    
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Barista and Cashier</h3>
-
-                                        
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Coffee</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
-                                
-
-                            
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                                
-                                    <div className="job-listing-details">
-
-                                
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-03.png" alt=""/>
-                                        </div>
-
-        
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Restaurant General Manager</h3>
-
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> King <div className="verified-badge" title="Verified Employer" data-tippy-placement="top"></div></li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                    
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
-
-                                
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                                
-                                    <div className="job-listing-details">
-
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-05.png" alt=""/>
-                                        </div>
-
-                                
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">International Marketing Coordinator</h3>
-
-                                    
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Skyist</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                            
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
-
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                                    <div className="job-listing-details">
-
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-04.png" alt=""/>
-                                        </div>
-
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Administrative Assistant</h3>
-
-                                        
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Mates</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
-
-
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                                    <div className="job-listing-details">
-
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-05.png" alt=""/>
-                                        </div>
-
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Construction Labourers</h3>
-
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Podous</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link>
-
-                                <Link to="/business/individual/listing" className="job-listing">
-
-                                    <div className="job-listing-details">
-
-                                    
-                                        <div className="job-listing-company-logo">
-                                            <img src="/images/company-logo-06.png" alt=""/>
-                                        </div>
-
-                            
-                                        <div className="job-listing-description">
-                                            <h3 className="job-listing-title">Human Resources Consultant</h3>
-
-                                        
-                                            <div className="job-listing-footer">
-                                                <ul>
-                                                    <li><i className="icon-material-outline-business"></i> Trideo</li>
-                                                    <li><i className="icon-material-outline-location-on"></i> San Francisco</li>
-                                                    <li><i className="icon-material-outline-business-center"></i> Full Time</li>
-                                                    <li><i className="icon-material-outline-access-time"></i> 2 days ago</li>
-                                                </ul>
-                                            </div>
-                                        </div>
-
-                                        <span className="bookmark-icon"></span>
-                                    </div>
-                                </Link> */}
 
                             </div>
+
+                            <div class="clearfix"></div>
+                            <div class="pagination-container margin-top-20 margin-bottom-20">
+                                <nav class="pagination">
+                                    <ul>
+                                        <li class="pagination-arrow"><a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-left"></i></a></li>
+                                        <li><a href="#" class="ripple-effect">1</a></li>
+                                        <li><a href="#" class="ripple-effect current-page">2</a></li>
+                                        <li><a href="#" class="ripple-effect">3</a></li>
+                                        <li><a href="#" class="ripple-effect">4</a></li>
+                                        <li class="pagination-arrow"><a href="#" class="ripple-effect"><i class="icon-material-outline-keyboard-arrow-right"></i></a></li>
+                                    </ul>
+                                </nav>
+                            </div>
+                            <div class="clearfix"></div>
+                         
+                            <div class="small-footer margin-top-15">
+                                <div class="small-footer-copyrights">
+                                    © 2019 <strong>Hireo</strong>. All Rights Reserved.
+                                </div>
+                                <ul class="footer-social-links">
+                                    <li>
+                                        <a href="#" title="Facebook" data-tippy-placement="top">
+                                            <i class="icon-brand-facebook-f"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title="Twitter" data-tippy-placement="top">
+                                            <i class="icon-brand-twitter"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title="Google Plus" data-tippy-placement="top">
+                                            <i class="icon-brand-google-plus-g"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" title="LinkedIn" data-tippy-placement="top">
+                                            <i class="icon-brand-linkedin-in"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <div class="clearfix"></div>
+                            </div>
+                       
+
                         </div>
                     </div>
-                </div>
-                <div className="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                    <Map
-                        style="mapbox://styles/mapbox/streets-v9"
-                        containerStyle={{
-                            height: '100%',
-                            width: '100%'
-                        }}
-                        >
-                        <Layer type="symbol" id="marker" layout={{ 'icon-image': 'marker-15' }}>
-                            <Feature coordinates={[-0.481747846041145, 51.3233379650232]} />
-                        </Layer>
-                    </Map>
-                </div>
-                </div>
+          
+
+                    </div>
             </div>
         )
     }

@@ -12,3 +12,39 @@
         display: none !important;
     }
 }
+.sliding-pane-class {
+    z-index: 99999999999 !important;
+}
+.sliding-pane-overlay {
+    z-index: 99999999999 !important;
+}
+.numbered li {
+    font-weight: bold;
+}
+.numbered label {
+    color: blue !important;
+    font-weight: bold;
+}
+.react-responsive-modal-modal {
+    min-width: 50vw;
+}
+.note-content {
+    max-height: 575px;
+    overflow-y: scroll;
+}
+.applications-box {
+    max-height: 575px;
+    overflow-y: scroll;
+}
+.fun-fact-one {
+    background-color: #36bd78 !important;
+}
+.fun-fact-three {
+    background-color: #efa80f !important;
+}
+.fun-fact-two {
+    background-color: #b81b7f !important;
+}
+.fun-fact-four {
+    background-color: #2a41e6 !important;
+}

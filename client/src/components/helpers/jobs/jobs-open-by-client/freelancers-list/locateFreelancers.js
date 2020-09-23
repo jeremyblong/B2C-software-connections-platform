@@ -177,8 +177,8 @@ constructor(props) {
                                 </div>
 
                                 <div class="sort-by">
-                                    <span>Sort by:</span>
-                                    <select class="selectpicker hide-tick">
+                                    {/* <span>Sort by:</span> */}
+                                    <select class="form-control hide-tick">
                                         <option>Relevance</option>
                                         <option>Newest</option>
                                         <option>Oldest</option>
@@ -191,7 +191,6 @@ constructor(props) {
                             <div class="freelancers-container freelancers-grid-layout margin-top-35">
                                 {this.state.users.length !== 0 ? this.state.users.map((user, index) => {
                                     if (user.completed_signup === true) {
-                                        console.log("user", user);
                                             return (
                                                 <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
                                                     <div class="freelancer-overview">

@@ -1,3 +1,42 @@
 #footer {
-    padding-top: 300px;
+    padding-top: 150px;
+    margin-top: 500px;
+    position: relative;;
+    bottom: auto !important;
+    right: 0;
+    width: 100%;
+    z-index: -1;
+}
+@media only screen and (max-width: 1500px) {
+    #footer {
+        padding-top: 150px;
+        margin-top: 500px;
+        position: relative;;
+        bottom: auto !important;
+        right: 0;
+        width: 100%;
+        z-index: -1;
+    }
+}
+@media only screen and (max-width: 1800px) {
+    #footer {
+        padding-top: 150px;
+        margin-top: 200px;
+        position: relative;;
+        bottom: auto !important;
+        right: 0;
+        width: 100%;
+        z-index: -1;
+    }
+}
+@media only screen and (max-width: 1250px) {
+    #footer {
+        padding-top: 150px;
+        margin-top: 700px;
+        position: relative;;
+        bottom: auto !important;
+        right: 0;
+        width: 100%;
+        z-index: -1;
+    }
 }

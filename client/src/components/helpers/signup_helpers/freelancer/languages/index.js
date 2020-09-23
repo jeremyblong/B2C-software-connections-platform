@@ -3,6 +3,7 @@ import "./style.css";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import axios from "axios";
+import { NotificationManager} from 'react-notifications';
 
 class FifthProfileLanguageSelectionHelper extends Component {
 constructor(props) {
@@ -32,7 +33,7 @@ constructor(props) {
                 console.log(err);
             })
         } else {
-            alert("Please fill out both fields - if you only speak english please enter 'Not Applicable' in secondary languages...")
+            NotificationManager.error('Please fill out both fields - if you only speak english please enter "Not Applicable" in secondary languages...', 'An Error Occurred', 7000);
         }
     }
     render() {

@@ -74,7 +74,7 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Title</label>
                                                         <li>{posting.title ? posting.title : "None-Provided"}</li>
                                                         <label>Description</label>
@@ -99,19 +99,19 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Attached Files</label>
-                                                        {posting.attachedFiles.length !== 0 ? posting.attachedFiles.map((file, index) => {
+                                                        {typeof posting.attachedFiles !== "undefined" && posting.attachedFiles.length !== 0 ? posting.attachedFiles.map((file, index) => {
                                                             return <li>{file.title}</li>
                                                         }) : null}
                                                         <label>Type Of Length Of Project</label>
-                                                        <li>{posting.length_of_project ? posting.length_of_project : "None-Provided"}</li>
+                                                        <li>{typeof posting.length_of_project !== "undefined" && posting.length_of_project ? posting.length_of_project : "None-Provided"}</li>
                                                         <label>Size Of Company</label>
-                                                        {posting.business_size.length !== 0 ? posting.business_size.map((size, index) => {
+                                                        {typeof posting.business_size !== "undefined" && posting.business_size.length !== 0 ? posting.business_size.map((size, index) => {
                                                             return <li>{size.label}</li>
                                                         }) : null}
                                                         <label>Questions For Applicant</label>
-                                                        {posting.questions_for_applicant.length !== 0 ? posting.questions_for_applicant.map((question, index) => {
+                                                        {typeof posting.questions_for_applicant !== "undefined" && posting.questions_for_applicant.length !== 0 ? posting.questions_for_applicant.map((question, index) => {
                                                             return <li>{question}</li>
                                                         }) : null}
                                                     </ul>
@@ -130,7 +130,7 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Types Of Development Desired</label>
                                                         {posting.type_of_development.length !== 0 ? posting.type_of_development.map((type, index) => {
                                                             return <li>{type.label}</li>
@@ -167,7 +167,7 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Location Preference</label>
                                                         <li>{posting.location_preference ? posting.location_preference : "None-Provided"}</li>
                                                         <label>Preferred Time-Zone</label>
@@ -189,7 +189,7 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Perfer Agency Or Individual Freelancer</label>
                                                         <li>{posting.visibility.agency_or_individual ? posting.visibility.agency_or_individual : "None-Provided"}</li>
                                                         <label>Amount Of Freelancers Required</label>
@@ -217,7 +217,7 @@ constructor(props) {
                                         </div>
                                         <div class="row">
                                                 <div class="numbered color filled">
-                                                    <ul className="ol list-2">
+                                                    <ul className="ol list-2 custom-list">
                                                         <label>Currency Type</label>
                                                         <li>{posting.billing.currency ? posting.billing.currency : "None-Provided"}</li>
                                                         <label>Hourly or Fixed</label>
@@ -252,7 +252,7 @@ constructor(props) {
                                 
                         
                                 <div class="dashboard-headline">
-                                    <h3 className="text-left">Details - Type of project</h3>
+                                    <h3 className="text-left">Review</h3>
 
                                     
                                     <nav id="breadcrumbs" class="dark">

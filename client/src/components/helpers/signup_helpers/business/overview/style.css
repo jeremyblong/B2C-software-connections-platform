@@ -54,3 +54,6 @@ ul.timeline > li:before {
         min-width: 100%;
     }
 }
+.custom-list li {
+    color: black !important;
+}

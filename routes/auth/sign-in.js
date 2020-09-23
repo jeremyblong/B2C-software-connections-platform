@@ -7,6 +7,8 @@ const config = require("config");
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
 const request = require("request");
+const moment = require("moment");
+const StreamChat = require('stream-chat').StreamChat;
 
 // need to fix how many times res.json is sent - can't send multiple headers
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
@@ -23,7 +25,13 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
             if (user) {
                 if (user.email === email.toLowerCase().trim() && user.password === password) {
 
-                    // const headers = {
+                    const client = new StreamChat('52zfrbfbqu6r', '2edjpqxk42vkxwjf22n73v5camaj66rmb5ykrz9uywt7bc2b86wedwb8qkt7tftv');
+
+                    // const timestamp = Number(moment().add('1h').format('X'));
+                    
+                    // const tokenStreamChat = client.createToken(user.username);
+
+                    // const headers = 
                     //     "Content-Type": "application/x-www-form-urlencoded"
                     // };
 
@@ -73,7 +81,8 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                     res.json({
                         message: "User FOUND!",
                         user,
-                        token
+                        token,
+                        getStreamToken: user.get_stream_token
                     })
                 } else {
                     res.json({

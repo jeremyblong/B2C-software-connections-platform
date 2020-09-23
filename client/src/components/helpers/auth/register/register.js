@@ -6,6 +6,7 @@ import axios from "axios";
 import { connect } from "react-redux";
 import { authentication, forceSignup } from "../../../../actions/auth/auth.js";
 import LoadingOverlay from 'react-loading-overlay';
+import { NotificationManager} from 'react-notifications';
 
 class RegisterHelper extends Component {
 constructor(props) {
@@ -23,7 +24,8 @@ constructor(props) {
         experience: "1",
         phoneNumber: "",
         picture: null,
-        isActive: false
+        isActive: false,
+        emailTaken: null
     }
 }
     onChange = (date) => {
@@ -35,7 +37,7 @@ constructor(props) {
         });
     }
     makeCall = (data) => {
-        const { email, accountType, password, reEnterPassword, username, experience, phoneNumber, picture } = this.state;
+        const { email, accountType, password, reEnterPassword, username, experience, phoneNumber, picture, emailTaken } = this.state;
 
         console.log("callback RAN.", data);
 
@@ -43,7 +45,7 @@ constructor(props) {
 
         console.log("NUMBER :", NUMBER);
 
-        if (email.length > 0 && accountType.length > 0 && password.length > 0 && username.length > 0 && experience.length > 0 && NUMBER && picture !== null) {
+        if (email.length > 0 && accountType.length > 0 && password.length > 0 && username.length > 0 && experience.length > 0 && NUMBER && picture !== null && emailTaken === null) {
             
             let trimmed;
 
@@ -91,7 +93,7 @@ constructor(props) {
             this.setState({
                 isActive: false
             }, () => {
-                alert("Please complete the entire registration form including selecting a profile image & account type...");
+                NotificationManager.error("Please complete the entire registration form including selecting a profile image & account type & make sure you're using an unregistered email...", 'Error message', 7000);
             })
         }
     }
@@ -118,7 +120,7 @@ constructor(props) {
                 this.setState({
                     isActive: false
                 }, () => {
-                    alert("Please complete the entire registration form including selecting a profile image & account type...")
+                    NotificationManager.error("Please complete the entire registration form including selecting a profile image & account type & make sure you're using an unregistered email...", 'Error message', 7000);
                 })
             }
         })
@@ -156,6 +158,27 @@ constructor(props) {
         } else if (this.state.accountType === "business") {
             return null;
         }
+    }
+    checkEmail = () => {
+        console.log("exited email input...");
+
+        axios.post("/check/email/taken", {
+            email: this.state.email
+        }).then((res) => {
+            console.log(res.data);
+            if (res.data.message === "Email is already taken!") {
+                console.log(res.data);
+                this.setState({
+                    emailTaken: res.data.message
+                })
+            } else {
+                this.setState({
+                    emailTaken: null
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
     render() {
         console.log(this.state);
@@ -217,10 +240,11 @@ constructor(props) {
                                 </div>
                                     
                             
-                                
+                                {this.state.emailTaken !== null ? <p className="lead text-center red-text" style={{ fontSize: "18px" }}>{this.state.emailTaken}</p> : null}
                                     <div className="input-with-icon-left">
                                         <i className="icon-material-baseline-mail-outline"></i>
-                                        <input onChange={(e) => {
+                                        
+                                        <input onBlur={this.checkEmail} onChange={(e) => {
                                             this.setState({
                                                 email: e.target.value 
                                             })

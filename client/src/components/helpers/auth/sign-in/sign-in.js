@@ -4,6 +4,12 @@ import { Link, withRouter } from "react-router-dom";
 import { authentication, forceSignup } from "../../../../actions/auth/auth.js";
 import { connect } from "react-redux";
 import axios from "axios";
+import { StreamChat } from 'stream-chat';
+import { NotificationManager} from 'react-notifications';
+import { saveGetStreamToken } from "../../../../actions/chat/chat.js";
+
+const client = new StreamChat("52zfrbfbqu6r");
+
 
 class SignInHelper extends Component {
 constructor(props) {
@@ -23,10 +29,23 @@ constructor(props) {
         axios.post("/login", {
             email,
             password
-        }).then((res) => {
+        }).then(async (res) => {
             switch (res.data.message) {
                 case "User FOUND!":
-                        console.log(res.data);   
+                        console.log(res.data); 
+                        
+                        client.disconnect();
+
+                        await client.setUser(
+                            {
+                                id: res.data.user.username,
+                                name: res.data.user.username,
+                                image: `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${res.data.user.profilePics[res.data.user.profilePics.length - 1].picture}`,
+                            },
+                            res.data.getStreamToken,
+                        );
+
+                        this.props.saveGetStreamToken(res.data.getStreamToken);
 
                         this.props.authentication(res.data.user);
 
@@ -34,11 +53,15 @@ constructor(props) {
 
                         setTimeout(() => {
                             if (res.data.user.completed_signup === true) {
+
                                 console.log("completed_signup = true ran");
+
                                 this.props.history.push("/");
                             } else {
                                 if (res.data.user.currentSignupPageCompleted) {
+
                                     console.log("res.data.user.currentSignupPageCompleted");
+
                                     this.props.history.push(`/signup/freelancer/page/${res.data.user.currentSignupPageCompleted}`); 
                                     
                                     window.location.reload();
@@ -53,9 +76,10 @@ constructor(props) {
                         }, 750);
                     break;
                 case "Password/email did match our records...":
-                    alert(res.data.message);        
+                    NotificationManager.error('Error message', res.data.message, 7000);     
                     break;
                 default:
+                    NotificationManager.error("Please enter valid credentials that match our system records when you registered...", 'Error message', 7000);
                     break;
             }
         }).catch((err) => {
@@ -129,4 +153,4 @@ constructor(props) {
         )
     }
 }
-export default withRouter(connect(null, { authentication, forceSignup })(SignInHelper));
+export default withRouter(connect(null, { authentication, forceSignup, saveGetStreamToken })(SignInHelper));

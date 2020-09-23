@@ -3,6 +3,7 @@ import "./style.css";
 import { connect } from "react-redux";
 import { withRouter, Link } from "react-router-dom";
 import axios from "axios";
+import { NotificationManager} from 'react-notifications';
 
 class HourlyRateFreelancerHelper extends Component {
 constructor(props) {
@@ -15,17 +16,21 @@ constructor(props) {
     handleSubmission = () => {
         console.log("submitted.", this.props.username);
 
-        axios.post("/profile/build/freelancer/hourly/rates", {
-            username: this.props.username,
-            hourly: this.state.hourly
-        }).then((res) => {
-            if (res.data.message === "Successfully updated account!") {
-                console.log(res.data);
-                this.props.history.push("/signup/freelancer/page/6");
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+        if (this.state.hourly !== 0) {
+            axios.post("/profile/build/freelancer/hourly/rates", {
+                username: this.props.username,
+                hourly: this.state.hourly
+            }).then((res) => {
+                if (res.data.message === "Successfully updated account!") {
+                    console.log(res.data);
+                    this.props.history.push("/signup/freelancer/page/6");
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            NotificationManager.error('Please fill our your "hourly rate" before continuing...', 'An Error Occurred', 7000);
+        }
     }
     render() {
         console.log(this.state);

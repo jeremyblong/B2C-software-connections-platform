@@ -5,6 +5,8 @@ import moment from "moment";
 import axios from "axios";
 import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
+import { NotificationManager} from 'react-notifications';
+
 
 class SignupDescriptionHelper extends Component {
 constructor(props) {
@@ -93,7 +95,9 @@ constructor(props) {
             }
         } else {
             this.setState({
-                descErr: "You must enter at least 100 charectors in the description to continue..."
+                descErr: "You must enter at least 100 charectors and no more than 1000 charectors total to continue..."
+            }, () => {
+                NotificationManager.error('You must enter at least 100 charectors and no more than 1000 charectors total to continue...','Error Occurred', 7000);
             })
         }
     }
@@ -184,7 +188,7 @@ constructor(props) {
                                                         </Dropzone>
                                                     {this.state.files.length !== 0 ? this.state.files.map((file, index) => {
                                                         return (
-                                                            <div key={index} class="list-group"> <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">{file.date}</span>{file.title}</a></div>
+                                                            <div style={{ marginTop: "30px" }} key={index} class="list-group"> <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">{file.date}</span>{file.title}</a></div>
                                                         );
                                                     }) : null}
                                                 </div>

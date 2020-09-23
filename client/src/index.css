@@ -179,3 +179,16 @@ code {
 .blue-text {
   color: blue !important;
 }
+html, body {
+  overflow-x: hidden;
+}
+.float-left {
+  float: left !important;
+  margin-left: 20px;
+}
+.notify-box {
+  background-color: black !important;
+}
+.notify-box label span {
+ color: white !important;
+}

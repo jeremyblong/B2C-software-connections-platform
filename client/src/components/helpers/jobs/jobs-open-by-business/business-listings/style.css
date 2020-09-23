@@ -1,3 +1,20 @@
 .job-listing-title {
     color: #DD2D4A !important;
 }
+#sort {
+    float: right !important;
+}
+/* .job-listing {
+    min-height: 200px;
+    height: 100%;
+    width: 100%;
+} */
+.full-page-container {
+    min-height: 100%;
+}
+#margin-adjust-two {
+    min-height: 100%;
+    position: relative;
+    background-color: transparent;
+    border-top: 3px solid lightgrey;
+}

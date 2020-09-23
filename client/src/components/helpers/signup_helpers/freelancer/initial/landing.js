@@ -5,6 +5,8 @@ import Select from 'react-select';
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import axios from "axios";
+import { NotificationManager} from 'react-notifications';
+
 
 const KeyCodes = {
     comma: 188,
@@ -59,7 +61,7 @@ constructor(props) {
                 console.log(err);
             })
         } else {
-            alert("Please complete each and every field, thank you.")
+            NotificationManager.error('Please complete each and every field, thank you.', 'An Error Occurred', 7000);
         }
     }
     handleAddition = (tag) => {

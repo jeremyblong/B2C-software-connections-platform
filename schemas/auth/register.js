@@ -30,6 +30,9 @@ const UserSchema = new mongoose.Schema({
 	},
 	unique_id: {
 		type: String
+	},
+	get_stream_token: {
+		type: String
 	}
 });
 

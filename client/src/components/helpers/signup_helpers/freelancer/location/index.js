@@ -9,7 +9,7 @@ import PlacesAutocomplete, {
     getLatLng,
   } from 'react-places-autocomplete';
 import { completedSignup } from "../../../../../actions/signup/signedUpOrNot.js";
-
+import { NotificationManager} from 'react-notifications';
 
 class LocationFreelancerSignupHelper extends Component {
 constructor(props) {
@@ -30,30 +30,34 @@ constructor(props) {
 
         const { typeOfResidence, country, housingExtension, street, zipcode, state, city } = this.state;
 
-        axios.post("/profile/build/freelancer/update/location", {
-            username: this.props.username,
-            typeOfResidence, 
-            country, 
-            housingExtension, 
-            street, 
-            zipcode, 
-            state, 
-            city
-        }).then((res) => {
-            if (res.data.message === "Successfully updated account!") {
-                console.log(res.data);
-                
-                this.props.completedSignup(true);
-
-                setTimeout(() => {
-                    this.props.history.push("/");
-
-                    window.location.reload();
-                }, 500);
-            }
-        }).catch((err) => {
-            console.log(err);
-        })
+        if (country === "United States" ? (typeOfResidence.length > 0 && country.length > 0 && street.length > 0 && zipcode.length > 0 && city.length > 0 && state.length > 0) : (typeOfResidence.length > 0 && country.length > 0 && street.length > 0 && zipcode.length > 0 && city.length > 0)) {
+            axios.post("/profile/build/freelancer/update/location", {
+                username: this.props.username,
+                typeOfResidence, 
+                country, 
+                housingExtension, 
+                street, 
+                zipcode, 
+                state, 
+                city
+            }).then((res) => {
+                if (res.data.message === "Successfully updated account!") {
+                    console.log(res.data);
+                    
+                    this.props.completedSignup(true);
+    
+                    setTimeout(() => {
+                        this.props.history.push("/");
+    
+                        window.location.reload();
+                    }, 500);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            NotificationManager.error('Please complete each and every field before continuing...', 'An Error Occurred', 7000);
+        }
     }
     lookupAddresses = () => {
         console.log("ran....");

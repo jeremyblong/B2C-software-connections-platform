@@ -38,6 +38,8 @@ import BillingBusinessPage from "./components/pages/signup_pages/business/billin
 import BusinessSignupOverviewFinalReviewPage from "./components/pages/signup_pages/business/overview/final.js";
 import VerifyPhoneNumberPage from "./components/pages/auth/verify/index.js";
 import PlaceNewBidBusinessPage from "./components/pages/businesses/bids/placeNewBid.js";
+import ManageJobsApplicationsPage from "./components/pages/dashboard/manage-jobs/manage.js";
+import DashboardManageApplicantsPage from "./components/pages/dashboard/manage-jobs/individual-applicants-details.js";
 
 class App extends Component {
 constructor(props) {
@@ -52,7 +54,7 @@ constructor(props) {
   }
 }
   componentDidMount() {
-    this.props.authentication({});
+    // this.props.authentication({});
     setTimeout(() => {
       axios.post("/figure/out/page/number", {
         username: this.props.username
@@ -73,7 +75,11 @@ constructor(props) {
                 loaded: true,
                 user: res.data.user
               }, () => {
-                this.submit();
+                if (this.props.username) {
+                  this.submit();
+                } else {
+                  return null;
+                }
                 // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
               });
             }
@@ -90,7 +96,11 @@ constructor(props) {
                 loaded: true,
                 user: res.data.user
               }, () => {
-                this.submit();
+                if (this.props.username) {
+                  this.submit();
+                } else {
+                  return null;
+                }
                 // this.props.history.push(`/signup/freelancer/page/${this.state.pageNumber}`);
               });
             }
@@ -161,11 +171,13 @@ constructor(props) {
               <Route exact path="/businesses/post/job/listing" component={PostNewJobPage} />
               <Route exact path="/freelancers/list/view" component={FreelancersListPage} />
               <Route exact path="/freelancer/individual/page/public/:id" component={FreelancerProfileIndividualPublic} />
-              <Route exact path="/business/individual/listing" component={BusinessIndividualListing} />
+              <Route exact path="/business/individual/listing/:id" component={BusinessIndividualListing} />
               <Route exact path="/payment/create/membership" component={PaymentMemebershipPage} />
               <Route exact path="/thank/you/for/your/payment" component={ThankYouPage} /> 
               <Route exact path="/verify/phone/number" component={VerifyPhoneNumberPage} /> 
               <Route exact path="/freelancer/place/bid/company/listing" component={PlaceNewBidBusinessPage} />
+              <Route exact path="/dashboard/manage/applications" component={ManageJobsApplicationsPage} />
+              <Route exact path="/dashboard/manage/applications/individual/:id" component={DashboardManageApplicantsPage} />
             </div>
           </Fragment>
         );

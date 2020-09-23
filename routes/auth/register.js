@@ -12,11 +12,15 @@ const AWS = require('aws-sdk');
 const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
+const StreamChat = require('stream-chat').StreamChat;
 
 const accountSid = 'AC3ef6c21bae251cb9f4677c85e600c2ac';
 const authToken = '4a60ae3bfbfc6089b45b654e6138beee';
 const client = require('twilio')(accountSid, authToken);
 
+
+const clientStream = new StreamChat('52zfrbfbqu6r', '2edjpqxk42vkxwjf22n73v5camaj66rmb5ykrz9uywt7bc2b86wedwb8qkt7tftv');
+     
 
 const accessKeyId = 'J4FR4IVQL0CV0DFTMYBJ';
 const secretAccessKey = 'wuUJoRXlWkSpVfPusz5XEf3ijhgvRtbwXc4oFofP';
@@ -43,6 +47,8 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
         const bufferImage = new Buffer(avatar.replace(/^data:image\/\w+;base64,/, ""),'base64');
 
+        const tokenStreamChat = clientStream.createToken(username);
+
         const UserData = new User({
             username: username.trim(),
             accountType: accountType.trim(),
@@ -59,7 +65,8 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                 id: uuidv4()
             }],
             unique_id: uuidv4(),
-            phoneNumber: phoneNumber.trim()
+            phoneNumber: phoneNumber.trim(),
+            get_stream_token: tokenStreamChat
         });
         
         UserData.save((err, data) => {
@@ -82,12 +89,21 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                           client.verify.services(service.sid)
                             .verifications
-                            .create({to: `+1${phoneNumber.trim()}`, channel: 'sms'})
-                            .then(verification => {
+                            .create({to: `+1${phoneNumber}`, channel: 'sms'})
+                            .then(async (verification) => {
                                 
                                 console.log(verification.status);
 
                                 app.set('serviceSid', service.sid); 
+
+                                await clientStream.setUser(
+                                    {
+                                        id: username,
+                                        name: username,
+                                        image: `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${generatedID}`,
+                                    },
+                                    tokenStreamChat,
+                                );
 
                                 res.json({
                                     message: "Successfully registered!",

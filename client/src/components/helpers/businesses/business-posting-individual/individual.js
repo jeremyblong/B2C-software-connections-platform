@@ -4,14 +4,94 @@ import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import FileViewer from 'react-file-viewer';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
+import axios from "axios";
+import 'react-responsive-modal/styles.css';
+import { Modal } from 'react-responsive-modal';
+import { NotificationManager} from 'react-notifications';
+
 
 class BusinessPostingsIndividual extends Component {
 constructor(props) {
     super(props)
     
+    this.state = {
+        backup: null,
+        open: false,
+        messageSubject: "",
+        messageMessage: "",
+        usernamePerPage: ""
+    }
 }
     onError(e) {
         console.log(e);
+    }
+    onOpenModal = () => {
+        this.setState({ open: true });
+    };
+     
+    onCloseModal = () => {
+        this.setState({ open: false });
+    };
+    componentDidMount() {
+        console.log("BusinessPostingsIndividual props.... :", this.props);
+
+        const specific_id = this.props.general.match.params.id;
+
+        axios.post("/gather/posted/job/by/id", {
+            id: specific_id
+        }).then((res) => {
+            if (res.data.message === "Found Specific User!") {
+                console.log("REsolution :", res.data);
+
+                for (let index = 0; index < res.data.user.businessData.job_postings.length; index++) {
+                    const job_posting = res.data.user.businessData.job_postings[index];
+                    
+                    if (job_posting.id === specific_id) {
+                        this.setState({
+                            backup: job_posting,
+                            usernamePerPage: res.data.user.username
+                        })
+                    }
+                }
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    renderButtonOrNotURL = (job_posting) => {
+
+        let found = false;
+
+        console.log("this.props.username", this.props.username)
+
+        if (typeof this.props.username !== "undefined" && this.state.usernamePerPage !== this.props.username) {
+            if (job_posting.responses) {
+                for (let index = 0; index < job_posting.responses.length; index++) {
+                    const response = job_posting.responses[index];
+                    console.log(response.sender, this.props.username);
+                    if (response.sender === this.props.username) {
+                        found = true;
+                    }
+                }
+                if (found === true) {
+                    return null;
+                } else {
+                    return (
+                        <Fragment>
+                            <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
+                        </Fragment>
+                    );
+                }
+            } else {
+                return (
+                    <Fragment>
+                        <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
+                    </Fragment>
+                );
+            }
+        } else {
+            return null;
+        }
     }
     renderButtonOrNot = () => {
         // {passedData.responses ? passedData.responses.map((response, index) => {
@@ -25,37 +105,49 @@ constructor(props) {
             //     );
             // }
         // }) : null}
-        const passedData = this.props.job ? this.props.job.job : null;
+        const passedData = this.props.job ? this.props.job.job : this.state.backup;
 
         let found = false;
-
-        if (passedData.responses) {
-            for (let index = 0; index < passedData.responses.length; index++) {
-                const response = passedData.responses[index];
-                console.log(response.sender, this.props.username);
-                if (response.sender === this.props.username) {
-                    found = true;
+        if (typeof this.props.username !== "undefined" && this.state.usernamePerPage !== this.props.username) {
+            if (passedData.responses) {
+                for (let index = 0; index < passedData.responses.length; index++) {
+                    const response = passedData.responses[index];
+                    console.log(response.sender, this.props.username);
+                    if (response.sender === this.props.username) {
+                        found = true;
+                    }
                 }
-            }
-            if (found === true) {
-                return null;
+                if (found === true) {
+                    return null;
+                } else {
+                    return (
+                        <Fragment>
+                            <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: passedData }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
+                        </Fragment>
+                    );
+                }
             } else {
                 return (
                     <Fragment>
-                        <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
+                        <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: passedData }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
                     </Fragment>
                 );
             }
         } else {
-            return (
-                <Fragment>
-                    <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
-                </Fragment>
-            );
+            return null;
         }
     }
     renderContent = () => {
-        const passedData = this.props.job ? this.props.job.job : null;
+        console.log("business-postings-individual page: ", this.state);
+
+        let passedData = null;
+
+        if (typeof this.props.job === "undefined") {
+            passedData = this.state.backup;
+        } else {
+            passedData = this.props.job.job;
+        }
+        // const passedData =  ? this.props.job.job : this.state.backup;
 
         const Map = ReactMapboxGl({
             accessToken:
@@ -243,6 +335,14 @@ constructor(props) {
                             <div class="col-xl-4 col-lg-4">
                                 <div class="sidebar-container">
                                     {this.renderButtonOrNot()}
+
+                                    <div style={{ marginTop: "30px", marginBottom: "20px" }}>
+                                        <button onClick={() => {
+                                            this.setState({
+                                                open: !this.state.open
+                                            })
+                                        }} className="btn red-btn" style={{ width: "100%", color: "white", padding: "14px 20px" }}>Send Private Message</button>
+                                    </div>
                                     {/* {this.props.accountType === "freelancer" && alreadyApplied === false ? <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link> : null}                                         */}
                             
                                     <div class="sidebar-widget">
@@ -326,10 +426,90 @@ constructor(props) {
             return null;
         }
     }
+    handleMessageSubmission = (e) => {
+        e.preventDefault();
+
+        console.log("handleMessageSubmission clicked.");
+
+        const { messageSubject, messageMessage } = this.state;
+
+        axios.post("/gather/posted/job/by/id", {
+            id: this.props.general.match.params.id
+        }).then((responseee) => {
+            if (responseee.data.message === "Found Specific User!") {
+
+                console.log("RES-DATA: ", responseee.data);
+
+                let prom = new Promise((resolve, reject) => {
+
+                    console.log('synchronously executed');
+
+                    axios.post("/create/messaging/channel", {
+                        username: this.props.username,
+                        otherUser: responseee.data.user.username,
+                        message_subject: messageSubject,
+                        message: messageMessage
+                    }).then((response) => {
+                        if (response.data.message === "Successfully generated channel!") {
+                            console.log("Successfully generated channel! res.data", response.data);
+                            resolve(response.data);
+                        }
+                    }).catch((err) => {
+                        console.log(err);
+                    })
+                })
+        
+                prom.then((value) => {
+
+                    this.setState({
+                        open: false
+                    }, () => {
+                        NotificationManager.success('Message sent successfully!', 'MESSAGE SENT!', 5000);
+                    })
+
+                    // axios.post("/send/initial/private/message", {
+                    //     username: this.props.username,
+                    //     message_subject: messageSubject,
+                    //     message: messageMessage
+                    // }).then((res) => {
+                    //     console.log(res.data);
+                    // }).catch((err) => {
+                    //     console.log(err);
+                    // })
+                });
+            }
+        })
+    }
     render() {
+        console.log("individual busines-posting props... :", this.props);
         return (
             <div>
                 {this.renderContent()}
+                <Modal open={this.state.open} onClose={this.onCloseModal} center>
+                
+                            <div class="loginmodal-container">
+                                <h1>Construct Your Private Message </h1><br />
+                                <form onSubmit={this.handleMessageSubmission}>
+                                    <input className="form-control my-input" onChange={(e) => {
+                                        this.setState({
+                                            messageSubject: e.target.value
+                                        })
+                                    }} type="text" placeholder="Enter your message subject..."/>
+                                    <textarea onChange={(e) => {
+                                        this.setState({
+                                            messageMessage: e.target.value
+                                        })
+                                    }} rows={6} className="form-control my-input" type="text" placeholder="Enter your message here..."/>
+                                    <input type="submit" name="login" class="login loginmodal-submit" value="Login"/>
+                                </form>
+                                    
+                                {/* <div class="login-help">
+                                    <a href="#">Register</a> - <a href="#">Forgot Password</a>
+                                </div> */}
+                            </div>
+                    
+                
+                </Modal>
             </div>
         )
     }

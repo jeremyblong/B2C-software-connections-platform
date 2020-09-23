@@ -71,22 +71,33 @@ const Navigation = (props) => {
   const logUserOut = () => {
     props.authentication({});
     props.completedSignup(false);
+
+    axios.post("/logout").then((res) => {
+        if (res.data.message === "Successfully disconnected from chat!") {
+            console.log("logged out res.data: ", res.data);
+        }
+    }).catch((err) => {
+        console.log(err);
+    })
     
     setTimeout(() => {
         props.history.push("/");
     }, 500);
   }
   useEffect(() => {
-    axios.post("/gather/specific/user/username", {
-        username: props.username
-    }).then((res) => {
-        if (res.data.message === "Found Specific User!") {
-            console.log(res.data);
-            setData(res.data.user);
-        }
-    }).catch((err) => {
-        console.log(err);
-    })
+    console.log("magic username -- :", props.username);
+    if (typeof props.username !== "undefined") {
+        axios.post("/gather/specific/user/username", {
+            username: props.username
+        }).then((res) => {
+            if (res.data.message === "Found Specific User!") {
+                console.log(res.data);
+                setData(res.data.user);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
   }, [])
   const renderContent = () => {
       console.log("PROPS ------------ ", props);
@@ -149,15 +160,14 @@ const Navigation = (props) => {
                                                     <div className="header-notifications-scroll" data-simplebar>
                                                         <ul id="list">
                                                             {data.notifications ? data.notifications.map((notification, index) => {
-                                                                console.log("notification", notification)
                                                                 return (
-                                                                    <li className="notifications-not-read">
-                                                                        <a href="/">
+                                                                    <li key={index} className="notifications-not-read">
+                                                                        <Link to={{pathname: `/business/individual/listing/${notification.related_job}`}}>
                                                                             <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
                                                                             <span className="notification-text">
                                                                                 <strong>{notification.action_taker === props.username ? "You" : notification.action_taker}</strong> {notification.action_specific} <span className="color">{notification.action.title}</span>
                                                                             </span>
-                                                                        </a>
+                                                                        </Link>
                                                                     </li>
                                                                 );
                                                             }) : null}

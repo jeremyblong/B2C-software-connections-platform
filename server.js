@@ -43,6 +43,7 @@ app.use(express.urlencoded({
 })); 
 
 // routes go here... 
+app.use("/logout", require("./routes/auth/logout.js"));
 app.use("/register", require("./routes/auth/register.js"));
 app.use("/login", require("./routes/auth/sign-in.js"));
 app.use("/gather/specific/user/username", require("./routes/specific/getUserByUsername.js"));
@@ -83,7 +84,14 @@ app.use("/gather/users/job_postings/exists", require("./routes/businesses/jobs/g
 app.use("/twilio/verify/phone/number", require("./routes/public_apis/twillio/verfiy.js"));
 app.use("/gather/posted/job/by/id", require("./routes/businesses/jobs/findByJobId.js"));
 app.use("/submit/proposal/freelancer", require("./routes/businesses/jobs/applyToListing.js"));
-
+app.use("/post/new/note/dashboard", require("./routes/dashboard/addNewNote.js"));
+app.use("/edit/note/dashboard/home/change", require("./routes/dashboard/editNote.js"));
+app.use("/delete/note/dashboard", require("./routes/dashboard/deleteNote.js"));
+app.use("/gather/posted/job/by/id/specific/job", require("./routes/dashboard/getSpecificJob.js"));
+app.use("/get/user/profile/picture", require("./routes/dashboard/images/retrieveUserPic.js"));
+app.use("/check/email/taken", require("./routes/checkEmailTaken.js"));
+app.use("/create/messaging/channel", require("./routes/messaging/channels/createChannel.js"));
+app.use("/send/initial/private/message", require("./routes/messaging/messages/sendInitialMessage.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);
