@@ -96,6 +96,13 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                                 app.set('serviceSid', service.sid); 
 
+                                res.json({
+                                    message: "Successfully registered!",
+                                    data,
+                                    image: generatedID,
+                                    sid: service.sid
+                                })
+
                                 await clientStream.setUser(
                                     {
                                         id: username,
@@ -104,13 +111,6 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     },
                                     tokenStreamChat,
                                 );
-
-                                res.json({
-                                    message: "Successfully registered!",
-                                    data,
-                                    image: generatedID,
-                                    sid: service.sid
-                                })
                             });
                     });
                 });

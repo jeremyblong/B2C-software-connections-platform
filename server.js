@@ -92,6 +92,9 @@ app.use("/get/user/profile/picture", require("./routes/dashboard/images/retrieve
 app.use("/check/email/taken", require("./routes/checkEmailTaken.js"));
 app.use("/create/messaging/channel", require("./routes/messaging/channels/createChannel.js"));
 app.use("/send/initial/private/message", require("./routes/messaging/messages/sendInitialMessage.js"));
+app.use("/remove/applicant/job/posting/individual", require("./routes/businesses/jobs/removeApplicant.js"));
+app.use("/add/page/view", require("./routes/increasePageViews.js"));
+app.use("/gather/posted/job/by/id/two", require("./routes/businesses/jobs/findByJobIdTwo.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

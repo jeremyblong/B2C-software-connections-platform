@@ -108,6 +108,7 @@ constructor(props) {
         const passedData = this.props.job ? this.props.job.job : this.state.backup;
 
         let found = false;
+
         if (typeof this.props.username !== "undefined" && this.state.usernamePerPage !== this.props.username) {
             if (passedData.responses) {
                 for (let index = 0; index < passedData.responses.length; index++) {
@@ -136,6 +137,22 @@ constructor(props) {
         } else {
             return null;
         }
+    }
+    renderPrivateMessageBtn = () => {
+        if (this.state.usernamePerPage === this.props.username) {
+            return null;
+        } else {
+            return (
+                <div style={{ marginTop: "30px", marginBottom: "20px" }}>
+                    <button onClick={() => {
+                        this.setState({
+                            open: !this.state.open
+                        })
+                    }} className="btn red-btn" style={{ width: "100%", color: "white", padding: "14px 20px" }}>Send Private Message</button>
+                </div>
+            );
+        }
+        
     }
     renderContent = () => {
         console.log("business-postings-individual page: ", this.state);
@@ -336,13 +353,7 @@ constructor(props) {
                                 <div class="sidebar-container">
                                     {this.renderButtonOrNot()}
 
-                                    <div style={{ marginTop: "30px", marginBottom: "20px" }}>
-                                        <button onClick={() => {
-                                            this.setState({
-                                                open: !this.state.open
-                                            })
-                                        }} className="btn red-btn" style={{ width: "100%", color: "white", padding: "14px 20px" }}>Send Private Message</button>
-                                    </div>
+                                    {this.renderPrivateMessageBtn()}
                                     {/* {this.props.accountType === "freelancer" && alreadyApplied === false ? <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link> : null}                                         */}
                             
                                     <div class="sidebar-widget">
@@ -500,7 +511,7 @@ constructor(props) {
                                             messageMessage: e.target.value
                                         })
                                     }} rows={6} className="form-control my-input" type="text" placeholder="Enter your message here..."/>
-                                    <input type="submit" name="login" class="login loginmodal-submit" value="Login"/>
+                                    <input type="submit" name="send-message" class="login loginmodal-submit" value="Send Message"/>
                                 </form>
                                     
                                 {/* <div class="login-help">

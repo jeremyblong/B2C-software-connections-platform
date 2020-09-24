@@ -92,6 +92,19 @@ constructor(props) {
                 }).catch((err) => {
                     console.log(err);
                 })
+            } else {
+                axios.post("/business/signup/description/update", {
+                    username: this.props.username,
+                    id: this.props.unique_id,
+                    description: this.state.description
+                }).then((res) => {
+                    console.log(res.data);
+                    if (res.data.message === "Successfully updated account!") {
+                        this.props.history.push("/signup/business/page/2");
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
             }
         } else {
             this.setState({

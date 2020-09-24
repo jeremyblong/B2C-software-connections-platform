@@ -4,7 +4,8 @@ import MultiSelect from "react-multi-select-component";
 import { withRouter } from "react-router-dom";
 import Select from "react-dropdown-select";
 import axios from "axios";
-import SlidingPanel from 'react-sliding-side-panel';
+import SlidingPane from "react-sliding-pane";
+import "react-sliding-pane/dist/react-sliding-pane.css";
 import { RadioGroup, RadioButton } from 'react-radio-buttons';
 import { connect } from "react-redux";
 import { authentication } from "../../../../../actions/auth/auth.js";
@@ -43,7 +44,7 @@ constructor(props) {
             { value: "Custom-PHP", index: 11 },
             { value: "PostgreSQL-Administration", index: 12 }
         ],
-        show: false
+        show: true
     }
 }
     removeItem = (passed) => {
@@ -506,47 +507,60 @@ constructor(props) {
                                     <div class="clearfix"></div>
                                 </div>
                     
-                                <SlidingPanel 
-                                    backdropClicked={() => {
-                                        this.setState({
-                                            openPanel: false
-                                        })
-                                    }}
-                                    type={'bottom'}
-                                    isOpen={this.state.openPanel}
-                                    size={25} 
-                                    panelContainerClassName={"overlay-sliding-panel"}
-                                >
-                                    <div id="slide-up-bottom-overlay">
-                                        
-                                        <div className="container">
-                                            <div style={{ marginBottom: "30px", marginTop: "30px" }} className="row">
-                                                
-                                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
-                                                    <RadioGroup onChange={ this.onChangeRadio } horizontal>
-                                                        <RadioButton pointColor={"blue"} rootColor={"black"} value="without">
-                                                            Proceed <strong style={{ color: "red" }}>WITHOUT</strong> adding any skills in the additional skills section...
-                                                        </RadioButton>
-                                                
-                                                        <RadioButton pointColor={"blue"} rootColor={"black"} value="with">
-                                                            Proceed & <strong style={{ color: "red" }}>INCLUDE</strong> the additional skills...!
-                                                        </RadioButton>
-                                                    </RadioGroup>
-
-                                                    {this.state.withOrWithout.length !== 0 ? <button onClick={() => {
-                                                       this.handleFinalSubmission(); 
-                                                    }} className="btn blue-btn" style={{ width: "100%", color: "white", marginTop: "30px", marginBottom: "30px" }}>Update account and proceed to next page...</button> : null}
-                                                </div>
-                                             
-                                            </div>
-                                        </div>
-                                       
-                                    </div>
-                                </SlidingPanel>
+                                
                             </div>
                         </div>                 
                     </div>                  
                 </div>
+                <SlidingPane
+                    className="panel-panel"
+                    overlayClassName="panel-overlay-special"
+                    isOpen={this.state.openPanel}
+                    title="Select whether or not you'd like to include the 'additional skills' section of this page..."
+                    onRequestClose={() => {
+                    // triggered on "<" on left top click or on outside click
+                        this.setState({ openPanel: false });
+                    }}
+                >
+                    <div id="slide-up-bottom-overlay">
+                        
+                        <div className="container">
+                            <div style={{ marginBottom: "30px", marginTop: "30px" }} className="row">
+                                
+                                <div className="col-lg-12 col-md-12 col-sm-12 col-xs-12">    
+                                    <RadioGroup onChange={ this.onChangeRadio } horizontal>
+                                        <RadioButton pointColor={"blue"} rootColor={"black"} value="without">
+                                            Proceed <strong style={{ color: "red" }}>WITHOUT</strong> adding any skills in the additional skills section...
+                                        </RadioButton>
+                                
+                                        <RadioButton pointColor={"blue"} rootColor={"black"} value="with">
+                                            Proceed & <strong style={{ color: "red" }}>INCLUDE</strong> the additional skills...!
+                                        </RadioButton>
+                                    </RadioGroup>
+
+                                    {this.state.withOrWithout.length !== 0 ? <button onClick={() => {
+                                        this.handleFinalSubmission(); 
+                                    }} className="btn blue-btn" style={{ width: "100%", color: "white", marginTop: "30px", marginBottom: "30px" }}>Update account and proceed to next page...</button> : null}
+                                </div>
+                                
+                            </div>
+                        </div>
+                        
+                    </div>
+                </SlidingPane>
+                {/* <SlidingPanel 
+                    backdropClicked={() => {
+                        this.setState({
+                            openPanel: false
+                        })
+                    }}
+                    type={'bottom'}
+                    isOpen={this.state.openPanel}
+                    size={25} 
+                    panelContainerClassName={"overlay-sliding-panel"}
+                >
+                    
+                </SlidingPanel> */}
             </div>
         )
     }

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { withRouter } from "react-router-dom";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
+import { authentication } from "../../../../../actions/auth/auth.js";
 
 class BusinessSignupOverviewHelper extends Component {
 constructor(props) {
@@ -17,13 +18,30 @@ constructor(props) {
     handleSubmission = () => {
         console.log("handle submission");
 
+        const { job_postings } = this.state.data.businessData;
+
+        const posting = job_postings[0];
+
+        const action_data = {
+            title: posting.title,
+            desc: posting.description,
+            billing: posting.billing,
+            listing_id: posting.id
+        }
+
         axios.post("/business/complete/signup", {
-            username: this.props.username
+            username: this.props.username,
+            action_data_id: posting.id,
+            action_data
         }).then((res) => {
             console.log(res.data);
             if (res.data.message === "Successfully registered user and posted job!") {
+
+                this.props.authentication({});
+
+                localStorage.clear();
                 
-                this.props.history.push("/");
+                this.props.history.push("/sign-in");
 
                 window.location.reload();
             }
@@ -350,4 +368,4 @@ const mapStateToProps = state => {
         }
     }
 }
-export default withRouter(connect(mapStateToProps, {  })(BusinessSignupOverviewHelper));
+export default withRouter(connect(mapStateToProps, { authentication })(BusinessSignupOverviewHelper));

@@ -40,6 +40,7 @@ import VerifyPhoneNumberPage from "./components/pages/auth/verify/index.js";
 import PlaceNewBidBusinessPage from "./components/pages/businesses/bids/placeNewBid.js";
 import ManageJobsApplicationsPage from "./components/pages/dashboard/manage-jobs/manage.js";
 import DashboardManageApplicantsPage from "./components/pages/dashboard/manage-jobs/individual-applicants-details.js";
+import ManageBidsFreelancerPageMain from "./components/pages/dashboard/manage-bids/manage.js";
 
 class App extends Component {
 constructor(props) {
@@ -178,6 +179,7 @@ constructor(props) {
               <Route exact path="/freelancer/place/bid/company/listing" component={PlaceNewBidBusinessPage} />
               <Route exact path="/dashboard/manage/applications" component={ManageJobsApplicationsPage} />
               <Route exact path="/dashboard/manage/applications/individual/:id" component={DashboardManageApplicantsPage} />
+              <Route exact path="/dashboard/manage/bidders" component={ManageBidsFreelancerPageMain} />
             </div>
           </Fragment>
         );

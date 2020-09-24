@@ -50,49 +50,51 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                         console.log("match.")
 
-                        for (let index = 0; index < files.length; index++) {
+                        if (files) {
+                            for (let index = 0; index < files.length; index++) {
 
-                            const generatedID = uuidv4();
-
-                            const file = files[index];
-
-                            filesArray.push({
-                                title: file.title,
-                                picture: generatedID
-                            });
-                            
-                            // console.log("file", file);
-
-                            const request = new Promise(function(resolve, reject) {
-                                fs.writeFile(`./documents/pdf/${generatedID}`, file.picture64, { encoding: 'base64' }, (err) => {
-                                    console.log('File created');
-                                    resolve();
+                                const generatedID = uuidv4();
+    
+                                const file = files[index];
+    
+                                filesArray.push({
+                                    title: file.title,
+                                    picture: generatedID
                                 });
-                            });
-                             
-                            request.then((result) => {
-                                fs.readFile(`./documents/pdf/${generatedID}`, (err, data) => {
-                                    if (err) {
-                                        console.log(err);
-                                        throw err;
-                                    } // Something went wrong!
-                                    
-                                    
-                                    s3.putObject({
-                                        Body: data,
-                                        Bucket: "software-gateway-platform",
-                                        Key: generatedID
-                                    }, (errorr, dataaa) => {
-                                        if (errorr) {
-                                           console.log(errorr);
-                                        }
-                                        console.log(dataaa);
+                                
+                                // console.log("file", file);
+    
+                                const request = new Promise(function(resolve, reject) {
+                                    fs.writeFile(`./documents/pdf/${generatedID}`, file.picture64, { encoding: 'base64' }, (err) => {
+                                        console.log('File created');
+                                        resolve();
                                     });
                                 });
-                            }, (error) => {
-                               //handle
-                               console.log(error);
-                            });
+                                 
+                                request.then((result) => {
+                                    fs.readFile(`./documents/pdf/${generatedID}`, (err, data) => {
+                                        if (err) {
+                                            console.log(err);
+                                            throw err;
+                                        } // Something went wrong!
+                                        
+                                        
+                                        s3.putObject({
+                                            Body: data,
+                                            Bucket: "software-gateway-platform",
+                                            Key: generatedID
+                                        }, (errorr, dataaa) => {
+                                            if (errorr) {
+                                               console.log(errorr);
+                                            }
+                                            console.log(dataaa);
+                                        });
+                                    });
+                                }, (error) => {
+                                   //handle
+                                   console.log(error);
+                                });
+                            }
                         }
                         
                         element.description = description;

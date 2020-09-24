@@ -16,10 +16,19 @@ constructor(props) {
             unique_id: this.props.user.unique_id || this.props.id
         }).then((res) => {
             if (res.data.message === "FOUND user!") {
-                console.log("Found data ! :", res.data);
-                
-                this.setState({
-                    user: res.data.user
+
+                axios.post("/add/page/view", {
+                    unique_id: this.props.user.unique_id || this.props.id
+                }).then((responseee) => {
+                    if (responseee.data.message === "Updated Page View Count!") {
+                        console.log("Updated Page View Count!! :", responseee.data);
+                        
+                        this.setState({
+                            user: responseee.data.user
+                        })
+                    }
+                }).catch((err) => {
+                    console.log(err);
                 })
             }
         }).catch((err) => {
@@ -323,7 +332,11 @@ constructor(props) {
                                                     <li><a href="#" data-button-color="#dd4b39" title="Share on Google Plus" data-tippy-placement="top"><i className="icon-brand-google-plus-g"></i></a></li>
                                                     <li><a href="#" data-button-color="#0077b5" title="Share on LinkedIn" data-tippy-placement="top"><i className="icon-brand-linkedin-in"></i></a></li>
                                                 </ul>
+                                                
                                             </div>
+                                            {user.page_views ? <div style={{ marginTop: "25px" }} className="row mx-auto">
+                                                <h2 className="text-center">Page View Count: <strong style={{ color: "blue" }}>{user.page_views}</strong></h2>
+                                            </div> : null}
                                         </div>
                                     </div>
 
@@ -331,6 +344,7 @@ constructor(props) {
                             </div>
 
                         </div>
+                        
                     </div>
 
 

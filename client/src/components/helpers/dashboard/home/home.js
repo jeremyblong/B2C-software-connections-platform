@@ -154,7 +154,7 @@ constructor(props) {
                                             <div class="invoice-list-item mx-auto">
                                             <strong>{application.title}</strong>
                                                 <ul>
-                                                    <li><span class="unpaid">Pending</span></li> <br />
+                                                    <li>{application.accepted === "DENIED/DECLINED" ? <span class="unpaid">DECLINED</span> :  <span class="paid">Pending</span>}</li> <br />
                                                     <li>Order: {application.id}</li> <br />
                                                     <li>Date: {application.date}</li>
                                                 </ul>
@@ -343,16 +343,51 @@ constructor(props) {
             console.log(err);
         })
     } 
+    renderCountTwo = () => {
+        const { user } = this.state;
+
+        if (user.accountType === "business") {
+            return (
+                <div class="fun-fact" data-fun-fact-color="#2a41e6">
+                    <div class="fun-fact-text">
+                        <span>This Month Views</span>
+                        <h4>0</h4>
+                    </div>
+                    <div class="fun-fact-icon fun-fact-four"><i class="icon-feather-trending-up" style={{ color: "white" }}></i></div>
+                </div>
+            );
+        } else {
+            return (
+                <div class="fun-fact" data-fun-fact-color="#2a41e6">
+                    <div class="fun-fact-text">
+                        <span>Your Profile Views</span>
+                        <h4>{user.page_views ? user.page_views : "0"}</h4>
+                    </div>
+                    <div class="fun-fact-icon fun-fact-four"><i class="icon-feather-trending-up" style={{ color: "white" }}></i></div>
+                </div>
+            );
+        }
+    }
     renderConditional = () => {
         const { user } = this.state;
         
-        const options = [
-            { value: "/dashboard/manage/applications", label: "Manage Jobs" },
-            { value: "/dashboard/manage/bidders", label: "Manage Applicants" },
-            { value: "/dashboard/manage/applications", label: "Post A Job" },
-            { value: "/dashboard/manage/applications", label: "Analytics" }
-        ];
+        let options;
 
+        if (this.props.accountType === "freelancer") {
+            options = [
+                { value: "/dashboard/manage/applications", label: "Manage Jobs" },
+                { value: "/dashboard/manage/bidders", label: "Manage My Bids" },
+                { value: "/dashboard/manage/applications", label: "Un-Developed" },
+                { value: "/dashboard/manage/applications", label: "Un-Developed" }
+            ];
+        } else {
+            options = [
+                { value: "/dashboard/manage/applications", label: "Manage Jobs" },
+                { value: "/dashboard/manage/bidders", label: "Un-Developed" },
+                { value: "/dashboard/manage/applications", label: "Un-Developed" },
+                { value: "/dashboard/manage/applications", label: "Un-Developed" }
+            ];
+        }
         const defaultOption = options[0];
 
         if (user !== null && user !== "Could NOT locate user...") {
@@ -382,7 +417,7 @@ constructor(props) {
                                             {/* /dashboard/manage/applications */}
                                             <ul data-submenu-title="Organize and Manage">
                                                 <li>
-                                                    <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />;
+                                                    <Dropdown options={options} onChange={this._onSelect} value={defaultOption} placeholder="Select an option" />
                                                 </li>
                                                 <li><a href="#"><i class="icon-material-outline-assignment"></i> Tasks</a>
                                                     <ul>
@@ -421,7 +456,7 @@ constructor(props) {
                                                             <span class="hamburger-inner"></span>
                                                         </span>
                                                     </span>
-                                                    <span class="trigger-title">Dashboard Navigation</span>
+                                                    <span class="trigger-title">Dashboard</span>
                                                 </a>
                                             </NavbarToggler>
                                             <Collapse isOpen={this.state.isOpen} navbar>
@@ -490,13 +525,7 @@ constructor(props) {
                                     <div class="fun-fact-icon fun-fact-three"><i class="icon-material-outline-rate-review" style={{ color: "white" }}></i></div>
                                 </div>
 
-                                <div class="fun-fact" data-fun-fact-color="#2a41e6">
-                                    <div class="fun-fact-text">
-                                        <span>This Month Views</span>
-                                        <h4>0</h4>
-                                    </div>
-                                    <div class="fun-fact-icon fun-fact-four"><i class="icon-feather-trending-up" style={{ color: "white" }}></i></div>
-                                </div>
+                                {this.renderCountTwo()}
                             </div>
                             <div class="row">
 
@@ -1177,7 +1206,8 @@ const mapStateToProps = state => {
         const obj = state.auth;
         if (obj.authenticated.hasOwnProperty("email")) {
             return {
-                username: state.auth.authenticated.username
+                username: state.auth.authenticated.username,
+                accountType: state.auth.authenticated.accountType
             }
         }
     }

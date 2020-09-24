@@ -16,9 +16,17 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
         collection.findOne({ unique_id }).then((user) => {
             if (user) {
+                
+                if (!user.page_views) {
+                    user["page_views"] = 1;
+                } else {
+                    user.page_views = user.page_views + 1;
+                }
+
+                collection.save(user);
 
                 res.json({
-                    message: "FOUND user!",
+                    message: "Updated Page View Count!",
                     user
                 })
             } else {

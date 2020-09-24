@@ -13,6 +13,7 @@
     "mapbox-gl": "^1.12.0",
     "moment": "^2.27.0",
     "multiselect-react-dropdown": "^1.5.7",
+    "places.js": "^1.19.0",
     "react": "^16.13.1",
     "react-charts": "^2.0.0-beta.7",
     "react-checkbox-group": "^5.0.2",

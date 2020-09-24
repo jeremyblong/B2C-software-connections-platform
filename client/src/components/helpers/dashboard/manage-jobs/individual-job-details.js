@@ -3,6 +3,12 @@ import axios from "axios";
 import "./style.css";
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
+import { Link, withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+import { NotificationManager} from 'react-notifications';
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css'; 
 
 class IndividualJobsHelperDetails extends Component {
 constructor(props) {
@@ -13,7 +19,12 @@ constructor(props) {
         responses: [],
         ready: false,
         open: false,
-        modalInfo: null
+        modalInfo: null,
+        messageOpen: false,
+        messageMessage: "",
+        messageSubject: "",
+        selectedUser: null,
+        popoverOpenCV: false
     }
 }
     onOpenModal = () => {
@@ -22,6 +33,9 @@ constructor(props) {
  
     onCloseModal = () => {
         this.setState({ open: false });
+    };
+    onCloseModalTwo = () => {
+        this.setState({ messageOpen: false });
     };
     componentDidMount() {
         axios.post("/gather/posted/job/by/id/specific/job", {
@@ -61,13 +75,85 @@ constructor(props) {
         })
     }
     sendMessage = () => {
-        console.log("send message...");
+        console.log("send message...", this.props.username);
 
+        const { messageMessage, messageSubject, selectedUser } = this.state;
+
+        axios.post("/create/messaging/channel", {
+            username: this.props.username, 
+            otherUser: selectedUser.sender, 
+            message_subject: messageSubject, 
+            message: messageMessage
+        }).then((res) => {
+            if (res.data.message === "Successfully generated channel!") {
+                console.log(res.data);
+                
+                NotificationManager.success('Successfully generated channel and sent your message!', 'Action Was Successful!', 6000);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
     }
+    unselectApplicant = (response) => {
+        console.log("remove applicant...");
+
+        const { id, title, sender, description } = response;
+
+        const action_data = {
+            title: this.state.user.title,
+            desc: description,
+            billing: {},
+            listing_id: id
+        }
+
+        axios.put("/remove/applicant/job/posting/individual", {
+            username_authenticated_user: this.props.username,
+            username_application: sender,
+            id_application: this.props.match.params.id,
+            response_id: id,
+            action_data
+        }).then((res) => {
+            if (res.data.message === "Found and removed selected response!") {
+                console.log("success", res.data);
+
+                this.setState({
+                    responses: this.state.responses.filter((itemmm) => {
+                        return itemmm.id !== response.id
+                    })
+                })
+            } else {
+                console.log("failure", res.data);
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    decisions = (response) => {
+        confirmAlert({
+          title: "Are you sure you'd like to remove this application?",
+          message: "This action cannot be undone - please be sure about your decision...",
+          buttons: [
+            {
+              label: 'Remove Applicant',
+              onClick: () => {
+                  console.log("remove applicant...")
+                  this.unselectApplicant(response);
+              }
+            },
+            {
+              label: 'CANCEL',
+              onClick: () => {
+                console.log("do nothing - unselect.");
+
+              }
+            }
+          ]
+        });
+      };
     render() {
         const { modalInfo } = this.state;
 
-        console.log("individual-job-details state... :", this.state);
+        console.log("individual-job-details props... :", this.props);
         return (
             <div style={{ borderTop: "3px solid lightgrey" }}>
                 <div class="dashboard-container">
@@ -192,6 +278,21 @@ constructor(props) {
                                                                     </div>
                                                                     <h4><a href="#">{response.sender} <img class="flag" src="/images/flags/au.svg" alt="" title="Australia" data-tippy-placement="top"/></a></h4>
                                                                     <p>{response.title}</p>
+                                                                    <br />
+                                                                    
+                                                                    <p>{response.cover_letter_message ? `${response.cover_letter_message.slice(0, 250)}${response.cover_letter_message.length >= 250 ? "..." : ""}` : null}<i onClick={() => {
+                                                                        this.setState({
+                                                                            popoverOpenCV: !this.state.popoverOpenCV
+                                                                        })
+                                                                    }} id="Popover10" class="fa fa-info-circle fa-2x"></i></p>
+                                                                    {response.cover_letter_message ? <Popover rootClose id="my-cv" placement="bottom" isOpen={this.state.popoverOpenCV} target="Popover10">
+                                                                        <PopoverHeader>Cover Letter/Intro</PopoverHeader>
+                                                                        <PopoverBody>{response.cover_letter_message} <hr className="my-4" /><button onClick={() => {
+                                                                            this.setState({
+                                                                                popoverOpenCV: false
+                                                                            })
+                                                                        }} style={{ width: "100%", color: "white" }} className="btn red-btn">Exit/Dismiss</button></PopoverBody>
+                                                                    </Popover> : null}
                                                                     <hr />
                                                                     <span class="freelancer-detail-item"><a href="#"><i class="icon-feather-mail"></i> {response.email}</a></span>
                                                                     <span class="freelancer-detail-item"><i class="icon-feather-phone"></i> {response.phoneNumber}</span>
@@ -209,11 +310,18 @@ constructor(props) {
                                                                         {typeof response.attachedFiles !== "undefined" && response.attachedFiles ? response.attachedFiles.map((file, index) => {
                                                                             return <a key={index} href={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${file.picture}`} class="button ripple-effect" download><i class="icon-feather-file-text"></i> Download {file.title}</a>;
                                                                         }) : null}
-                                                                        <button style={{ marginTop: "-23px" }}  onClick={this.sendMessage} class="blue-btn popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Send Message</button>
+                                                                        <button onClick={() => {
+                                                                            this.setState({
+                                                                                messageOpen: !this.state.messageOpen,
+                                                                                selectedUser: response
+                                                                            })
+                                                                        }} style={{ marginTop: "-23px" }} class="blue-btn popup-with-zoom-anim button dark ripple-effect"><i class="icon-feather-mail"></i> Send Message</button>
                                                                         <a href="#" class="button gray ripple-effect ico" title="Remove Candidate" data-tippy-placement="top"><i class="icon-feather-trash-2"></i></a>
                                                                     </div>
-                                                                    <div className="float-btn-right">
-                                                                        <button className="btn red-btn" style={{ color: "white" }}>Remove/Delete Applicant</button>
+                                                                    <div id="up-on-desk" className="float-btn-right">
+                                                                        <button onClick={() => {
+                                                                            this.decisions(response);
+                                                                        }} className="btn red-btn" style={{ color: "white" }}>Remove/Delete Applicant</button>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -275,7 +383,41 @@ constructor(props) {
                                         </div>
                                     </div>
                                 </div>
-                        </Modal>  : null}              
+                        </Modal>  : null}  
+
+                        <Modal open={this.state.messageOpen} onClose={this.onCloseModalTwo} center>
+                
+                                <div class="loginmodal-container">
+                                    <h1>Construct Your Private Message </h1><br />
+                                    <form onSubmit={(e) => {
+                                        e.preventDefault();
+
+                                        this.setState({
+                                            messageOpen: false
+                                        }, () => {
+                                            this.sendMessage();
+                                        })
+                                    }}>
+                                        <input className="form-control my-input" onChange={(e) => {
+                                            this.setState({
+                                                messageSubject: e.target.value
+                                            })
+                                        }} type="text" placeholder="Enter your message subject..."/>
+                                        <textarea onChange={(e) => {
+                                            this.setState({
+                                                messageMessage: e.target.value
+                                            })
+                                        }} rows={6} className="form-control my-input" type="text" placeholder="Enter your message here..."/>
+                                        <input type="submit" name="send-message" class="login loginmodal-submit" value="Send Message"/>
+                                    </form>
+                                        
+                                    {/* <div class="login-help">
+                                        <a href="#">Register</a> - <a href="#">Forgot Password</a>
+                                    </div> */}
+                                </div>
+                        
+                    
+                    </Modal>            
                             <div class="dashboard-footer-spacer"></div>
                             <div class="small-footer margin-top-15">
                                 <div class="small-footer-copyrights">
@@ -309,12 +451,23 @@ constructor(props) {
 
                         </div>
                     </div>
-                  
+                                                
                     </div>
             </div>
         )
     }
 }
-export default IndividualJobsHelperDetails;
+const mapStateToProps = state => {
+    for (const key in state.auth) {
+        const obj = state.auth;
+        if (obj.authenticated.hasOwnProperty("email")) {
+            return {
+                username: state.auth.authenticated.username,
+                getStreamToken: state.getStreamInfo.getStreamToken
+            }
+        }
+    }
+}
+export default withRouter(connect(mapStateToProps, {  })(IndividualJobsHelperDetails));
 
 

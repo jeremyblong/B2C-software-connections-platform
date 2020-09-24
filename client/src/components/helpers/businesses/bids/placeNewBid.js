@@ -8,7 +8,7 @@ import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
 import { Link, withRouter } from "react-router-dom";
 import Dropzone from 'react-dropzone'
 import { NotificationManager} from 'react-notifications';
-
+import Skeleton from "react-loading-skeleton";
 
 class PlaceNewBidHelper extends Component {
 constructor(props) {
@@ -30,7 +30,8 @@ constructor(props) {
         question1: null,
         question2: null,
         question3: null,
-        question4: null
+        question4: null,
+        errorLoading: false
     }
 }
     componentDidMount() {
@@ -48,6 +49,10 @@ constructor(props) {
                 this.setState({
                     user: res.data.user
                 })
+            } else {
+                this.setState({
+                    errorLoading: true
+                })
             }
         }).catch((err) => {
             console.log(err);
@@ -63,7 +68,9 @@ constructor(props) {
                     receipient: res.data.user
                 })
             } else {
-                console.log(res.data);
+                this.setState({
+                    errorLoading: true
+                })
             }
         }).catch((err) => {
             console.log(err);
@@ -311,9 +318,9 @@ constructor(props) {
         }
     }
     renderConditional = () => {
-        const { loaded, user, passed, receipient } = this.state;
+        const { loaded, user, passed, receipient, errorLoading } = this.state;
 
-        if (loaded === true && user !== null && passed !== null && receipient !== null) {
+        if (loaded === true && user !== null && passed !== null && receipient !== null && errorLoading === false) {
 
             console.log(this.state);
 
@@ -519,6 +526,56 @@ constructor(props) {
                         </div>       
                     </div>
                </Fragment>
+            );
+        } else if (loaded === true && user === null && errorLoading === false) {
+            return (
+                <div>
+                   <div id="titlebar" class="gradient">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <Skeleton count={10} width={"100%"} height={75} />
+
+                                   
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                  
+                    {/* <div class="container">
+
+                        <div class="row">
+                            <div class="col-xl-12">
+
+                                <section id="not-found" class="center margin-top-50 margin-bottom-25">
+                                    <h2>404 <i class="icon-line-awesome-question-circle"></i></h2>
+                                    <p>We're sorry but we are experiencing and error... Please navigate from the homepage back to this page to render the correct results (error free)</p>
+                                </section>
+
+                                <div class="row">
+                                    <div class="col-xl-8 offset-xl-2">
+                                            <div class="intro-banner-search-form not-found-search margin-bottom-50">
+                                              
+                                                <div class="intro-search-field ">
+                                                    <input id="intro-keywords" type="text" placeholder="What Are You Looking For?"/>
+                                                </div>
+
+                                               
+                                                <div class="intro-search-button">
+                                                    <button class="button ripple-effect">Search</button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div> */}
+                </div>
             );
         } else {
             return (

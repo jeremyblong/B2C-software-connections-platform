@@ -70,6 +70,9 @@ const Navigation = (props) => {
   }
   const logUserOut = () => {
     props.authentication({});
+
+    localStorage.clear();
+    
     props.completedSignup(false);
 
     axios.post("/logout").then((res) => {
