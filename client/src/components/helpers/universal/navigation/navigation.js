@@ -72,7 +72,7 @@ const Navigation = (props) => {
     props.authentication({});
 
     localStorage.clear();
-    
+
     props.completedSignup(false);
 
     axios.post("/logout").then((res) => {
@@ -346,8 +346,7 @@ const mapStateToProps = state => {
         email: state.auth.authenticated.email,
         username: state.auth.authenticated.username,
         accountType: state.auth.authenticated.accountType,
-        profilePics: state.auth.authenticated.profilePics,
-        accountType: state.auth.authenticated.accountType
+        profilePics: state.auth.authenticated.profilePics
       }
     } else {
         return {

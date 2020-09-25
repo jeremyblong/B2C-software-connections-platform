@@ -13,6 +13,8 @@ import Slider from 'react-rangeslider';
 import SlidingPane from "react-sliding-pane";
 import "react-sliding-pane/dist/react-sliding-pane.css";
 import { NotificationManager } from 'react-notifications';
+import Dropzone from 'react-dropzone';
+import moment from "moment";
 
 class PostAJob extends Component {
 constructor(props) {
@@ -21,6 +23,7 @@ constructor(props) {
     this.state = {
         business: false,
         user: null,
+        normalFile: null,
         loaded: false,
         job_title: "",
         category: "",
@@ -34,6 +37,7 @@ constructor(props) {
         webserverTypes: null,
         deviceType: null,
         platform: null,
+        questionError: "",
         programmingLanguages: null,
         talentType: "",
         number_of_freelancers: null,
@@ -48,7 +52,13 @@ constructor(props) {
         state: "",
         companyOrNo: "",
         isPaneOpen: false,
+        files: [],
+        acceptedFile: null,
+        location: null,
         pay_type: "",
+        addition: "",
+        minimum_earnings: "",
+        questions: false,
         preselected: [{
             title: "Do you have any questions about the job description?",
             index: 0
@@ -82,6 +92,57 @@ constructor(props) {
         }]
     }
 }
+    handleFinalSubmission = () => {
+        console.log("clicked submission...");
+
+        const { job_title, length_of_project, category, location, experienceLevel, deviceType, platform, webserverTypes, databaseTypes, programmingLanguages, talentType, businessSize, successScore, amountEarned, number_of_freelancers, pay_rate_amount_fixed, pay_rate_amount_hourly, pay_type, country, companyOrNo, state, job_description, preselected, additionalSkillsOptions, questions, files } = this.state;
+
+        // optional = additionalSkillsOptions, country, 
+        
+        if (job_title.length > 0 && length_of_project.length > 0 && category.length > 0 && location !== null && experienceLevel !== null && talentType.length > 0 && successScore !== null && amountEarned !== null && number_of_freelancers !== null && (pay_rate_amount_fixed !== 0 || pay_rate_amount_hourly !== 0) && pay_type.length > 0 && companyOrNo.length > 0 && job_description.length > 0) {
+            console.log("all checked and ready to go...!!!");
+
+            axios.post("/list/secondary/job", {
+                username: this.props.username,
+                title: job_title,
+                length_of_project, 
+                type_of_dev: category,
+                poster_location: location,
+                experience_level: experienceLevel,
+                who_can_see: talentType,
+                applicant_success_score: successScore, 
+                applicant_amount_earned: amountEarned, 
+                number_of_freelancers,
+                pay_rate: pay_rate_amount_fixed !== 0 ? pay_rate_amount_fixed : pay_rate_amount_hourly,
+                pay_type,
+                talent_type: companyOrNo,
+                description: job_description,
+                deviceType: deviceType !== null ? deviceType : null,
+                platform: platform !== null ? platform : null,
+                web_server_types: webserverTypes !== null ? webserverTypes : null,
+                database_types: databaseTypes !== null ? databaseTypes : null,
+                programming_languages: programmingLanguages !== null ? programmingLanguages : null,
+                business_size: businessSize !== null ? businessSize :  null,
+                country: country.length > 0 ? country : null,
+                timezone_or_state: state.length > 0 ? state : null,
+                preselected: questions === true ? preselected : null,
+                additional_skills: additionalSkillsOptions.length > 0 ? additionalSkillsOptions : [],
+                files: files.length > 0 ? files : null
+            }).then((res) => {
+                if (res.data.message === "ALL logic was executed successfully!") {
+                    console.log("ALL logic was executed successfully!", res.data);
+
+                    setTimeout(() => {
+                        this.props.history.push("/dashboard");
+                    }, 1500);
+                }
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            NotificationManager.error('You are missing some required fields...Complete every required field before proceeding', 'Double check which fields are required and complete them', 7000);
+        }
+    }
     componentDidMount() {
 
         axios.post("/gather/specific/user/username", {
@@ -261,12 +322,12 @@ constructor(props) {
             { label: "Fortune 500", value: "fortune-500", index: 5 }
         ];
 
-        const { additionalSkillsOptions } = this.state;
+        const { additionalSkillsOptions, preselected, questions } = this.state;
 
         if (this.state.business === true) {
             return (
                 <div class="dashboard-content-container" data-simplebar>
-		                <div class="dashboard-content-inner" >
+		                <div class="dashboard-content-inner">
 
                                 <div class="dashboard-headline">
                                     <h3 className="text-left">Post a Job</h3>
@@ -281,7 +342,7 @@ constructor(props) {
                                 </div>
                         
 
-                        <div class="row">
+                            <div class="row">
 
                             
                             <div class="col-xl-12">
@@ -318,7 +379,7 @@ constructor(props) {
                                                         this.setState({
                                                             length_of_project: e.target.value
                                                         })
-                                                    }} value={this.state.length_of_project} class="form-control">
+                                                    }} value={this.state.length_of_project} class="form-control" required>
                                                         <option value={"----select a value----"}>--- pick an option ---</option>
                                                         <option value={"complex-project"}>Complex/Lengthy Project (Long term project)</option>
                                                         <option value={"on-going-project"}>On-Going Project (Mix between a short-term and long-term project)</option>
@@ -599,7 +660,7 @@ constructor(props) {
                                                     </div>
                                                 </div>
 
-                                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12" style={{ marginTop: "30px" }}>
+                                                <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12" style={{ marginTop: "30px" }}>
                                                     <div class="submit-field">
                                                         <h5>Minimum Amount Earned Previously</h5>
                                                         <label>Minimum amount earned required from freelancer applicant's</label>
@@ -617,7 +678,7 @@ constructor(props) {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12" style={{ marginTop: "30px" }}>
+                                                <div className="col-md-6 col-lg-6 col-sm-12 col-xs-12" style={{ marginTop: "30px" }}>
                                                     <div class="submit-field">
                                                         <h5>Minimum Success Score</h5>
                                                         <label>Minimum success score required to apply for position... (success score are previously completed jobs by the freelancers)</label>
@@ -634,24 +695,7 @@ constructor(props) {
                                                         </select>
                                                     </div>
                                                 </div>
-                                                <div className="col-md-4 col-lg-4 col-sm-12 col-xs-12" style={{ marginTop: "30px" }}>
-                                                    <div class="submit-field">
-                                                        <h5>Minimum Amount Earned</h5>
-                                                        <label>Minimum amount earned required to apply for this specific job (freelancers)</label>
-                                                        <select className="form-control" onChange={(e) => {
-                                                            this.setState({
-                                                                amountEarned: e.target.value
-                                                            })
-                                                        }}>
-                                                            <option value="---select a value---">---select a value---</option>
-                                                            <option value="doesnt-matter">Doesn't Matter</option>
-                                                            <option value="$100+">$100+</option>
-                                                            <option value="$1,000+">$1,000+</option>
-                                                            <option value="$5,000+">$5,000+</option>
-                                                            <option value="$10,000+">$10,000+</option>
-                                                        </select>
-                                                    </div>
-                                                </div>
+                                                
 
                                             <div style={{ marginTop: "30px" }} class="col-xl-4">
                                             <label> Select how many freelancers you need...</label>
@@ -1071,21 +1115,52 @@ constructor(props) {
                                                             job_description: e.target.value
                                                         })
                                                     }} value={this.state.job_description} placeholder={"Enter your detailed job description here..."} cols="30" rows="5" class="with-border"></textarea>
-                                                    <div class="uploadButton margin-top-30">
-                                                        <input class="uploadButton-input" type="file" accept="image/*, application/pdf" id="upload" multiple/>
-                                                        <label class="uploadButton-button ripple-effect" for="upload">Upload Files</label>
-                                                        <span class="uploadButton-file-name">Images or documents that might be helpful in describing your job</span>
-                                                    </div>
+                                                   
+                                                    <label>Upload additional files/content to help freelancers gain a better understanding of your goals</label>
+                                                        <Dropzone onDrop={acceptedFile => {
+                                                            console.log(acceptedFile);
+
+                                                            this.setState({
+                                                                acceptedFile
+                                                            }, () => {
+                                                                this.getBase64(this.state.acceptedFile[0], this.callback);
+                                                            })
+                                                        }}>
+                                                            {({getRootProps, getInputProps}) => (
+                                                                <section>
+                                                                    <div {...getRootProps()}>
+                                                                        <input {...getInputProps()} />
+                                                                        <div class="upload-drop-zone" id="drop-zone"> Or drag and drop files here </div>                                                            
+                                                                    </div>
+                                                                </section>
+                                                            )}
+                                                        </Dropzone>
+                                                    {this.state.files.length !== 0 ? this.state.files.map((file, index) => {
+                                                        return (
+                                                            <div style={{ marginTop: "30px" }} key={index} class="list-group"> <a href="#" class="list-group-item list-group-item-success"><span class="badge alert-success pull-right">{file.date}</span>{file.title}</a></div>
+                                                        );
+                                                    }) : null}
+                                                
                                                     <div onClick={() => {
                                                         this.setState({
-                                                            isPaneOpen: true
+                                                            isPaneOpen: true,
+                                                            questions: false
                                                         })
                                                         console.log("clicked")
-                                                    }} id="bottom-right-align">
+                                                    }} id="bottom-right-align tick-tick">
                                                         <label style={{ textAlign: "left", fontWeight: "bold", color: "blue" }}>ADD custom questions to your job listing to get a better read on your canidates and to learn more about their skills and capablities...</label>
                                                         
                                                         <div id="float-me-left">
                                                             <img src={require("../../../../assets/icons/add.png")} style={{ width: "50px", height: "50px" }} />
+                                                        </div>
+                                                        <div class="keywords-list">
+                                                            {typeof preselected !== "undefined" && preselected.length > 0 && questions === true ? preselected.map((question, index) => {
+                                                                return (
+                                                                    <span class="keyword" style={{ padding: "0px 10px" }}>
+                                                                        {question.title}
+                                                                    </span>
+                                                                );
+                                                            }) : null}
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1098,7 +1173,7 @@ constructor(props) {
                             </div>
 
                             <div style={{ marginBottom: "100px" }} class="col-xl-12">
-                                <a href="#" class="button ripple-effect big margin-top-30" style={{ width: "100%" }}><i class="icon-feather-plus"></i> Post a Job</a>
+                                <button onClick={this.handleFinalSubmission} class="button ripple-effect big margin-top-30" style={{ width: "100%" }}><i class="icon-feather-plus"></i> Post Job</button>
                             </div>
 
                         </div>
@@ -1163,6 +1238,57 @@ constructor(props) {
             );
         }
     }
+    getBase64 = (file, cb) => {
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            cb(reader.result)
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
+    }
+    callback = (result) => {
+        console.log("Callback RESULT... :", result);
+
+        if (result.includes("data:image/png;base64,")) {
+            this.setState({
+                files: [...this.state.files, {
+                    title: this.state.acceptedFile[0].name,
+                    picture64: result.split("data:image/png;base64,")[1],
+                    date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a")
+                }],
+                normalFile: result
+            })
+        } else if (result.includes("data:image/jpeg;base64,")) {
+            this.setState({
+                files: [...this.state.files, {
+                    title: this.state.acceptedFile[0].name,
+                    picture64: result.split("data:image/jpeg;base64,")[1],
+                    date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a")
+                }],
+                normalFile: result
+            })
+        } else if (result.includes("data:image/jpg;base64,")) {
+            this.setState({
+                files: [...this.state.files, {
+                    title: this.state.acceptedFile[0].name,
+                    picture64: result.split("data:image/jpg;base64,")[1],
+                    date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a")
+                }],
+                normalFile: result
+            })
+        } else if (result.includes("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,")) {
+            this.setState({
+                files: [...this.state.files, {
+                    title: this.state.acceptedFile[0].name,
+                    picture64: result.split("data:application/vnd.openxmlformats-officedocument.wordprocessingml.document;base64,")[1],
+                    date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a")
+                }],
+                normalFile: result
+            })
+        }
+    }
     removeItem = (value) => {
         console.log("remove item... :", value);
 
@@ -1196,6 +1322,27 @@ constructor(props) {
            </div>
         );
     }
+    handleAddition = () => {
+        console.log("handle addition...");
+
+        const { preselected, addition } = this.state;
+
+        if (this.state.addition.length !== 0) {
+            console.log("successfully ran.")
+            this.setState({
+                preselected: [...preselected, {
+                    title: addition,
+                    index: preselected.length === 0 ? 0 : preselected[preselected.length - 1].index + 1
+                }],
+                addition: ""
+            })
+        } else {
+            console.log("didnt successfully run...")
+            this.setState({
+                questionError: "You need to enter a value before adding a new question to the list..."
+            })
+        }
+    }
     removeQuestion = (value) => {
         console.log("remove question...");
 
@@ -1208,7 +1355,7 @@ constructor(props) {
         })
     }
     render() {
-        const { loaded } = this.state;
+        const { loaded, addition, preselected, isPaneOpen, questionError } = this.state;
 
         console.log(this.state);
         return (
@@ -1218,7 +1365,7 @@ constructor(props) {
                         <SlidingPane
                             className="sliding-pane-class"
                             overlayClassName="overlay-class"
-                            isOpen={this.state.isPaneOpen}
+                            isOpen={isPaneOpen}
                             title="Add screening questions"
                             subtitle="Please select from the questions provided or enter your own!"
                             onRequestClose={() => {
@@ -1235,14 +1382,16 @@ constructor(props) {
                                 <div class="keyword-input-container">
                                     <input onChange={(e) => {
                                         this.setState({
-                                            addition: e.target.value
+                                            addition: e.target.value,
+                                            questionError: ""
                                         })
-                                    }} value={this.state.addition} type="text" class="keyword-input with-border" placeholder="Add a questions here..."/>
+                                    }} value={addition} type="text" class="keyword-input with-border" placeholder="Add a questions here..."/>
                                     <button onClick={this.handleAddition} class="keyword-input-button ripple-effect"><i class="icon-material-outline-add"></i></button>
                                 </div>
+                                {typeof questionError !== "undefined" && questionError.length > 0 ? <p className="lead red-text">{questionError}</p> : null}
                                 <label>Please remove any questions that you wouldn't like to use or are irrelevant for your project. Select a maximum of 5 questions or ADD YOUR OWN...</label>
                                 <div class="keywords-list">
-                                    {this.state.preselected.length !== 0 ? this.state.preselected.map((item, index) => {
+                                    {preselected.length !== 0 ? preselected.map((item, index) => {
                                         return (
                                             <Fragment>
                                                 <span class="keyword"><span onClick={() => {
@@ -1257,7 +1406,7 @@ constructor(props) {
                                 
                                 <div class="clearfix"></div>
                                 <hr className="my-4" />
-                                    {this.state.preselected.length > 5 ? <div><h3 style={{ color: "#880D1E", fontWeight: "bold" }} className="text-center">You need to de-select some items, too many questions are selected...</h3></div> : <div><button onClick={() => {
+                                    {preselected.length > 5 ? <div><h3 style={{ color: "#880D1E", fontWeight: "bold" }} className="text-center">You need to de-select some items, too many questions are selected...</h3></div> : <div><button onClick={() => {
                                         this.setState({
                                             questions: true,
                                             isPaneOpen: false
@@ -1290,4 +1439,3 @@ export default withRouter(connect(mapStateToProps, { })(PostAJob));
 
 
 // attachedFiles
-// questions for applicants

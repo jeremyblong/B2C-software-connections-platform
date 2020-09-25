@@ -95,6 +95,7 @@ app.use("/send/initial/private/message", require("./routes/messaging/messages/se
 app.use("/remove/applicant/job/posting/individual", require("./routes/businesses/jobs/removeApplicant.js"));
 app.use("/add/page/view", require("./routes/increasePageViews.js"));
 app.use("/gather/posted/job/by/id/two", require("./routes/businesses/jobs/findByJobIdTwo.js"));
+app.use("/list/secondary/job", require("./routes/businesses/jobs/addSecondaryJob.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

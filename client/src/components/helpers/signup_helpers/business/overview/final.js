@@ -237,11 +237,11 @@ constructor(props) {
                                                 <div class="numbered color filled">
                                                     <ul className="ol list-2 custom-list">
                                                         <label>Currency Type</label>
-                                                        <li>{posting.billing.currency ? posting.billing.currency : "None-Provided"}</li>
+                                                        <li>{posting.billing ? posting.billing.currency : "None-Provided"}</li>
                                                         <label>Hourly or Fixed</label>
-                                                        <li>{posting.billing.rate ? posting.billing.rate : "None-Provided"}</li>
+                                                        <li>{posting.billing ? posting.billing.rate : "None-Provided"}</li>
                                                         <label>Billing Amount Per Rate</label>
-                                                        <li>{posting.billing.pay ? posting.billing.pay : "None-Provided"}</li>
+                                                        <li>{posting.billing ? posting.billing.pay : "None-Provided"}</li>
                                                        
                                                     </ul>
                                                 </div>

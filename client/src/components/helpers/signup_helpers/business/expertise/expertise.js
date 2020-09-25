@@ -85,7 +85,8 @@ constructor(props) {
                 business_size: businessSize.length > 0 ? businessSize : null,
                 additional_skills: this.state.saved,
                 id: this.props.unique_id,
-                experience_level: experienceLevel
+                experience_level: experienceLevel,
+                programming_languages: programmingLanguages.length > 0 ? programmingLanguages : null
             }).then((res) => {
                 if (res.data.message === "Found and updated the desired user account!") {
                     

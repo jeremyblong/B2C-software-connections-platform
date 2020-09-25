@@ -11,7 +11,7 @@ const mongo = require("mongodb");
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
 	router.post('/', (req, res) => {
 
-        const { username, type_of_development, platform, database_types, web_server_types, business_size, additional_skills, id, experience_level } = req.body;
+        const { username, type_of_development, platform, database_types, web_server_types, business_size, additional_skills, id, experience_level, programming_languages } = req.body;
     
 		console.log("REQUEST BODY :", req.body);
 
@@ -51,6 +51,9 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                         }
                         if (experience_level) {
                             element["experience_level"] = experience_level;
+                        }
+                        if (programming_languages) {
+                            element["programming_languages"] = programming_languages;
                         }
 
                         user.businessSignupPageCompleted = 4;
