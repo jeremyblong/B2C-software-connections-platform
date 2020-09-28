@@ -9,7 +9,7 @@ const FreelancerProfileIndividualPublic = (props) => {
     return (
         <div>
             <Navigation />
-            <IndividualFreelancerProfileHelper user={props.location.state.user} id={props.match.params.id} />
+            <IndividualFreelancerProfileHelper user={props.location.state ? props.location.state.user : props} id={props.match.params.id} />
             <FooterFooter />
         </div>
     );

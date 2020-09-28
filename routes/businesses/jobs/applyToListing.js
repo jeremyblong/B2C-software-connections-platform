@@ -120,7 +120,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                 }];
 
-                                collection.save(element);
+                                
                             } else {
                                 element.submitted_applications.push({
                                     title: intro,
@@ -138,7 +138,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                 });
 
-                                collection.save(element);
+                                
                             }
 
                             if (!element.notifications) {
@@ -150,7 +150,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     action_specific: "applied for a job!",
                                     related_job: action_data.listing_id
                                 }];
-                                collection.save(element);
+                                
                             } else {
                                 element.notifications.push({
                                     date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -160,10 +160,10 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     action_specific: "applied for a job!",
                                     related_job: action_data.listing_id
                                 });
-                                collection.save(element);
+                                
                             }
 
-                            // collection.save(element);
+                            // 
                             
                         } else {
                             if (!element.submitted_applications) {
@@ -182,7 +182,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     fourthQuestion: fourthQuestion !== null ? fourthQuestion : null, 
                                     fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                 }]
-                                collection.save(element);
+                                
                             } else {
                                 element.submitted_applications.push({
                                     title: intro,
@@ -200,7 +200,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                 });
 
-                                collection.save(element);
+                                
                             }
 
                             if (element.notifications) {
@@ -212,7 +212,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     action_specific: "applied for a job!",
                                     related_job: action_data.listing_id
                                 });
-                                collection.save(element);
+                                
                                 
                             } else {
                                 element["notifications"] = [{
@@ -223,13 +223,14 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                     action_specific: "applied for a job!",
                                     related_job: action_data.listing_id
                                 }];
-                                collection.save(element);
+                                
                             }
 
-                            collection.save(element);
+                            
                         }
 
                         collection.save(element);
+                        
                     } 
                     if (element.username === otherUser) {
 
@@ -256,7 +257,6 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                         fourthQuestion: fourthQuestion !== null ? fourthQuestion : null, 
                                         fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                     }]
-                                    collection.save(element);
                                 } else {
                                     job.responses.push({
                                         title: intro,
@@ -272,8 +272,6 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                         fourthQuestion: fourthQuestion !== null ? fourthQuestion : null, 
                                         fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                                     });
-
-                                    collection.save(element);
                                 }
                             }
                             
@@ -294,7 +292,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 fourthQuestion: fourthQuestion !== null ? fourthQuestion : null, 
                                 fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                             }]
-                            collection.save(element);
+                            
                         } else {
                             element.received_applications.push({
                                 title: intro,
@@ -311,10 +309,22 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 fourthQuestion: fourthQuestion !== null ? fourthQuestion : null, 
                                 fifthQuestion: fifthQuestion !== null ? fifthQuestion : null
                             })
-                            collection.save(element);
+                            
                         }
 
-                        if (!element.notifications) {
+                        if (element.notifications) {
+                            console.log("ELEMENT NOTIFICATIONS EXISTS");
+                            element.notifications.push({
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: generatedID,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "applied for one of your posted jobs!",
+                                related_job: action_data.listing_id
+                            });
+                            
+                        } else {
+                            console.log("NOTIFICATIONS DOESNT EXIST....................");
                             element["notifications"] = [{
                                 date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
                                 application_id_linked: generatedID,
@@ -324,18 +334,9 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 related_job: action_data.listing_id
                             }];
 
-                            collection.save(element);
-                        } else {
-                            element.notifications.push({
-                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
-                                application_id_linked: generatedID,
-                                action: action_data,
-                                action_taker: username,
-                                action_specific: "applied for one of your posted jobs!",
-                                related_job: action_data.listing_id
-                            });
-                            collection.save(element);
+                            
                         }
+
                         collection.save(element);
                     }
                 }

@@ -367,14 +367,15 @@ constructor(props) {
 
                                                     <hr className="my-4" />
                                                     {passed.questions_for_applicant ? passed.questions_for_applicant.map((question, index) => {
+                                                        console.log("Question... :", question);
                                                         return (
                                                             <Fragment>
                                                                 <div className="col-md-12 col-lg-12 col-sm-12">
-                                                                    <label>{question}</label>
-                                                                    <input className="form-control" placeholder={question} onChange={(e) => {
+                                                                    <label>{question.title ? question.title : question}</label>
+                                                                    <input className="form-control" placeholder={question.title ? question.title : question} onChange={(e) => {
                                                                         this.setState({
                                                                             [`question${index}`]: {
-                                                                                question,
+                                                                                question: question.title ? question.title : question,
                                                                                 answer: e.target.value
                                                                             }
                                                                         })

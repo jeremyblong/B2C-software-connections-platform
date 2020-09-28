@@ -41,6 +41,8 @@ import PlaceNewBidBusinessPage from "./components/pages/businesses/bids/placeNew
 import ManageJobsApplicationsPage from "./components/pages/dashboard/manage-jobs/manage.js";
 import DashboardManageApplicantsPage from "./components/pages/dashboard/manage-jobs/individual-applicants-details.js";
 import ManageBidsFreelancerPageMain from "./components/pages/dashboard/manage-bids/manage.js";
+import PurchaseTokensPage from "./components/pages/tokens/display/main.js";
+import PurchaseTokensReviewPage from "./components/pages/tokens/review/review.js";
 
 class App extends Component {
 constructor(props) {
@@ -179,7 +181,9 @@ constructor(props) {
               <Route exact path="/freelancer/place/bid/company/listing" component={PlaceNewBidBusinessPage} />
               <Route exact path="/dashboard/manage/applications" component={ManageJobsApplicationsPage} />
               <Route exact path="/dashboard/manage/applications/individual/:id" component={DashboardManageApplicantsPage} />
-              <Route exact path="/dashboard/manage/bidders" component={ManageBidsFreelancerPageMain} />
+              <Route exact path="/dashboard/manage/bidders" component={ManageBidsFreelancerPageMain} />  
+              <Route exact path="/purchase/tokens" component={PurchaseTokensPage} />  
+              <Route exact path="/purchase/tokens/review/:tokens" component={PurchaseTokensReviewPage} />
             </div>
           </Fragment>
         );
@@ -193,7 +197,7 @@ constructor(props) {
               <Route exact path={`/signup/freelancer/page/3`} component={FourthPageSignupFreelancer} />
               <Route exact path={`/signup/freelancer/page/4`} component={FifthPageSignupFreelancer} />
               <Route exact path={`/signup/freelancer/page/5`} component={SixthPageFreelancerSignUp} />
-              <Route exact path={`/signup/freelancer/page/6`} component={SeventhFreelancerSignupPage} />
+              <Route exact path={`/signup/freelancer/page/6`} component={SeventhFreelancerSignupPage} /> 
             </div>
           </Fragment>
         );

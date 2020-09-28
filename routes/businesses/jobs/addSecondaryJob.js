@@ -113,6 +113,12 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                console.log(error);
                             });
                         }
+                        let questionsArray = [];
+
+                        for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
+                            const question = preselected[indexxxx];
+                            questionsArray.push(question.title);
+                        }
 
                         user.businessData.job_postings.push({
                             date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -121,7 +127,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                             id: generatedID,
                             description,
                             attachedFiles: filesArray,
-                            questions_for_applicant: preselected,
+                            questions_for_applicant: questionsArray,
                             length_of_project,
                             platform,
                             database_types,
@@ -144,10 +150,49 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 currency: "USD"
                             },
                             programming_languages
-                        })
+                        });
+
+                        const billing_specifics = {
+                            pay: pay_rate,
+                            rate: pay_type,
+                            currency: "USD"
+                        }
+
+                        const action_data = {
+                            title,
+                            desc: description,
+                            billing: billing_specifics,
+                            listing_id: generatedID
+                        }
+
+                        if (user.notifications) {
+                            user.notifications.push({
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            })
+                        } else {
+                            user["notifications"] = [{
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            }];
+                        }
 
                         collection.save(user);
                     } else {
+                        let questionsArray = [];
+
+                        for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
+                            const question = preselected[indexxxx];
+                            questionsArray.push(question.title);
+                        }
                         // no files exist
                         user.businessData.job_postings.push({
                             date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -156,7 +201,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                             id: generatedID,
                             description,
                             attachedFiles: [],
-                            questions_for_applicant: preselected,
+                            questions_for_applicant: questionsArray,
                             length_of_project,
                             platform,
                             database_types,
@@ -179,7 +224,41 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 currency: "USD"
                             },
                             programming_languages
-                        })
+                        });
+
+                        const billing_specifics = {
+                            pay: pay_rate,
+                            rate: pay_type,
+                            currency: "USD"
+                        }
+
+                        const action_data = {
+                            title,
+                            desc: description,
+                            billing: billing_specifics,
+                            listing_id: generatedID
+                        }
+
+                        if (user.notifications) {
+                            user.notifications.push({
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            })
+                        } else {
+                            user["notifications"] = [{
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            }];
+                        };
+
                         collection.save(user);
                     }
                     // already exists with this specific user!                    
@@ -233,6 +312,13 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                console.log(error);
                             });
                         }
+                        let questionsArray = [];
+
+                        for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
+                            const question = preselected[indexxxx];
+                            questionsArray.push(question.title);
+                        }
+
                         user["businessData"] = {
                             job_postings: [{
                                 date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
@@ -241,7 +327,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 id: generatedID,
                                 description,
                                 attachedFiles: filesArray,
-                                questions_for_applicant: preselected,
+                                questions_for_applicant: questionsArray,
                                 length_of_project,
                                 platform,
                                 database_types,
@@ -265,9 +351,49 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 },
                                 programming_languages
                             }]
+                        };
+
+                        const billing_specifics = {
+                            pay: pay_rate,
+                            rate: pay_type,
+                            currency: "USD"
                         }
+
+                        const action_data = {
+                            title,
+                            desc: description,
+                            billing: billing_specifics,
+                            listing_id: generatedID
+                        }
+
+                        if (user.notifications) {
+                            user.notifications.push({
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            })
+                        } else {
+                            user["notifications"] = [{
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            }];
+                        };
+
                         collection.save(user);
                     } else {
+                        let questionsArray = [];
+
+                        for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
+                            const question = preselected[indexxxx];
+                            questionsArray.push(question.title);
+                        }
                         // no files exist...
                         user["businessData"] = {
                             job_postings: [{
@@ -277,7 +403,7 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 id: generatedID,
                                 description,
                                 attachedFiles: [],
-                                questions_for_applicant: preselected,
+                                questions_for_applicant: questionsArray,
                                 length_of_project,
                                 platform,
                                 database_types,
@@ -301,7 +427,41 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                                 },
                                 programming_languages
                             }]
+                        };
+
+                        const billing_specifics = {
+                            pay: pay_rate,
+                            rate: pay_type,
+                            currency: "USD"
                         }
+
+                        const action_data = {
+                            title,
+                            desc: description,
+                            billing: billing_specifics,
+                            listing_id: generatedID
+                        }
+
+                        if (user.notifications) {
+                            user.notifications.push({
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            })
+                        } else {
+                            user["notifications"] = [{
+                                date: moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a"),
+                                application_id_linked: null,
+                                action: action_data,
+                                action_taker: username,
+                                action_specific: "posted another new job!",
+                                related_job: generatedID
+                            }];
+                        };
+                        
                         collection.save(user);
                     }
                 }

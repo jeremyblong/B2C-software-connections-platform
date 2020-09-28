@@ -81,6 +81,7 @@ app.use("/business/signup/visibility/update", require("./routes/profile/business
 app.use("/business/signup/billing/rate/update", require("./routes/profile/business-signup/billing-rate.js"));
 app.use("/business/complete/signup", require("./routes/profile/business-signup/complete-signup.js"));
 app.use("/gather/users/job_postings/exists", require("./routes/businesses/jobs/gatherJobs.js"));
+app.use("/add/count/business/views/page", require("./routes/businesses/jobs/addToViewCount.js"));
 app.use("/twilio/verify/phone/number", require("./routes/public_apis/twillio/verfiy.js"));
 app.use("/gather/posted/job/by/id", require("./routes/businesses/jobs/findByJobId.js"));
 app.use("/submit/proposal/freelancer", require("./routes/businesses/jobs/applyToListing.js"));
@@ -96,6 +97,11 @@ app.use("/remove/applicant/job/posting/individual", require("./routes/businesses
 app.use("/add/page/view", require("./routes/increasePageViews.js"));
 app.use("/gather/posted/job/by/id/two", require("./routes/businesses/jobs/findByJobIdTwo.js"));
 app.use("/list/secondary/job", require("./routes/businesses/jobs/addSecondaryJob.js"));
+app.use("/bookmark/business/page", require("./routes/businesses/jobs/bookmark/bookmarkJob.js"));
+app.use("/post/comment/profile/picture/intitial", require("./routes/social_media/comments/addComment.js"));
+app.use("/delete/comment/profile/picture", require("./routes/social_media/comments/removeComment.js"));
+app.use("/reply/sub/comment/profile/pictures", require("./routes/social_media/comments/subReply.js"));
+app.use("/delete/comment/profile/picture/deeply/nested", require("./routes/social_media/comments/removeNestedComment.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);

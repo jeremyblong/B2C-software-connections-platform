@@ -350,8 +350,8 @@ constructor(props) {
             return (
                 <div class="fun-fact" data-fun-fact-color="#2a41e6">
                     <div class="fun-fact-text">
-                        <span>This Month Views</span>
-                        <h4>0</h4>
+                        <span>Combined Business Listing Views</span>
+                        <h4>{user.job_posting_combined_count}</h4>
                     </div>
                     <div class="fun-fact-icon fun-fact-four"><i class="icon-feather-trending-up" style={{ color: "white" }}></i></div>
                 </div>

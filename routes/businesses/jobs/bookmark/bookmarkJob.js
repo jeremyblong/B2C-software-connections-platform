@@ -5,29 +5,44 @@ const fs = require('fs');
 const mongo = require("mongodb");
 const config = require("config");
 const cors = require('cors');
-const StreamChat = require('stream-chat').StreamChat;
 
-
-const client = new StreamChat('52zfrbfbqu6r', '2edjpqxk42vkxwjf22n73v5camaj66rmb5ykrz9uywt7bc2b86wedwb8qkt7tftv');
 // need to fix how many times res.json is sent - can't send multiple headers
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
     router.post("/", (req, res) => {
 
-        const { username, message_subject, message } = req.body;
+        const { username, job_posting } = req.body;
+
+        console.log("req.body add bookmark... :", req.body);
 
         const collection = db.collection("users");
 
         collection.findOne({ username }).then((user) => {
-            if (!user) {
+            if (user) {
+
+                console.log("FOUND USER - bookmarkJob... !!! :", user);
+
+                if (user.business_bookmarks) {
+                    
+                } else {
+                    user["business_bookmarks"] = [{
+
+                    }]
+                }
+
                 res.json({
-                    message: "Could NOT locate user..."
+                    message: "Found Specific User!",
+                    user
                 })
             } else {
                 res.json({
-                    message: "Located the desired user!",
-                    user
-                })
+                    message: "Couldn't find user..."
+                })                
             }
+        }).catch((err) => {
+            res.json({
+                message: "Critical error occurred...",
+                err
+            })
         })
     });
 });

@@ -14,7 +14,30 @@
 }
 #margin-adjust-two {
     min-height: 100%;
+    margin-bottom: 60vw !important;
     position: relative;
     background-color: transparent;
     border-top: 3px solid lightgrey;
+}
+.add-backdrop {
+    box-shadow: 7px 7px 7px grey !important;
+    border: 1px solid black;
+}
+@media only screen and (max-width: 1320px) {
+    #margin-adjust-two {
+        min-height: 100%;
+        margin-bottom: 1000px !important;
+        position: relative;
+        background-color: transparent;
+        border-top: 3px solid lightgrey;
+    }
+}
+@media only screen and (max-width: 600px) {
+    #margin-adjust-two {
+        min-height: 100%;
+        margin-bottom: 0px !important;
+        position: relative;
+        background-color: transparent;
+        border-top: 3px solid lightgrey;
+    }
 }

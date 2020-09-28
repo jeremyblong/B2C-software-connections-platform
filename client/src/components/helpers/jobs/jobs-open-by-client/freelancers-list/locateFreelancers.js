@@ -192,7 +192,7 @@ constructor(props) {
                                 {this.state.users.length !== 0 ? this.state.users.map((user, index) => {
                                     if (user.completed_signup === true) {
                                             return (
-                                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
+                                                <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
                                                     <div class="freelancer-overview">
                                                         <div class="freelancer-overview-inner">
                                                             

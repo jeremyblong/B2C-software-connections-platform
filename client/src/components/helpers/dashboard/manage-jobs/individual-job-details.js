@@ -24,7 +24,9 @@ constructor(props) {
         messageMessage: "",
         messageSubject: "",
         selectedUser: null,
-        popoverOpenCV: false
+        show_cover_letter: false,
+        index: 0,
+        response: ""
     }
 }
     onOpenModal = () => {
@@ -282,17 +284,11 @@ constructor(props) {
                                                                     
                                                                     <p>{response.cover_letter_message ? `${response.cover_letter_message.slice(0, 250)}${response.cover_letter_message.length >= 250 ? "..." : ""}` : null}<i onClick={() => {
                                                                         this.setState({
-                                                                            popoverOpenCV: !this.state.popoverOpenCV
+                                                                            show_cover_letter: !this.state.show_cover_letter,
+                                                                            response: response.cover_letter_message
                                                                         })
-                                                                    }} id="Popover10" class="fa fa-info-circle fa-2x"></i></p>
-                                                                    {response.cover_letter_message ? <Popover rootClose id="my-cv" placement="bottom" isOpen={this.state.popoverOpenCV} target="Popover10">
-                                                                        <PopoverHeader>Cover Letter/Intro</PopoverHeader>
-                                                                        <PopoverBody>{response.cover_letter_message} <hr className="my-4" /><button onClick={() => {
-                                                                            this.setState({
-                                                                                popoverOpenCV: false
-                                                                            })
-                                                                        }} style={{ width: "100%", color: "white" }} className="btn red-btn">Exit/Dismiss</button></PopoverBody>
-                                                                    </Popover> : null}
+                                                                    }} id={`Popover${index}`} class="fa fa-info-circle fa-2x"></i></p>
+                                                                    
                                                                     <hr />
                                                                     <span class="freelancer-detail-item"><a href="#"><i class="icon-feather-mail"></i> {response.email}</a></span>
                                                                     <span class="freelancer-detail-item"><i class="icon-feather-phone"></i> {response.phoneNumber}</span>
@@ -417,6 +413,15 @@ constructor(props) {
                                 </div>
                         
                     
+                    </Modal>      
+                    <Modal open={this.state.show_cover_letter} onClose={() => {
+                        this.setState({
+                            show_cover_letter: false
+                        })
+                    }} center>
+                        <div class="loginmodal-container">
+                            <p className="lead text-center">{this.state.response}</p>
+                        </div>
                     </Modal>            
                             <div class="dashboard-footer-spacer"></div>
                             <div class="small-footer margin-top-15">

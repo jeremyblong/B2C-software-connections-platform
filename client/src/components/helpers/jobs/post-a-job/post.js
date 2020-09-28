@@ -1105,7 +1105,7 @@ constructor(props) {
                                                     <option value="WV">West Virginia</option>
                                                     <option value="WI">Wisconsin</option>
                                                     <option value="WY">Wyoming</option>
-                                                </select><hr className="my-4" /><button onClick={this.handleSubmission} className="btn blue-btn" style={{ width: "100%", color: "white", marginTop: "20px" }}>Save changes and proceed</button></div> : null}
+                                                </select><hr className="my-4" /></div> : null}
 
                                             <div style={{ marginTop: "30px" }} class="col-xl-12">
                                                 <div class="submit-field">

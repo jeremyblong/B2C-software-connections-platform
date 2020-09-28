@@ -163,16 +163,30 @@ const Navigation = (props) => {
                                                     <div className="header-notifications-scroll" data-simplebar>
                                                         <ul id="list">
                                                             {data.notifications ? data.notifications.map((notification, index) => {
-                                                                return (
-                                                                    <li key={index} className="notifications-not-read">
-                                                                        <Link to={{pathname: `/business/individual/listing/${notification.related_job}`}}>
-                                                                            <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
-                                                                            <span className="notification-text">
-                                                                                <strong>{notification.action_taker === props.username ? "You" : notification.action_taker}</strong> {notification.action_specific} <span className="color">{notification.action.title}</span>
-                                                                            </span>
-                                                                        </Link>
-                                                                    </li>
-                                                                );
+                                                                console.log("NOTIFYICAITONNNNNNNN: ", notification);
+                                                                if (notification.freelancer_profile_id) {
+                                                                    return (
+                                                                        <li key={index} className="notifications-not-read">
+                                                                            <Link to={{pathname: `/freelancer/individual/page/public/${notification.freelancer_profile_id}`, user: props, openPane: true, index: notification.index ? notification.index : null }}>
+                                                                                <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
+                                                                                <span className="notification-text">
+                                                                                    <strong>{notification.action_taker === props.username ? "You" : notification.action_taker}</strong> {notification.action_specific} 
+                                                                                </span>
+                                                                            </Link>
+                                                                        </li>
+                                                                    );
+                                                                } else if (notification.action) {
+                                                                    return (
+                                                                        <li key={index} className="notifications-not-read">
+                                                                            <Link to={{pathname: `/business/individual/listing/${notification.related_job}`}}>
+                                                                                <span className="notification-icon"><i className="icon-material-outline-group"></i></span>
+                                                                                <span className="notification-text">
+                                                                                    <strong>{notification.action_taker === props.username ? "You" : notification.action_taker}</strong> {notification.action_specific} <span className="color">{notification.action.title}</span>
+                                                                                </span>
+                                                                            </Link>
+                                                                        </li>
+                                                                    );
+                                                                }
                                                             }) : null}
                                                         </ul>
                                                     </div>
@@ -318,6 +332,9 @@ const Navigation = (props) => {
                 {props.accountType === "freelancer" ? <DropdownItem>
                     <Link className="dropdown-link" to="/view/personal/profile">View Public Profile</Link>
                 </DropdownItem> : null}
+                <DropdownItem className="dropdown-link">
+                    <Link className="dropdown-link" to="/purchase/tokens">Purchase Tokens</Link>
+                </DropdownItem>
                 <DropdownItem className="dropdown-link">
                     <Link className="dropdown-link" to="/">Refer A Friend & Get $25</Link>
                 </DropdownItem>

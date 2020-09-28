@@ -3,7 +3,7 @@ import ReactMapboxGl, { Layer, Feature } from 'react-mapbox-gl';
 import "./style.css";
 import { Link } from "react-router-dom";
 import axios from "axios";
-	
+import { connect } from "react-redux";
 
 class BusinessPostingsHomepage extends Component {
 constructor(props) {
@@ -23,6 +23,23 @@ constructor(props) {
                     users: res.data.jobs
                 })
             }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    addBookmark = (e, posting) => {
+        // prevent redirect...
+        e.preventDefault();
+        // log outcome
+        console.log("add bookmark...", posting, this.props.username);
+        // logic goes here...
+        const { username } = this.props;
+
+        axios.post("/bookmark/business/page", {
+            username,
+            job_posting: posting
+        }).then((res) => {
+            console.log(res.data);
         }).catch((err) => {
             console.log(err);
         })
@@ -64,7 +81,7 @@ constructor(props) {
                                  
                                 <div class="sidebar-widget">
                                     <h3>Category</h3>
-                                    <select class="selectpicker default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
+                                    <select class="form-control default" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
                                         <option>Admin Support</option>
                                         <option>Customer Service</option>
                                         <option>Data Analytics</option>
@@ -191,7 +208,7 @@ constructor(props) {
                                     console.log("USER~!:", job);
                                     return (
                                         <Fragment>
-                                            <Link to={{pathname: `/business/individual/listing/${job.id}`, data: { job }}} className="job-listing">
+                                            <Link to={{pathname: `/business/individual/listing/${job.id}`, data: { job }}} className="job-listing add-backdrop">
 
                                                 <div class="job-listing-details">
                                                 
@@ -208,7 +225,11 @@ constructor(props) {
 
                                             
                                                 <div class="job-listing-footer">
-                                                    <span class="bookmark-icon"></span>
+                                                    <div onClick={(e) => {
+                                                        this.addBookmark(e, job);
+                                                    }}>
+                                                        <span class="bookmark-icon"></span>
+                                                    </div>
                                                     <ul>
                                                         <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
                                                         <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
@@ -307,4 +328,14 @@ constructor(props) {
         )
     }
 }
-export default BusinessPostingsHomepage;
+const mapStateToProps = state => {
+    for (const key in state.auth) {
+      const obj = state.auth;
+      if (obj.authenticated && (obj.authenticated.hasOwnProperty("email"))) {
+        return {
+          username: state.auth.authenticated.username
+        }
+      } 
+    }
+  }
+export default connect(mapStateToProps, { })(BusinessPostingsHomepage);

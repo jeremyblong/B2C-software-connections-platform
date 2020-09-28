@@ -83,7 +83,7 @@ const ContactHelper = props => {
                                     <textarea className="with-border" name="comments" cols="40" rows="5" id="comments" placeholder="Message" spellcheck="true" required="required"></textarea>
                                 </div>
 
-                                <input type="submit" className="submit button blue-btn margin-top-15" id="submit" value="Submit Message" />
+                                <input style={{ width: "100%" }} type="submit" className="submit button blue-btn margin-top-15" id="submit" value="Submit Message" />
 
                             </form>
                         </section>

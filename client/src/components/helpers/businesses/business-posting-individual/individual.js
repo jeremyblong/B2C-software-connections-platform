@@ -56,6 +56,14 @@ constructor(props) {
             }
         }).catch((err) => {
             console.log(err);
+        });
+
+        axios.post("/add/count/business/views/page", {
+            id: specific_id
+        }).then((res) => {
+            console.log(res.data);
+        }).catch((err) => {
+            console.log(err);
         })
     }
     renderButtonOrNotURL = (job_posting) => {
@@ -94,17 +102,6 @@ constructor(props) {
         }
     }
     renderButtonOrNot = () => {
-        // {passedData.responses ? passedData.responses.map((response, index) => {
-            // if (response.sender === this.props.username) {
-            //     return null;
-            // } else if (response.sender !== this.props.username) {
-            //     return (
-            //         <Fragment>
-            //             <Link to={{pathname: "/freelancer/place/bid/company/listing", data: { data: this.props.job.job }}} class="apply-now-button red-btn popup-with-zoom-anim">Apply Now <i class="icon-material-outline-arrow-right-alt"></i></Link>
-            //         </Fragment>
-            //     );
-            // }
-        // }) : null}
         const passedData = this.props.job ? this.props.job.job : this.state.backup;
 
         let found = false;
@@ -420,7 +417,10 @@ constructor(props) {
                                                     <a style={{ color: "white", marginTop: "10px", marginBottom: "10px" }} href={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${file.picture}`} className="btn blue-btn" download>Click to download attached file</a>
                                                 );
                                             }) : null}
-                                            
+                                            <hr className="my-4" />
+                                            {passedData.view_count ? <div style={{ marginTop: "25px" }} className="row mx-auto">
+                                                <h2 className="text-center">Page View Count: <strong style={{ color: "blue" }}>{passedData.view_count}</strong></h2>
+                                            </div> : null}
                                             
                                         </div>
                                     </div>
