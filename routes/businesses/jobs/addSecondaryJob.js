@@ -189,9 +189,11 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
                     } else {
                         let questionsArray = [];
 
-                        for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
-                            const question = preselected[indexxxx];
-                            questionsArray.push(question.title);
+                        if (preselected) {
+                            for (let indexxxx = 0; indexxxx < preselected.length; indexxxx++) {
+                                const question = preselected[indexxxx];
+                                questionsArray.push(question.title);
+                            }
                         }
                         // no files exist
                         user.businessData.job_postings.push({

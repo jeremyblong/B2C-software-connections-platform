@@ -85,7 +85,7 @@ constructor(props) {
                             <div className="col-md-12">
                                 <div className="single-page-header-inner">
                                     <div className="left-side">
-                                        <div onClick={this.onOpenModal} className="header-image freelancer-avatar"><img id="shift" src={this.state.user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.user.profilePics[this.state.user.profilePics.length - 1].picture}` : "/images/user-avatar-big-02.jpg"} alt="" /></div>
+                                        <div onClick={null} className="header-image freelancer-avatar"><img id="shift" src={this.state.user !== null ? `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${this.state.user.profilePics[this.state.user.profilePics.length - 1].picture}` : "/images/user-avatar-big-02.jpg"} alt="" /></div>
                                         <div className="header-details">
                                             <h3 className="text-white"><div className="tan">{user.username}</div> <span style={{ color: "white" }}> {`${user.experience} years of experience`}</span></h3>
                                             <ul>

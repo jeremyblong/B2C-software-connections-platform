@@ -263,6 +263,33 @@ constructor(props) {
                 }           
                 break;
             default:
+                axios.post("/submit/proposal/freelancer", {
+                    intro,
+                    cover_letter_note: note,
+                    files: files.length > 0 ? files : null,
+                    username: this.props.username,
+                    otherUser: receipient.username,
+                    passed_id: this.props.data.id,
+                    firstQuestion: question0,
+                    action_data: {
+                        title: passed.title,
+                        desc: passed.description,
+                        billing: passed.billing,
+                        listing_id: passed.id
+                    }
+                }).then((res) => {
+                    if (res.data.message === "Found and updated appropriate users!") {
+                        console.log(res.data);
+    
+                        NotificationManager.success(`You've successfully applied for this position! We hope you get the gig!`, 'Successfully applied for position!');
+    
+                        setTimeout(() => {
+                            this.props.history.push("/display/jobs/main");
+                        }, 3000);
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
                 break;
         }
     }

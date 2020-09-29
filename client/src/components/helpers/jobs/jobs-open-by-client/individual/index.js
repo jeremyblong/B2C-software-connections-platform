@@ -170,59 +170,68 @@ constructor(props) {
     }
     photoClicked = () => {
         console.log("photo clicked.");
+        axios.post("/gather/user/by/id", {
+            unique_id: this.props.user.unique_id || this.props.id
+        }).then((responseeeeee) => {
+            if (responseeeeee.data.message === "FOUND user!") {
+                console.log("responseeeeee. responseeeeee . :", responseeeeee.data);
 
-        this.setState({
-            selected_image_data: this.state.user.profilePics[0],
-            index: 0,
-            ready: false
-        }, () => {
-            if (this.state.selected_image_data.comments) {
-                for (let indx = 0; indx < this.state.selected_image_data.comments.length; indx++) {
-                    const image_content = this.state.selected_image_data.comments[indx];
-                    console.log("image_content", image_content);
-
-                    axios.post("/gather/specific/user/username", {
-                        username: image_content.author
-                    }).then((resolution) => {
-                        if (resolution.data.message === "Found Specific User!") {
-                            console.log("resolution resolution: ", resolution.data);
-                            image_content.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                    })
-
-                    for (let xxxxxx = 0; xxxxxx < image_content.replies.length; xxxxxx++) {
-
-                        const reply = image_content.replies[xxxxxx];
-                        
-                        axios.post("/gather/specific/user/username", {
-                            username: reply.author
-                        }).then((resolution) => {
-                            if (resolution.data.message === "Found Specific User!") {
-                                console.log("resolution resolution: ", resolution.data);
-                                reply.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+                this.setState({
+                    selected_image_data: responseeeeee.data.user.profilePics[0],
+                    index: 0,
+                    ready: false
+                }, () => {
+                    if (this.state.selected_image_data.comments) {
+                        for (let indx = 0; indx < this.state.selected_image_data.comments.length; indx++) {
+                            const image_content = this.state.selected_image_data.comments[indx];
+                            console.log("image_content", image_content);
+        
+                            axios.post("/gather/specific/user/username", {
+                                username: image_content.author
+                            }).then((resolution) => {
+                                if (resolution.data.message === "Found Specific User!") {
+                                    console.log("resolution resolution: ", resolution.data);
+                                    image_content.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+                                }
+                            }).catch((err) => {
+                                console.log(err);
+                            })
+        
+                            for (let xxxxxx = 0; xxxxxx < image_content.replies.length; xxxxxx++) {
+        
+                                const reply = image_content.replies[xxxxxx];
+                                
+                                axios.post("/gather/specific/user/username", {
+                                    username: reply.author
+                                }).then((resolution) => {
+                                    if (resolution.data.message === "Found Specific User!") {
+                                        console.log("resolution resolution: ", resolution.data);
+                                        reply.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
                             }
-                        }).catch((err) => {
-                            console.log(err);
+                        }
+                        setTimeout(() => {
+                            this.setState({
+                                ready: true,
+                                isPaneOpen: true
+                            })
+                        }, 1300);
+                    } else {
+                        console.log("no comments exist...");
+                        
+                        this.setState({
+                            ready: true,
+                            isPaneOpen: true
                         })
                     }
-                }
-                setTimeout(() => {
-                    this.setState({
-                        ready: true,
-                        isPaneOpen: true
-                    })
-                }, 1300);
-            } else {
-                console.log("no comments exist...");
-                
-                this.setState({
-                    ready: true,
-                    isPaneOpen: true
+                    
                 })
             }
-            
+        }).catch((err) => {
+            console.log(err);
         })
     }
     renderContent = () => {
@@ -563,53 +572,70 @@ constructor(props) {
         console.log("transition start...", value);
 
         const indexxx = value.nextIndex;
-
-        this.setState({
-            selected_image_data: this.state.user.profilePics[indexxx],
-            index: indexxx,
-            ready: false
-        }, () => {
-            if (this.state.selected_image_data.comments) {
-                for (let indx = 0; indx < this.state.selected_image_data.comments.length; indx++) {
-                    const image_content = this.state.selected_image_data.comments[indx];
-                    console.log("image_content", image_content);
-
-                    axios.post("/gather/specific/user/username", {
-                        username: image_content.author
-                    }).then((resolution) => {
-                        if (resolution.data.message === "Found Specific User!") {
-                            console.log("resolution resolution: ", resolution.data);
-                            image_content.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
-                        }
-                    }).catch((err) => {
-                        console.log(err);
-                    })
-
-                    for (let xxxxxx = 0; xxxxxx < image_content.replies.length; xxxxxx++) {
-
-                        const reply = image_content.replies[xxxxxx];
-                        
-                        axios.post("/gather/specific/user/username", {
-                            username: reply.author
-                        }).then((resolution) => {
-                            if (resolution.data.message === "Found Specific User!") {
-                                console.log("resolution resolution: ", resolution.data);
-                                reply.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+        axios.post("/gather/user/by/id", {
+            unique_id: this.props.user.unique_id || this.props.id
+        }).then((responseeeeee) => {
+            if (responseeeeee.data.message === "FOUND user!") {
+                this.setState({
+                    selected_image_data: responseeeeee.data.user.profilePics[indexxx],
+                    index: indexxx,
+                    ready: false
+                }, () => {
+                    if (this.state.selected_image_data.comments) {
+                        const commentArray = [];
+        
+                        for (let indx = 0; indx < this.state.selected_image_data.comments.length; indx++) {
+                            const image_content = this.state.selected_image_data.comments[indx];
+                            console.log("image_content", image_content);
+        
+                            axios.post("/gather/specific/user/username", {
+                                username: image_content.author
+                            }).then((resolution) => {
+                                if (resolution.data.message === "Found Specific User!") {
+                                    console.log("resolution resolution: ", resolution.data);
+                                    image_content.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+                                }
+                            }).catch((err) => {
+                                console.log(err);
+                            })
+        
+                            for (let xxxxxx = 0; xxxxxx < image_content.replies.length; xxxxxx++) {
+        
+                                const reply = image_content.replies[xxxxxx];
+                                
+                                axios.post("/gather/specific/user/username", {
+                                    username: reply.author
+                                }).then((resolution) => {
+                                    if (resolution.data.message === "Found Specific User!") {
+                                        console.log("resolution resolution: ", resolution.data);
+                                        reply.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
                             }
-                        }).catch((err) => {
-                            console.log(err);
+                            commentArray.push(image_content);
+                        }
+                        this.setState({
+                            selected_image_data: {
+                                ...this.state.selected_image_data,
+                                comments: [...commentArray]
+                            }
                         })
+        
+                        setTimeout(() => {
+                            this.setState({
+                                ready: true
+                            })
+                        }, 1300);
+                    } else {
+                        console.log("no comments exist...");
                     }
-                }
-                setTimeout(() => {
-                    this.setState({
-                        ready: true
-                    })
-                }, 1300);
-            } else {
-                console.log("no comments exist...");
+                    
+                })
             }
-            
+        }).catch((err) => {
+            console.log(err);
         })
     }
     renderSlider = () => {
@@ -927,7 +953,7 @@ constructor(props) {
                                 {ready === true && selected_image_data && selected_image_data.hasOwnProperty("comments") ? selected_image_data.comments.map((each, index) => {
                                     console.log("eachhhhhhhh ", each);
                                     return (
-                                        <li key={index}>
+                                        <li key={this.state.index + index}>
                                             <div className="avatar"><img src={each.picture} alt="user-picture"/></div>
                                             <div className="comment-content"><div className="arrow-comment"></div>
                                                 <div className="comment-by">Username: {each.author} <br /> Preferred Name: {each.preferred_name}<span className="date">{each.date}</span> <br />
@@ -1042,45 +1068,14 @@ constructor(props) {
         }).then((response) => {
             console.log(response.data);
             if (response.data.message === "Successfully updated comment thread and posted new sub reply!") {
-                let prom = new Promise((resolve, reject) => {
-                    console.log('synchronously executed');
-                    
-                    for (let indx = 0; indx < response.data.current_update.comments.length; indx++) {
-                        const image_content = response.data.current_update.comments[indx];
-                        console.log("image_content", image_content);
-                        // make api request to get MOST RECENT picture for user
-                        axios.post("/gather/specific/user/username", {
-                            username: image_content.author
-                        }).then((resolution) => {
-                            if (resolution.data.message === "Found Specific User!") {
+                NotificationManager.success("You've successfully posted a new comment to this persons profile picture feed...", 'Successfully posted a new comment!');
 
-                                console.log("resolution resolution: ", resolution.data);
-                                // tack picture onto each comment...
-                                image_content.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${resolution.data.user.profilePics[resolution.data.user.profilePics.length - 1].picture}`;
-
-                            }
-                        }).catch((err) => {
-                            console.log(err);
-                        })
-                        
-                    }
-                    setTimeout(() => {
-                        resolve(response.data.current_update);
-                    }, 1000);
-                });
-
-                prom.then((passed_values) => {
-                    this.setState({
-                        selected_image_data: passed_values,
-                        openedPopoverId: null,
-                        isPaneOpen: false
-                    })
-                }).catch((err) => {
-                    console.log(err);
-                }).finally(() => {
-                    console.log("finally...");
+                this.setState({
+                    isPaneOpen: false,
+                    reply_public_name: "",
+                    reply_contact_email: "",
+                    reply_message: ""
                 })
-                
             } else {
                 NotificationManager.error('Something occurred while posting your comment, please refresh the page and try your action again...', 'ERROR!', 7000);
             }
@@ -1124,37 +1119,3 @@ const mapStateToProps = state => {
     }
 }
 export default withRouter(connect(mapStateToProps, { })(IndividualFreelancerProfileHelper));
-
-{/* <ul>
-    <li>
-        <div className="avatar"><img src="images/user-avatar-placeholder.png" alt=""/></div>
-        <div className="comment-content"><div className="arrow-comment"></div>
-            <div className="comment-by">Tom Smith<span className="date">12th, June 2019</span>
-                <a href="#" className="reply"><i className="fa fa-reply"></i> Reply</a>
-            </div>
-            <p>Rrhoncus et erat. Nam posuere tristique sem, eu ultricies tortor imperdiet vitae. Curabitur lacinia neque.</p>
-        </div>
-    </li>
-    <li>
-        <div className="avatar"><img src="images/user-avatar-placeholder.png" alt=""/></div>
-        <div className="comment-content"><div className="arrow-comment"></div>
-            <div className="comment-by">Kathy Brown<span className="date">12th, June 2019</span>
-                <a href="#" className="reply"><i className="fa fa-reply"></i> Reply</a>
-            </div>
-            <p>Nam posuere tristique sem, eu ultricies tortor.</p>
-        </div>
-
-        <ul>
-            <li>
-                <div className="avatar"><img src="images/user-avatar-placeholder.png" alt=""/></div>
-                <div className="comment-content"><div className="arrow-comment"></div>
-                    <div className="comment-by">John Doe<span className="date">12th, June 2019</span>
-                        <a href="#" className="reply"><i className="fa fa-reply"></i> Reply</a>
-                    </div>
-                    <p>Great template!</p>
-                </div>
-            </li>
-        </ul>
-
-    </li>
-</ul> */}

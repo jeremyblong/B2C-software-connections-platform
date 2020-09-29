@@ -130,6 +130,86 @@ constructor(props) {
             console.log(err);
         })
     }
+    acceptApplicantForJob = (response) => {
+        console.log("accept applicant.", response);
+
+        const { user } = this.state;
+
+        const action_data = {
+            title: user.title,
+            billing: user.billing,
+            listing_id: this.props.match ? this.props.match.params.id : this.props.props.match.params.id
+        }
+
+        axios.post("/accept/application/bids/start/project", {
+            other_user: response.sender,
+            current_user: this.props.username,
+            response,
+            action_data,
+            related_job: this.props.match ? this.props.match.params.id : this.props.props.match.params.id,
+            signed_in: this.props.username,
+            application_id_linked: response.id
+        }).then((res) => {
+            if (res.data.message === "Successfully started project between BOTH users!") {
+                console.log(res.data);
+
+                const users_to_update = [];
+
+                for (let xxxxxxx = 0; xxxxxxx < this.state.responses.length; xxxxxxx++) {
+                    const responseeeeee = this.state.responses[xxxxxxx];
+                    
+                    console.log("RESPONSEEEEE..... :", responseeeeee);
+
+                    if (responseeeeee.sender !== response.sender) {
+                        users_to_update.push(responseeeeee.sender);
+                    }
+                }
+
+                axios.post("/denied/change/condition/other/users", {
+                    username: response.sender,
+                    users_to_update,
+                    response,
+                    action_data,
+                    related_job: this.props.match ? this.props.match.params.id : this.props.props.match.params.id,
+                    signed_in: this.props.username,
+                    application_id_linked: response.id
+                }).then((responseeeee) => {
+                    if (responseeeee.data.message === "Successfully updated users application status and made appropriate changes!") {
+                        console.log(responseeeee.data);   
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+
+                for (let indexxxxx = 0; indexxxxx < res.data.new_responses.length; indexxxxx++) {
+                    const narrowed_response = res.data.new_responses[indexxxxx];
+                    
+                    console.log("narrowed_Response:", narrowed_response);
+
+                    axios.post("/gather/specific/user/username", {
+                        username: narrowed_response.sender
+                    }).then((returned_res) => {
+                        narrowed_response.picture = `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${returned_res.data.user.profilePics[returned_res.data.user.profilePics.length - 1].picture}`;
+                        narrowed_response.email = returned_res.data.user.email;
+                        narrowed_response.phoneNumber = returned_res.data.user.phoneNumber;
+                        narrowed_response.experience = `${returned_res.data.user.experience} years of software dev experience`;
+                        narrowed_response.accountType = returned_res.data.user.accountType;
+
+                        this.setState({
+                            responses: [narrowed_response]
+                        }, () => {
+                            NotificationManager.success("You've successfully selected your candiate for this position! We will notify everyone else of the decided freelancer...", 'Action Was Successful!', 6000);
+                        })
+                    }).catch((error) => {
+                        console.log(error);
+                    })
+                }
+                
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     decisions = (response) => {
         confirmAlert({
           title: "Are you sure you'd like to remove this application?",
@@ -155,7 +235,7 @@ constructor(props) {
     render() {
         const { modalInfo } = this.state;
 
-        console.log("individual-job-details props... :", this.props);
+        console.log("individual-job-details state... :", this.state);
         return (
             <div style={{ borderTop: "3px solid lightgrey" }}>
                 <div class="dashboard-container">
@@ -318,6 +398,12 @@ constructor(props) {
                                                                         <button onClick={() => {
                                                                             this.decisions(response);
                                                                         }} className="btn red-btn" style={{ color: "white" }}>Remove/Delete Applicant</button>
+                                                                    </div>
+                                                                    <hr className="my-4" />
+                                                                    <div id="up-on-desk" className="float-btn-right">
+                                                                        <button onClick={() => {
+                                                                            this.acceptApplicantForJob(response);
+                                                                        }} className="btn btn-success" style={{ color: "white" }}>Accept Applicant</button>
                                                                     </div>
                                                                 </div>
                                                             </div>

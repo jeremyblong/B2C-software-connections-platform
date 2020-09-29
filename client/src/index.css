@@ -197,3 +197,7 @@ html, body {
     width: 100vw !important;
   }
 }
+.btn-success:hover {
+  background-color: #237523 !important;
+  color: white !important;
+}

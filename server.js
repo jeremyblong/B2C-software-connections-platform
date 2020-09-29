@@ -102,6 +102,8 @@ app.use("/post/comment/profile/picture/intitial", require("./routes/social_media
 app.use("/delete/comment/profile/picture", require("./routes/social_media/comments/removeComment.js"));
 app.use("/reply/sub/comment/profile/pictures", require("./routes/social_media/comments/subReply.js"));
 app.use("/delete/comment/profile/picture/deeply/nested", require("./routes/social_media/comments/removeNestedComment.js"));
+app.use("/accept/application/bids/start/project", require("./routes/active_project/activate/startProject.js"));
+app.use("/denied/change/condition/other/users", require("./routes/active_project/activate/setDeniedOtherApplicants.js"));
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);
