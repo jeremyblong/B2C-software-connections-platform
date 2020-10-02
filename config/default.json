@@ -1,5 +1,7 @@
 {
     "mongoURI": "mongodb://jeremyablong:jeremyablong@cluster0-shard-00-00.dds2b.mongodb.net:27017,cluster0-shard-00-01.dds2b.mongodb.net:27017,cluster0-shard-00-02.dds2b.mongodb.net:27017/<dbname>?ssl=true&replicaSet=atlas-130tw6-shard-0&authSource=admin&retryWrites=true&w=majority",
     "googleDocsID": "325165004357-9nbt89md3mjafu2pc37dgjuurd7o9auf.apps.googleusercontent.com",
-    "googleDocsSecret": "zdyHAhivGiBGuRaWQ9jtF-M4"
+    "googleDocsSecret": "zdyHAhivGiBGuRaWQ9jtF-M4",
+    "vontageAPIKey": "46936994",
+    "vontageAPISecret": "cc351168824391465c4be3d1db2ca4c3f1455304"
 }

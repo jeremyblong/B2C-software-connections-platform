@@ -1,0 +1,89 @@
+@media only screen and (max-width: 750px) {
+    .btn-row-mobile {
+        margin-top: 40px;
+    }
+}
+.modal-content {
+    width: 100% !important;
+}
+#subscribeModal .form-control {
+    height: 56px;
+    border-top-left-radius: 30px;
+    border-bottom-left-radius: 30px;
+    padding-left:30px;
+    border: 3px solid darkblue;
+}
+#subscribeModal .h2 {
+    margin-left: 150px;
+}
+#subscribeModal .btn {
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+	padding-right:20px;
+	background: blue;
+	border-color:darkblue;
+}
+#subscribeModal .form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: blue;
+    outline: 0;
+    box-shadow: none;
+}
+#subscribeModal .top-strip{
+	height: 155px;
+    background: blue;
+    transform: rotate(141deg);
+    margin-top: -94px;
+    margin-right: 190px;
+    margin-left: -130px;
+    border-bottom: 65px solid darkblue;
+    border-top: 10px solid darkblue;
+}
+#subscribeModal .bottom-strip{
+	height: 155px;
+    background: blue;
+    transform: rotate(112deg);
+    margin-top: -110px;
+    margin-right: -215px;
+    margin-left: 300px;
+    border-bottom: 65px solid darkblue;
+    border-top: 10px solid darkblue;
+}
+
+/**************************/
+/****** modal-lg stips *********/
+/**************************/
+#subscribeModal .modal-lg .top-strip {
+    height: 155px;
+    background: blue;
+    transform: rotate(141deg);
+    margin-top: -106px;
+    margin-right: 457px;
+    margin-left: -130px;
+    border-bottom: 65px solid darkblue;
+    border-top: 10px solid darkblue;
+}
+#subscribeModal .modal-lg .bottom-strip {
+    height: 155px;
+    background: blue;
+    transform: rotate(135deg);
+    margin-top: -115px;
+    margin-right: -339px;
+    margin-left: 421px;
+    border-bottom: 65px solid darkblue;
+    border-top: 10px solid darkblue;
+}
+#subscribeModal .modal-content{
+	overflow:hidden;
+}
+.OTPublisherContainer {
+    width: 50% !important;
+    min-height: 325px !important;
+}
+.OTSubscriberContainer {
+    width:  50% !important;
+    min-height: 325px !important;  
+    float: right !important;
+    top: -325px !important;
+}

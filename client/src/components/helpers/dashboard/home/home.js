@@ -28,6 +28,8 @@ import { Modal } from 'react-responsive-modal';
 import { NotificationManager } from 'react-notifications';
 import uuid from "react-uuid";
 import moment from "moment";
+import { Button, Popover, PopoverHeader, PopoverBody } from 'reactstrap';
+
 
 
 const Chart = require("chart.js");
@@ -50,7 +52,8 @@ constructor(props) {
         notePaneOpenEdit: false,
         selectedNote: null,
         newNote: "",
-        newPriority: ""
+        newPriority: "",
+        popIsOpen: false
     }
 }
     onOpenModal = () => {
@@ -137,6 +140,15 @@ constructor(props) {
             });
         }, 500);
     }
+    renderStatus = (application) => {
+        if (application.accepted === "DENIED/DECLINED") {
+            return <span class="unpaid">DECLINED</span>;
+        } else if (application.accepted === true) {
+            return <span class="paid">ACCEPTED!</span>;
+        } else {
+            return <span class="paid pending-pending">Pending</span>;
+        }
+    }
     renderPortionOne = () => {
         const { user } = this.state;
 
@@ -149,12 +161,13 @@ constructor(props) {
                         <div class="content">
                             <ul class="dashboard-box-list">
                                 {user.submitted_applications ? user.submitted_applications.map((application, index) => {
+                                    console.log("APPPPPPPP :", application);
                                     return (
                                         <li>
                                             <div class="invoice-list-item mx-auto">
                                             <strong>{application.title}</strong>
                                                 <ul>
-                                                    <li>{application.accepted === "DENIED/DECLINED" ? <span class="unpaid">DECLINED</span> :  <span class="paid">Pending</span>}</li> <br />
+                                                    <li>{this.renderStatus(application)}</li><br />
                                                     <li>Order: {application.id}</li> <br />
                                                     <li>Date: {application.date}</li>
                                                 </ul>
@@ -368,6 +381,51 @@ constructor(props) {
             );
         }
     }
+    renderBidsWon = () => {
+
+        let count = 0;
+
+        const { user } = this.state;
+
+        if (user.submitted_applications) {
+            for (let index = 0; index < user.submitted_applications.length; index++) {
+                const application = user.submitted_applications[index];
+                if (application.accepted === true) {
+                    count++
+                }
+            }
+        }
+        return (
+            <Fragment>
+                <div onClick={this.renderBidsWonClicked} class="fun-fact fun-fact-special" data-fun-fact-color="#36bd78">
+                    <div class="fun-fact-text">
+                        <span id="bids-won">Task Bids Won</span>
+                        <h4 id="count">{count}</h4> 
+                    </div>
+                    <i id="Popover111" onMouseEnter={this.entered} onMouseLeave={() => {
+                        this.setState({
+                            popIsOpen: false
+                        })
+                    }} style={{ marginRight: "40px" }} class="fa fa-info-circle fa-2x"></i>
+                    <Popover popperClassName="poppp" placement="bottom" isOpen={this.state.popIsOpen} target="Popover111">
+                        <PopoverHeader>Click To View Bids</PopoverHeader>
+                        <PopoverBody>You can click this box to view your bids if you're interested in more analytics.</PopoverBody>
+                    </Popover>
+                    <div class="fun-fact-icon fun-fact-one"><i class="icon-material-outline-gavel" style={{ color: "white" }}></i></div>
+                </div>
+            </Fragment>
+        );
+    }
+    entered = () => {
+        this.setState({
+            popIsOpen: true
+        })
+    }
+    renderBidsWonClicked = () => {
+        console.log("clicked.");
+
+
+    }
     renderConditional = () => {
         const { user } = this.state;
         
@@ -509,13 +567,7 @@ constructor(props) {
                             </div>
 
                             <div class="fun-facts-container">
-                                <div class="fun-fact" data-fun-fact-color="#36bd78">
-                                    <div class="fun-fact-text">
-                                        <span>Task Bids Won</span>
-                                        <h4>0</h4>
-                                    </div>
-                                    <div class="fun-fact-icon fun-fact-one"><i class="icon-material-outline-gavel" style={{ color: "white" }}></i></div>
-                                </div>
+                                {this.renderBidsWon()}
                                 {this.renderCountOne()}
                                 <div class="fun-fact" data-fun-fact-color="#efa80f">
                                     <div class="fun-fact-text">
@@ -527,6 +579,11 @@ constructor(props) {
 
                                 {this.renderCountTwo()}
                             </div>
+                            <div className="row">
+                                <button onClick={() => {
+                                    this.props.history.push("/dashboard/video/call/homepage");
+                                }} className="btn blue-btn" style={{ width: "100%", color: "white", marginTop: "25px" }}>Start/Manage A Video Call</button>
+                            </div>
                             <div class="row">
 
                                 <div class="col-xl-8">
@@ -534,7 +591,7 @@ constructor(props) {
                                         <div class="headline">
                                             <h3><i class="icon-feather-bar-chart-2"></i> Your Profile Views</h3>
                                             <div class="sort-by">
-                                                <select class="selectpicker hide-tick">
+                                                <select class="form-control hide-tick">
                                                     <option>Last 6 Months</option>
                                                     <option>This Year</option>
                                                     <option>This Month</option>
@@ -987,6 +1044,7 @@ constructor(props) {
         }
     }
     handleNoteSubmission = (e) => {
+
         e.preventDefault();
 
         console.log("note submission...");
@@ -1057,9 +1115,9 @@ constructor(props) {
     render() {
         const { user, application, notePaneOpen } = this.state;
 
-        console.log(this.state);
+        console.log("dashboard home state ------- :", this.state);
         return (
-            <div style={{ borderTop: "3px solid lightgrey" }}>
+            <div id="adjust-footer-main" style={{ borderTop: "3px solid lightgrey" }}>
                 {this.renderConditional()}       
                 <Modal id="modal-modal" open={this.state.notePaneOpen} onClose={this.onCloseModal} center>
                         <div class="sign-in-form custom-popup">

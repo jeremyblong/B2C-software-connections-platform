@@ -217,13 +217,13 @@ constructor(props) {
                                     <h3 class="margin-bottom-25">Job Description</h3>
                                     <p>{passedData.description}</p>
                                     <hr className="black-line" />
-                                    <label className="text-center" style={{ color: "blue" }}>Types of development sought out after...</label>
+                                    <label className="text-left" style={{ color: "blue" }}>Types of development sought out after...</label>
                                     <ul class="list-2">
                                         {passedData.type_of_development ? passedData.type_of_development.map((type, index) => {
                                             return <li>{type.label}</li>;
                                         }) : null}
                                     </ul>
-                                    {passedData.additional_skills.length !== 0 ? <Fragment><label className="text-center" style={{ color: "blue" }}>Additional skills desired...</label>
+                                    {passedData.additional_skills.length !== 0 ? <Fragment><label className="text-left" style={{ color: "blue" }}>Additional skills desired...</label>
                                     <ul class="list-2">
                                         {passedData.additional_skills ? passedData.additional_skills.map((item, index) => {
                                             return <li>{item.value}</li>;
@@ -231,18 +231,18 @@ constructor(props) {
                                     </ul></Fragment> : null}
 
 
-                                    {passedData.platform.length !== 0 ? <Fragment><label className="text-center" style={{ color: "blue" }}>Platforms</label>
+                                    {passedData.platform.length !== 0 ? <Fragment><label className="text-left" style={{ color: "blue" }}>Platforms</label>
                                     <ul class="list-2">
                                         {passedData.platform ? passedData.platform.map((item, index) => {
                                             return <li>{item.label}</li>;
                                         }) : null}
                                     </ul></Fragment> : null}
 
-                                    {passedData.preferred_state_timezone ? <Fragment><label className="text-center" style={{ color: "blue" }}>Perferred timezone</label>
+                                    {passedData.preferred_state_timezone ? <Fragment><label className="text-left" style={{ color: "blue" }}>Perferred timezone</label>
                                     <ul class="list-2">
                                         <li>{passedData.preferred_state_timezone}</li>
                                     </ul></Fragment> : null}
-                                    {passedData.preferred_country ? <Fragment><label className="text-center" style={{ color: "blue" }}>Perferred location</label>
+                                    {passedData.preferred_country ? <Fragment><label className="text-left" style={{ color: "blue" }}>Perferred location</label>
                                     <ul class="list-2">
                                         <li>{passedData.preferred_country}</li>
                                     </ul></Fragment> : null}

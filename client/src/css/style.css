@@ -4759,7 +4759,6 @@ span.blog-item-tag {
 	width: calc(100% * (1/2) - 30px);
 	flex-direction: column;
 }
-
 .grid-layout .job-listing-details {
 	flex-grow: 1;
     display: flex;
@@ -5182,7 +5181,9 @@ span.blog-item-tag {
     margin: 0 30px 30px 0;
     width: calc(100% * (1/2) - 30px);
     border-radius: 4px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    -webkit-box-shadow: -1px 1px 5px 9px rgba(0,0,0,0.25);
+	-moz-box-shadow: -1px 1px 5px 9px rgba(0,0,0,0.25);
+	box-shadow: -1px 1px 5px 9px rgba(0,0,0,0.25);
     background-color: #fff;
     transition: 0.3s;
     position: relative;
@@ -5190,7 +5191,9 @@ span.blog-item-tag {
 }
 
 .freelancer:hover {
-    box-shadow: 0 2px 18px rgba(0,0,0,0.14);
+    -webkit-box-shadow: -1px 1px 5px 9px rgba(95, 119, 252, 0.829);
+	-moz-box-shadow: -1px 1px 5px 9px rgba(95, 119, 252, 0.829);
+	box-shadow: -1px 1px 5px 9px rgba(95, 119, 252, 0.829);
     transform: translateY(-4px);
 }
 
@@ -17004,3 +17007,6 @@ ul.dashboard-box-list > li:hover {
 	.padding-left-90 { padding-left: 90px !important; }
 	.padding-left-95 { padding-left: 95px !important; }
 	.padding-left-100 { padding-left: 100px !important; }
+
+
+	

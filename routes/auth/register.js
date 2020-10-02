@@ -13,6 +13,11 @@ const wasabiEndpoint = new AWS.Endpoint('s3.us-west-1.wasabisys.com');
 const { v4: uuidv4 } = require('uuid');
 const moment = require("moment");
 const StreamChat = require('stream-chat').StreamChat;
+const EC = require("elliptic").ec;
+const ec = new EC("secp256k1");
+const gemshire = require("../../main.js");
+const bcrypt = require("bcrypt");
+const axios = require("axios");
 
 const accountSid = 'AC3ef6c21bae251cb9f4677c85e600c2ac';
 const authToken = '4a60ae3bfbfc6089b45b654e6138beee';
@@ -49,6 +54,15 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
         const tokenStreamChat = clientStream.createToken(username);
 
+        const key = ec.genKeyPair();
+
+		const publicKey = key.getPublic("hex");
+		const privateKey = key.getPrivate("hex");
+
+		console.log("private key is the ", privateKey);
+
+		console.log("public key is ", publicKey);
+
         const UserData = new User({
             username: username.trim(),
             accountType: accountType.trim(),
@@ -66,8 +80,14 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
             }],
             unique_id: uuidv4(),
             phoneNumber: phoneNumber.trim(),
-            get_stream_token: tokenStreamChat
+            get_stream_token: tokenStreamChat,
+            blockPublicKey: publicKey,
+            blockPrivateKey: privateKey
         });
+
+        const port = req.app.get("PORT");
+
+        console.log("PORTTTTT :", port);
         
         UserData.save((err, data) => {
             if (err) {
@@ -96,21 +116,42 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                                 app.set('serviceSid', service.sid); 
 
-                                res.json({
-                                    message: "Successfully registered!",
-                                    data,
-                                    image: generatedID,
-                                    sid: service.sid
-                                })
+                                axios.post(`http://localhost:${port}/transaction/broadcast`, {
+                                    amount: 35, 
+                                    sender: "00", 
+                                    recipient: publicKey
+                                }).then(async (resp) => {
+                                    console.log(resp);
+                                    if (resp) {
+                                        axios.get(`http://localhost:${port}/mine`).then((feedback) => {
+                                            if (feedback) {
+                                                console.log(feedback.data);
+                                            }
+                                        }).catch((err) => {
+                                            console.log(err);
+                                        })
+                                        
 
-                                await clientStream.setUser(
-                                    {
-                                        id: username,
-                                        name: username,
-                                        image: `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${generatedID}`,
-                                    },
-                                    tokenStreamChat,
-                                );
+                                        // s3 bucket here...
+                                        res.json({
+                                            message: "Successfully registered!",
+                                            data,
+                                            image: generatedID,
+                                            sid: service.sid
+                                        })
+        
+                                        await clientStream.setUser(
+                                            {
+                                                id: username,
+                                                name: username,
+                                                image: `https://s3.us-west-1.wasabisys.com/software-gateway-platform/${generatedID}`,
+                                            },
+                                            tokenStreamChat,
+                                        );
+                                    }
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
                             });
                     });
                 });

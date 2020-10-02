@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Slider from "react-slick";
 import "./style.css";
+import { Link } from "react-router-dom";
 
 class TopRatedWorkers extends Component {
 constructor(props) {
@@ -83,7 +84,15 @@ constructor(props) {
             slidesToScroll: 2,
             autoplaySpeed: 2000,
             autoplay: true,
-            infinite: false
+            infinite: false,
+            responsive: [{
+                breakpoint: 600,
+                settings: {
+                  slidesToShow: 1,
+                  slidesToScroll: 1,
+                  initialSlide: 1
+                }
+            }]
         };
         return (
             <div>
@@ -94,7 +103,7 @@ constructor(props) {
                             <div className="col-xl-12">
                                 <div className="section-headline margin-top-0 margin-bottom-25">
                                     <h3>Highest Rated Freelancers</h3>
-                                    <a href="freelancers-grid-layout.html" className="headline-link">Browse All Freelancers</a>
+                                    <Link to="/freelancers/list/view" className="headline-link">Browse All Freelancers</Link>
                                 </div>
                             </div>
 
@@ -104,7 +113,7 @@ constructor(props) {
                                         console.log("freelancer :", freelancer)
                                         return (
                                             <div>
-                                                <div className="freelancer">
+                                                <div className="freelancer add-margin">
                                                     <div className="freelancer-overview">
                                                         <div className="freelancer-overview-inner">
                                                             <span className="bookmark-icon"></span>

@@ -6,7 +6,7 @@ import importedVideo from "../../../../assets/videos/typing.mov";
 class LandingTopHelper extends Component {
     render() {
         return (
-            <div>
+            <div id="back">
                 <div class="jumbotron">
                     <video playsinline="playsinline" autoplay="autoplay" muted="muted" loop="loop">
                         <source src={importedVideo} type="video/mp4" />

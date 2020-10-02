@@ -6,7 +6,7 @@ const mongo = require("mongodb");
 const config = require("config");
 const cors = require('cors');
 
-// need to fix how many times res.json is sent - can't send multiple headers
+
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
     router.post("/", (req, res) => {
 

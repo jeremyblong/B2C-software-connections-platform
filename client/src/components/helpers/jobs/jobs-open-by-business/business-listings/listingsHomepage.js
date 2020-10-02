@@ -231,7 +231,7 @@ constructor(props) {
                                                         <span class="bookmark-icon"></span>
                                                     </div>
                                                     <ul>
-                                                        <li><i className="icon-material-outline-business"></i><strong style={{ color: "#DD2D4A" }}>Length:</strong> {job.length_of_project}</li>
+                                                        <li><i className="icon-material-outline-business"></i><strong style={{ color: "blue" }}>Length:</strong> {job.length_of_project}</li>
                                                         <li><i className="icon-material-outline-location-on"></i>{job.location_preference}</li>
                                                         <li><i className="icon-material-outline-business-center"></i><strong style={{ color: "blue" }}>{job.experience_level}</strong> skill level</li>
                                                         <li><i className="icon-material-outline-access-time"></i>{job.date}</li>

@@ -48,3 +48,26 @@
 .fun-fact-four {
     background-color: #2a41e6 !important;
 }
+.pending-pending {
+    background-color: rgb(255, 125, 19) !important;
+    color: white !important;
+}
+#adjust-footer-main {
+    margin-bottom: 1000px;
+}
+.fun-fact-special:hover {
+    background-color: blue !important;
+    color: white !important;
+}
+.fun-fact-special:hover #bids-won {
+    color: white !important;
+}
+.fun-fact-special:hover #count {
+    color: white !important;
+}
+.fun-fact-special:hover .fun-fact-one {
+    border: 3px solid white;
+}
+.poppp {
+    background-color: white !important;
+}

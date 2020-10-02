@@ -23,7 +23,6 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 	    const { amount, username } = req.body;
 
 	    req.flash('amount', amount);
-	    req.flash('username', username);
 
 		const create_payment_json = {
 		    "intent": "sale",

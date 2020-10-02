@@ -33,6 +33,12 @@ const UserSchema = new mongoose.Schema({
 	},
 	get_stream_token: {
 		type: String
+	},
+	blockPublicKey: {
+		type: String
+	},
+	blockPrivateKey: {
+		type: String
 	}
 });
 

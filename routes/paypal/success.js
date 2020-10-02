@@ -24,11 +24,8 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
 		let message = req.flash('amount');
 
-		let saveUsername = req.flash("username");
-
 		console.log("PayerID", PayerID);
 		console.log("paymentId: ", paymentId)
-		console.log("saveUsername", saveUsername[0]);
 
 		const execute_payment_json = {
 			"payer_id": PayerID,
@@ -55,8 +52,6 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 				const amount = Number(splitted[0]);
 
 				if (payment.state === "approved") {
-
-					console.log(amount, saveUsername[0]);
 					
                     res.redirect("http://localhost:3000/thank/you/for/your/payment");
                     

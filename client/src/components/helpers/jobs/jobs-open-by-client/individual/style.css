@@ -46,6 +46,9 @@
     .mobile-hidden {
         display: none !important;
     }
+    #pop-100 {
+        margin-top: 0px;
+    }
 }
 .freelancer-avatar {
     border: 3px solid white;
@@ -55,4 +58,8 @@
 }
 .dark-blue-text {
     color: darkblue !important;
+}
+.freelancer-avatar img {
+    min-width: 120px !important;
+    min-height: 120px;
 }

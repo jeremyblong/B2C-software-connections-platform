@@ -10,6 +10,22 @@
     .intro-search-field {
         margin-top: 100px !important;
     }
+    video {
+        display: none;
+    }
+    .jumbotron {
+        padding-top: 30px;
+        padding-bottom: 30px;
+        margin-bottom: 30px;
+        color: inherit;
+        background-color: #eee;
+        height: 100% !important;
+        overflow: hidden;
+        position: relative;
+        background-image: url("../../../../assets/images/pex.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
 }
 #background-video {
     height: 100% !important;

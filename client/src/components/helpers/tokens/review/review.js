@@ -147,7 +147,9 @@ constructor(props) {
                                 </table>
                             </div>
                         </div>
-    
+                        <div>
+                            <button onClick={this.purchaseTokens} className="btn blue-btn" style={{ color: "white", width: "100%", marginBottom: "20px" }}>Continue to PayPal & purchase tokens</button>
+                        </div> 
                         <div class="d-flex flex-row-reverse bg-dark text-white p-4">
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Grand Total</div>
@@ -170,6 +172,7 @@ constructor(props) {
                 return (
                     <Fragment>
                         <div class="row pb-5 p-5">
+                        
                             <div class="col-md-6">
                                 <p class="font-weight-bold mb-4 text-left">Client Information</p>
                                 <p class="mb-1 text-left"><strong>Username:</strong> {user.username}</p>
@@ -226,7 +229,9 @@ constructor(props) {
                                 </table>
                             </div>
                         </div>
-    
+                        <div>
+                            <button onClick={this.purchaseTokens} className="btn blue-btn" style={{ color: "white", width: "100%", marginBottom: "20px" }}>Continue to PayPal & purchase tokens</button>
+                        </div>                    
                         <div class="d-flex flex-row-reverse bg-dark text-white p-4">
                             <div class="py-3 px-5 text-right">
                                 <div class="mb-2">Grand Total</div>
@@ -248,6 +253,106 @@ constructor(props) {
             }
         }
     }
+    purchaseTokens = () => {
+        const { passedTokenValue } = this.state;
+
+        console.log("purchase tokens clicked.");
+
+        switch (passedTokenValue) {
+            case 10:
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(1.50 - (1.5 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 10
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            case 25:
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(3.75 - (3.75 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 25
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            case 50: 
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(7.50 - (7.50 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 50
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            case 75: 
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(11.25 - (11.25 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 75
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            case 100: 
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(15.00 - (15.00 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 100
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            case 200: 
+                axios.post("/purchase/crypto/coins/initial/paypal", {
+                    amount: Number(25.00 - (25.00 * 0.10)), 
+                    username: this.props.username,
+                    crypto_total: 200
+                }).then((res) => {
+                    if (res.data) {
+                        console.log(res.data);
+
+                        window.location = res.data;
+                    }
+                }).catch((err) => {
+                    console.log(err);
+                })
+                break;
+            default:
+                break;
+        }
+    }
     render() {
         console.log("this.state", this.state);
         const date = moment(new Date()).format("dddd, MMMM Do YYYY, h:mm:ss a");
@@ -258,6 +363,9 @@ constructor(props) {
                         <div class="col-12">
                             <div class="card boxed-boxed">
                                 <div class="card-body p-0">
+                                <div className="row">
+                                    <button onClick={this.purchaseTokens} className="btn blue-btn" style={{ color: "white", width: "100%", margin: "20px 15px" }}>Continue to PayPal & purchase tokens</button>
+                                </div>
                                     <div class="row p-5">
                                         <div class="col-md-6">
                                             <img src={require("../../../../assets/images/code.png")} id="logo-logo" />

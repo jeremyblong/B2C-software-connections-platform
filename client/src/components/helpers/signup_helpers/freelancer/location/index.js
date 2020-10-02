@@ -10,6 +10,7 @@ import PlacesAutocomplete, {
   } from 'react-places-autocomplete';
 import { completedSignup } from "../../../../../actions/signup/signedUpOrNot.js";
 import { NotificationManager} from 'react-notifications';
+import places from "places.js";
 
 class LocationFreelancerSignupHelper extends Component {
 constructor(props) {
@@ -22,7 +23,8 @@ constructor(props) {
         street: "",
         zipcode: "",
         state: "",
-        city: ""
+        city: "",
+        placesInstance: null
     }   
 }   
     handleSubmission = () => {
@@ -81,8 +83,40 @@ constructor(props) {
           .then(latLng => console.log('Success', latLng))
           .catch(error => console.error('Error', error));
     };
+    componentDidMount() {
+        const fixedOptions = {
+            appId: 'plQYSC0SKL1W',
+            apiKey: '25eed220e2ba5812b5496ddc2340c555',
+            container: document.getElementById('location-selector'),
+          };
+          
+        const reconfigurableOptions = {
+            language: 'en', // Receives results in German
+            type: 'address', // Search only for cities names
+            aroundLatLngViaIP: false // disable the extra search/boost around the source IP
+        };
+        const placesInstance = places(fixedOptions).configure(reconfigurableOptions);
+
+        this.setState({
+            placesInstance
+        })
+    }
     render() {
         console.log(this.state);
+        if (this.state.placesInstance !== null) {
+            this.state.placesInstance.on('change', e => {
+                console.log(e.suggestion);
+
+                const { country, name, postcode, city, administrative } = e.suggestion;
+                this.setState({
+                    country,
+                    street: name, 
+                    zipcode: postcode, 
+                    state: administrative, 
+                    city
+                })
+            });
+        }
         return (
             <div>
                 <div style={{ borderTop: "3px solid lightgrey" }}>
@@ -121,8 +155,11 @@ constructor(props) {
                         
                                 <div class="row">
 
-                                <div class="dashboard-box margin-top-0" style={{ paddingBottom: "100px" }}>
+                                <div class="dashboard-box margin-top-0" style={{ paddingBottom: "100px", marginBottom: "205px" }}>
                                 <div className="content with-padding padding-bottom-10">
+                                <div className="row mx-auto">
+                                    <label className="text-center" style={{ marginBottom: "25px", color: "blue" }}>This information is 100% confidential and simply for admin reasons (will NOT be displayed publically)...</label>
+                                </div>
                                     <div className="row">
 
                                         <div className="col-xl-4">
@@ -410,11 +447,7 @@ constructor(props) {
                                         <div className="col-xl-12 col-lg-12 col-sm-12 col-xs-12">
                                             <div className="submit-field">
                                                 <h5>Physical Street Address</h5>
-                                                <input onChange={(e) => {
-                                                    this.setState({
-                                                        street: e.target.value
-                                                    })
-                                                }} value={this.state.street} type="text" className="with-border" placeholder={"Street Address"} />
+                                                <input id="location-selector" type="text" className="with-border" placeholder={"Street Address"} />
                                                 {/* <PlacesAutocomplete
                                                     value={this.state.street}
                                                     onChange={this.handleChange}
@@ -455,7 +488,7 @@ constructor(props) {
                                                 </PlacesAutocomplete> */}
                                             </div>
                                         </div>
-                                        <div className="col-xl-4">
+                                        {/* <div className="col-xl-4">
                                             <div className="submit-field">
                                                 <h5>City (Nearest)</h5>
                                                 <input onChange={(e) => {
@@ -464,8 +497,8 @@ constructor(props) {
                                                     })
                                                 }} value={this.state.city} type="text" className="with-border" placeholder={"Ex. Charlotte - Please don't use abbreviations"} />
                                             </div>
-                                        </div>
-                                        {this.state.country === "United States" ? <div className="col-xl-4">
+                                        </div> */}
+                                        {/* {this.state.country === "United States" ? <div className="col-xl-4">
                                             <div className="submit-field">
                                                 <h5>State</h5>
                                                 <select onChange={(e) => {
@@ -526,8 +559,8 @@ constructor(props) {
                                                     <option value="WY">Wyoming</option>
                                                 </select>	
                                             </div>
-                                        </div> : null}
-                                        <div className="col-xl-4">
+                                        </div> : null} */}
+                                        {/* <div className="col-xl-4">
                                             <div className="submit-field">
                                                 <h5>Zip-Code (Only first 5 digits for USA codes)</h5>
                                                 <input onChange={(e) => {
@@ -536,7 +569,7 @@ constructor(props) {
                                                     })
                                                 }} value={this.state.zipcode} type="text" className="with-border" placeholder={"Ex. 90038"} />
                                             </div>
-                                        </div>
+                                        </div> */}
                                     
                                     </div>
                                 </div>

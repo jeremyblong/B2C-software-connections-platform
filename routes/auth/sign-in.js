@@ -9,6 +9,14 @@ const jwt = require("jsonwebtoken");
 const request = require("request");
 const moment = require("moment");
 const StreamChat = require('stream-chat').StreamChat;
+const { v4: uuidv4 } = require('uuid');
+const OpenTok = require("opentok");
+const opentok = new OpenTok(config.get("vontageAPIKey"), config.get("vontageAPISecret"));
+const flash = require('connect-flash');
+const EC = require("elliptic").ec;
+const ec = new EC("secp256k1");
+const gemshire = require("../../main.js");
+const bcrypt = require("bcrypt");
 
 // need to fix how many times res.json is sent - can't send multiple headers
 mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTopology: true }, cors(), (err, db) => {
@@ -27,57 +35,65 @@ mongo.connect(config.get("mongoURI"),  { useNewUrlParser: true }, { useUnifiedTo
 
                     const client = new StreamChat('52zfrbfbqu6r', '2edjpqxk42vkxwjf22n73v5camaj66rmb5ykrz9uywt7bc2b86wedwb8qkt7tftv');
 
-                    // const timestamp = Number(moment().add('1h').format('X'));
-                    
-                    // const tokenStreamChat = client.createToken(user.username);
+                    const identity = user.username;
 
-                    // const headers = 
-                    //     "Content-Type": "application/x-www-form-urlencoded"
-                    // };
+                    const generatedID = uuidv4();
 
-                    // const client_id = "jBocGwHNIoZNr01wPHtQhtxIgyXLAgos";
+                    let sessionId;
 
-                    // const client_secret = "Z7E2vf0ACR1fGYIR";
+                    opentok.createSession({}, function(error, session) {
+                        if (error) {
+                            console.log("Error creating session:", error)
+                        } else {
+                            sessionId = session.sessionId;
 
-                    // let options = {
-                    //     uri: 'https://test.api.amadeus.com/v1/security/oauth2/token',
-                    //     method: 'POST',
-                    //     headers,
-                    //     json: true,
-                    //     form: {
-                    //         "grant_type": "client_credentials",
-                    //         "client_id": client_id,
-                    //         "client_secret": client_secret
-                    //     }
-                    // };
+                            console.log("Session ID: " + sessionId);
 
-                    // request(options, (err, response, body) => {
-                    //     if (err) {
-                    //         console.log(err);
-                    //         res.json({
-                    //             err
-                    //         })
-                    //     }
-                    //     // if (response.statusCode === 200) {
-                    //         console.log("response :", response);
-                    //         console.log("body", body);
+                            const tokennnn = opentok.generateToken(sessionId);
 
-                    //         const token = jwt.sign({
-                    //             sub: user._id,
-                    //             username: user.username
-                    //           }, user.email, { expiresIn: "3 hours" });
-                    //         res.json({
-                    //             message: "User FOUND!",
-                    //             user,
-                    //             token,
-                    //             access_token: body.access_token
-                    //         })
-                    //     // }
-                    // })
+                            if (user.opentok_data) {
+
+                                user.opentok_data.token = tokennnn;
+                                user.opentok_data.sessionId = sessionId;
+
+                                collection.save(user);
+                            } else {
+
+                                user["opentok_data"] = {
+                                    token: tokennnn,
+                                    sessionId
+                                };
+
+                                collection.save(user);
+                            }
+                        }
+                    });
+
+                    if (!user.blockPublicKey && !user.blockPrivateKey) {
+                        const key = ec.genKeyPair();
+                        
+                        // generate blockchain private and public keys for the crypto network later in the application
+                        const publicKey = key.getPublic("hex");
+                        const privateKey = key.getPrivate("hex");
+
+                        console.log("private key is the ", privateKey);
+
+                        console.log("public key is ", publicKey);
+
+                        user["blockPublicKey"] = publicKey;
+                        user["blockPrivateKey"] = privateKey;
+
+                        collection.save(user);
+                    } 
+
                     const token = jwt.sign({
                         sub: user._id,
                         username: user.username
-                      }, user.email, { expiresIn: "3 hours" });
+                    }, user.email, { expiresIn: "3 hours" });
+
+                    req.flash('username', user.username);
+
+
                     res.json({
                         message: "User FOUND!",
                         user,

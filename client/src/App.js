@@ -43,6 +43,8 @@ import DashboardManageApplicantsPage from "./components/pages/dashboard/manage-j
 import ManageBidsFreelancerPageMain from "./components/pages/dashboard/manage-bids/manage.js";
 import PurchaseTokensPage from "./components/pages/tokens/display/main.js";
 import PurchaseTokensReviewPage from "./components/pages/tokens/review/review.js";
+import VideoStreamingHomepagePage from "./components/pages/video-skype/home/index.js";
+import WalletHomepagePage from "./components/pages/blockchain/walletHomepage.js";
 
 class App extends Component {
 constructor(props) {
@@ -58,6 +60,12 @@ constructor(props) {
 }
   componentDidMount() {
     // this.props.authentication({});
+
+    axios.get("/consensus").then((res) => {
+      console.log(res.data);
+    }).catch((err) => {
+      console.log(err);
+    })
     setTimeout(() => {
       axios.post("/figure/out/page/number", {
         username: this.props.username
@@ -183,7 +191,9 @@ constructor(props) {
               <Route exact path="/dashboard/manage/applications/individual/:id" component={DashboardManageApplicantsPage} />
               <Route exact path="/dashboard/manage/bidders" component={ManageBidsFreelancerPageMain} />  
               <Route exact path="/purchase/tokens" component={PurchaseTokensPage} />  
-              <Route exact path="/purchase/tokens/review/:tokens" component={PurchaseTokensReviewPage} />
+              <Route exact path="/purchase/tokens/review/:tokens" component={PurchaseTokensReviewPage} /> 
+              <Route exact path="/dashboard/video/call/homepage" component={VideoStreamingHomepagePage} />  
+              <Route exact path="/manage/wallet" component={WalletHomepagePage} />
             </div>
           </Fragment>
         );

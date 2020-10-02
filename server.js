@@ -15,9 +15,14 @@ const nodeAddress = uuidv4().split("-").join("");
 const paypal = require('paypal-rest-sdk');
 const flash = require('connect-flash');
 const session = require('express-session');
+// config stuff
+const PORT = process.env.PORT || 5000;
+const port = process.argv[2];
 
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
+
+app.set("PORT", port);
 
 app.use(flash());
 app.use(session({ 
@@ -104,6 +109,19 @@ app.use("/reply/sub/comment/profile/pictures", require("./routes/social_media/co
 app.use("/delete/comment/profile/picture/deeply/nested", require("./routes/social_media/comments/removeNestedComment.js"));
 app.use("/accept/application/bids/start/project", require("./routes/active_project/activate/startProject.js"));
 app.use("/denied/change/condition/other/users", require("./routes/active_project/activate/setDeniedOtherApplicants.js"));
+app.use("/gather/active/jobs", require("./routes/businesses/jobs/gatherActiveJobs.js"));
+app.use("/create/video/room", require("./routes/public_apis/twillio/video-call/createRoom.js"));
+app.use("/send/stream/recieving/user", require("./routes/public_apis/twillio/video-call/sendStreamOther.js"));
+app.use("/get/freelancers/location/state", require("./routes/freelancers/search_queries/searchLocationState.js"));
+app.use("/location/gather", require("./routes/API_places/gatherLocation.js"));
+
+// blockchain stuff start
+app.use("/gather/blockchain/blocks", require("./routes/blockchain/chain/getChain.js"));
+app.use("/purchase/crypto/coins/initial/paypal", require("./routes/paypal/purchase-tokens/initial.js"));
+app.use("/purchase/crypto/coins/paypal/cancel", require("./routes/paypal/purchase-tokens/cancel.js"));
+app.use("/purchase/crypto/coins/paypal/success", require("./routes/paypal/purchase-tokens/success.js"));
+app.use("/gather/port/number", require("./routes/getPort.js"));
+// blockchain stuff end
 
 app.get("/blockchain", (req, res) => {
 	res.send(gemshire);
@@ -153,10 +171,10 @@ app.get("/mine", (req, res) => {
 
 	gemshire.networkNodes.forEach((networkNodeUrl) => {
 		const requestOptions = {
-		uri: networkNodeUrl + "/receive-new-block",
-		method: "POST",
-		body: { newBlock },
-		json: true
+			uri: networkNodeUrl + "/receive-new-block",
+			method: "POST",
+			body: { newBlock },
+			json: true
 		};
 
 		requestPromises.push(rp(requestOptions));
@@ -164,14 +182,14 @@ app.get("/mine", (req, res) => {
 
 	Promise.all(requestPromises).then((data) => {
 		const requestOptions = {
-		uri: gemshire.currentNodeUrl + "/transaction/broadcast",
-		method: "POST",
-		body: {
-			amount: 12.5,
-			sender: "00",
-			recipient: nodeAddress
-		},
-		json: true
+			uri: gemshire.currentNodeUrl + "/transaction/broadcast",
+			method: "POST",
+			body: {
+				amount: 0.5, // should be 12.5
+				sender: "00",
+				recipient: nodeAddress
+			},
+			json: true
 		}
 
 		return rp(requestOptions);
@@ -188,9 +206,9 @@ app.get("/consensus", (req, res) => {
 
 	gemshire.networkNodes.forEach((networkNodeUrl) => {
 		const requestOptions = { 
-		uri: networkNodeUrl + "/blockchain",
-		method: "GET",
-		json: true
+			uri: networkNodeUrl + "/blockchain",
+			method: "GET",
+			json: true
 		};
 		requestPromises.push(rp(requestOptions));
 	});
@@ -201,11 +219,11 @@ app.get("/consensus", (req, res) => {
 		let newPendingTransactions = null;
 		
 		blockchains.forEach((blockchain) => {
-		if (blockchain.chain.length > maxChainLength) {
-			maxChainLength = blockchain.chain.length;
-			newLongestChain = blockchain.chain;
-			newPendingTransactions = blockchain.pendingTransactions;
-		}
+			if (blockchain.chain.length > maxChainLength) {
+				maxChainLength = blockchain.chain.length;
+				newLongestChain = blockchain.chain;
+				newPendingTransactions = blockchain.pendingTransactions;
+			}
 		});
 
 		if (!newLongestChain || (newLongestChain && !gemshire.chainIsValid(newLongestChain))) {
@@ -398,8 +416,6 @@ if (process.env.NODE_ENV === "production") {
 	})
 }; 
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
+app.listen(port, () => {
 	console.log(`Server listening on port ${PORT}!`);
 });

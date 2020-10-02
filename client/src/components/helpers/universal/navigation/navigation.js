@@ -163,7 +163,7 @@ const Navigation = (props) => {
                                                     <div className="header-notifications-scroll" data-simplebar>
                                                         <ul id="list">
                                                             {data.notifications ? data.notifications.map((notification, index) => {
-                                                                console.log("NOTIFYICAITONNNNNNNN: ", notification);
+                                                                {/* console.log("NOTIFYICAITONNNNNNNN: ", notification); */}
                                                                 if (notification.freelancer_profile_id) {
                                                                     return (
                                                                         <li key={index} className="notifications-not-read">
@@ -216,7 +216,7 @@ const Navigation = (props) => {
                                             <ul>
                                         
                                                 <li className="notifications-not-read">
-                                                    <a href="dashboard-messages.html">
+                                                    <a href="/">
                                                         <span className="notification-avatar status-online"><img src="/images/user-avatar-small-03.jpg" alt=""/></span>
                                                         <div className="notification-text">
                                                             <strong>David Peterson</strong>
@@ -227,7 +227,7 @@ const Navigation = (props) => {
                                                 </li>
 
                                                 <li className="notifications-not-read">
-                                                    <a href="dashboard-messages.html">
+                                                    <a href="/">
                                                         <span className="notification-avatar status-offline"><img src="/images/user-avatar-small-02.jpg" alt=""/></span>
                                                         <div className="notification-text">
                                                             <strong>Sindy Forest</strong>
@@ -239,7 +239,7 @@ const Navigation = (props) => {
 
                                         
                                                 <li className="notifications-not-read">
-                                                    <a href="dashboard-messages.html">
+                                                    <a href="/">
                                                         <span className="notification-avatar status-online"><img src="/images/user-avatar-placeholder.png" alt=""/></span>
                                                         <div className="notification-text">
                                                             <strong>Marcin Kowalski</strong>
@@ -341,6 +341,9 @@ const Navigation = (props) => {
                 <DropdownItem className="dropdown-link" divider />
                 <DropdownItem>
                     <Link style={{ color: "blue" }} className="dropdown-link" to="/dashboard">Dashboard</Link>
+                </DropdownItem>
+                <DropdownItem>
+                    <Link style={{ color: "darkblue" }} className="dropdown-link" to="/manage/wallet">Manage Crypto Wallet</Link>
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown> : null}

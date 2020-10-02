@@ -56,7 +56,27 @@ constructor(props) {
 
                                 console.log("completed_signup = true ran");
 
-                                this.props.history.push("/");
+                                axios.get("/gather/port/number").then((res) => {
+
+                                    const port = "http://localhost:" + res.data.port.toString();
+                                    
+                                    axios.post("/register-and-broadcast-node", {
+                                        newNodeUrl: port
+                                    }).then((res) => {
+                                        axios.get("/consensus").then((responseee) => {
+                                            if (responseee) {
+                                                this.props.history.push("/");
+                                            }
+                                        }).catch((error) => {
+                                            console.log(error);
+                                        })
+                                        
+                                    }).catch((err) => {
+                                        console.log(err);
+                                    })
+                                }).catch((err) => {
+                                    console.log(err);
+                                })
                             } else {
                                 if (res.data.user.currentSignupPageCompleted) {
 

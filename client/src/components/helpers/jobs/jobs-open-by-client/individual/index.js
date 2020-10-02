@@ -702,7 +702,7 @@ constructor(props) {
                             if (selected_image_data && selected_image_data.hasOwnProperty("comments")) {
                                 clone.comments.push(newly_constructed_comment);
                             } else {
-                                clone["comments"] = newly_constructed_comment;
+                                clone["comments"] = [newly_constructed_comment];
                             }
 
                             this.setState({

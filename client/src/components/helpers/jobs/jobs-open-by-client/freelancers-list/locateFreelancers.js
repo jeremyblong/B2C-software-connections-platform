@@ -4,6 +4,30 @@ import { Link, withRouter } from "react-router-dom";
 import Slider from 'react-rangeslider'
 import 'react-rangeslider/lib/index.css';
 import axios from "axios";
+import places from "places.js";
+import Carousel from "react-multi-carousel";
+import "react-multi-carousel/lib/styles.css";
+
+
+const responsive = {
+  superLargeDesktop: {
+    // the naming can be any, depends on you.
+    breakpoint: { max: 4000, min: 3000 },
+    items: 5
+  },
+  desktop: {
+    breakpoint: { max: 3000, min: 1024 },
+    items: 4
+  },
+  tablet: {
+    breakpoint: { max: 1024, min: 464 },
+    items: 3
+  },
+  mobile: {
+    breakpoint: { max: 464, min: 0 },
+    items: 1
+  }
+};
 
 class FreelancerListView extends Component {
 constructor(props) {
@@ -11,7 +35,12 @@ constructor(props) {
     
     this.state = {
         volume: 0,
-        users: []
+        users: [],
+        placesInstance: null,
+        custom_search: false,
+        user_chunk_one: [],
+        user_chunk_two: [],
+        user_chunk_three: []
     }
 }
     handleOnChange = (value) => {
@@ -20,12 +49,33 @@ constructor(props) {
         })
     }
     componentDidMount() {
+        const fixedOptions = {
+            appId: 'plQYSC0SKL1W',
+            apiKey: '25eed220e2ba5812b5496ddc2340c555',
+            container: document.getElementById('location-selector'),
+          };
+          
+        const reconfigurableOptions = {
+            language: 'en', // Receives results in German
+            type: 'city', // Search only for cities names
+            aroundLatLngViaIP: false // disable the extra search/boost around the source IP
+        };
+        const placesInstance = places(fixedOptions).configure(reconfigurableOptions);
+          
+          // dynamically reconfigure options
+
+        this.setState({
+            placesInstance
+        })
+
         axios.get("/gather/freelancers").then((res) => {
             if (res.data.message === "Successfully gathered freelancers!") {
                 console.log("res.data.... :", res.data);
                 
                 this.setState({
-                    users: res.data.users
+                    user_chunk_one: res.data.users,
+                    user_chunk_two: res.data.users,
+                    user_chunk_three: res.data.users
                 })
             } else {
                 console.log("could NOT locate desired result...");
@@ -42,12 +92,201 @@ constructor(props) {
             }
         });
     }
-    render() {
-        const { volume } = this.state
-        return (
-            <div style={{ borderTop: "3px solid lightgrey" }}>
-                <div class="full-page-container freelancer-contain">
+    handleLocationSearch = (data) => {
+        console.log("data", data);
 
+        axios.post("/get/freelancers/location/state", {
+            state: data.administrative
+        }).then((res) => {
+            if (res.data.message === "Successfully found some users with that location!") {
+                console.log(res.data);
+
+                this.setState({
+                    user_chunk_one: res.data.users
+                })
+            }
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
+    renderSliderOne = () => {
+        if (typeof this.state.user_chunk_one !== "undefined" && this.state.user_chunk_one.length !== 0) {
+            console.log("ran........")
+            return this.state.user_chunk_one.map((user, index) => {
+                console.log("usaaaaa", user);
+                if (user.completed_signup === true) {
+                    console.log("TRUE")
+                    return (
+                        <div className="overlay-free">
+                            <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
+                                <div class="freelancer-overview">
+                                    <div class="freelancer-overview-inner">
+                                        
+                                    
+                                        <span class="bookmark-icon"></span>
+                                        
+                                        
+                                        <div class="freelancer-avatar">
+                                            <div class="verified-badge"></div>
+                                            <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
+                                        </div>
+
+                                    
+                                        <div class="freelancer-name">
+                                            <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
+                                            <span>{user.freelancerData.main_service_offered}</span>
+                                        </div>
+
+                                        <div class="freelancer-rating">
+                                            <div class="star-rating" data-rating="4.9"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="freelancer-details">
+                                    <div class="freelancer-details-list">
+                                        <ul>
+                                            {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
+                                            <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
+                                            <li>Job Success <strong>95%</strong></li>
+                                        </ul>
+                                    </div>
+                                    <button onClick={() => {
+                                        this.redirectPage(user);
+                                    }} class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+            })
+        }
+    }
+    renderSliderTwo = () => {
+        if (typeof this.state.user_chunk_two !== "undefined" && this.state.user_chunk_two.length !== 0) {
+            console.log("ran........")
+            return this.state.user_chunk_two.map((user, index) => {
+                console.log("usaaaaa", user);
+                if (user.completed_signup === true) {
+                    console.log("TRUE")
+                    return (
+                        <div>
+                            <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
+                                <div class="freelancer-overview">
+                                    <div class="freelancer-overview-inner">
+                                        
+                                    
+                                        <span class="bookmark-icon"></span>
+                                        
+                                        
+                                        <div class="freelancer-avatar">
+                                            <div class="verified-badge"></div>
+                                            <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
+                                        </div>
+
+                                    
+                                        <div class="freelancer-name">
+                                            <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
+                                            <span>{user.freelancerData.main_service_offered}</span>
+                                        </div>
+
+                                        <div class="freelancer-rating">
+                                            <div class="star-rating" data-rating="4.9"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="freelancer-details">
+                                    <div class="freelancer-details-list">
+                                        <ul>
+                                            {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
+                                            <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
+                                            <li>Job Success <strong>95%</strong></li>
+                                        </ul>
+                                    </div>
+                                    <button onClick={() => {
+                                        this.redirectPage(user);
+                                    }} class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+            })
+        }
+    }
+    renderSliderThree = () => {
+        if (typeof this.state.user_chunk_three !== "undefined" && this.state.user_chunk_three.length !== 0) {
+            console.log("ran........")
+            return this.state.user_chunk_three.map((user, index) => {
+                console.log("usaaaaa", user);
+                if (user.completed_signup === true) {
+                    console.log("TRUE")
+                    return (
+                        <div>
+                            <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
+                                <div class="freelancer-overview">
+                                    <div class="freelancer-overview-inner">
+                                        
+                                    
+                                        <span class="bookmark-icon"></span>
+                                        
+                                        
+                                        <div class="freelancer-avatar">
+                                            <div class="verified-badge"></div>
+                                            <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
+                                        </div>
+
+                                    
+                                        <div class="freelancer-name">
+                                            <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
+                                            <span>{user.freelancerData.main_service_offered}</span>
+                                        </div>
+
+                                        <div class="freelancer-rating">
+                                            <div class="star-rating" data-rating="4.9"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            
+                                <div class="freelancer-details">
+                                    <div class="freelancer-details-list">
+                                        <ul>
+                                            {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
+                                            <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
+                                            <li>Job Success <strong>95%</strong></li>
+                                        </ul>
+                                    </div>
+                                    <button onClick={() => {
+                                        this.redirectPage(user);
+                                    }} class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    );
+                }
+            })
+        }
+    }
+    render() {
+        const { volume } = this.state;
+
+        console.log("stateeeeeeeeeeee:", this.state);
+
+        if (this.state.placesInstance !== null) {
+            this.state.placesInstance.on('change', e => {
+                console.log(e.suggestion);
+
+                this.handleLocationSearch(e.suggestion);
+            });
+        }
+        return (
+            <div id="foot-adjust" style={{ borderTop: "3px solid lightgrey" }}>
+                <div class="full-page-container freelancer-contain">
+            
                     <div class="full-page-sidebar">
                         <div class="full-page-sidebar-inner" data-simplebar>
                             <div class="sidebar-container">
@@ -56,7 +295,7 @@ constructor(props) {
                                     <h3>Location</h3>
                                     <div class="input-with-icon">
                                         <div id="autocomplete-container">
-                                            <input id="autocomplete-input" type="text" placeholder="Location" />
+                                            <input id="location-selector" type="text" placeholder="Location" />
                                         </div>
                                         <i class="icon-material-outline-location-on"></i>
                                     </div>
@@ -170,6 +409,7 @@ constructor(props) {
                         <div class="full-page-content-inner">
 
                             <h3 class="page-title">Search Results</h3>
+                            <h3 class="page-title text-right">Swipe through the freelancers to see more users</h3>
 
                             <div class="notify-box margin-top-15">
                                 <div class="switch-container">
@@ -189,253 +429,77 @@ constructor(props) {
 
                   
                             <div class="freelancers-container freelancers-grid-layout margin-top-35">
-                                {this.state.users.length !== 0 ? this.state.users.map((user, index) => {
-                                    if (user.completed_signup === true) {
+                                <div id="display-desktop">
+                                {/* <h1 style={{ color: "blue" }} className="text-center"><strong>Full-Stack</strong> Developers (Server-Side/Database & Client-Side Development)</h1> */}
+                                    <div className="spacer">
+                                        
+                                    {typeof this.state.user_chunk_one !== "undefined" && this.state.user_chunk_one.length !== 0 ? <Carousel ref={(el) => (this.Carousel = el)} arrows={true} slidesToSlide={1} containerClass="carousel-container" responsive={responsive} itemClass="itemmm">
+                                            {this.renderSliderOne()}
+                                        </Carousel> : null}
+                                    </div>
+                                    <div className="spacer">
+                                        {/* <h1 style={{ color: "blue" }} className="text-center"><strong>Front-End</strong> Developers (Client-Side/Visual Development)</h1> */}
+                                        {typeof this.state.user_chunk_two !== "undefined" && this.state.user_chunk_two.length !== 0 ? <Carousel arrows={true} slidesToSlide={1} containerClass="carousel-container" responsive={responsive} itemClass="itemmm">
+                                            {this.renderSliderTwo()}
+                                        </Carousel> : null}
+                                    </div>
+                                    <div className="spacer">
+                                    {/* <h1 style={{ color: "blue" }} className="text-center"><strong>Back-End</strong> Developers (Server-Side/Database Development)</h1> */}
+                                        {typeof this.state.user_chunk_three !== "undefined" && this.state.user_chunk_three.length !== 0 ? <Carousel arrows={true} slidesToSlide={1} containerClass="carousel-container" responsive={responsive} itemClass="itemmm">
+                                            {this.renderSliderThree()}
+                                        </Carousel> : null}
+                                    </div>   
+                                </div>
+                                <div id="display-mobile">
+                                    {typeof this.state.users !== "undefined" && this.state.users.length !== 0 ? this.state.users.map((user, index) => {
+                                        if (user.completed_signup === true) {
+                                            console.log("TRUE")
                                             return (
-                                                <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
-                                                    <div class="freelancer-overview">
-                                                        <div class="freelancer-overview-inner">
+                                                <div id="freelancer-overlay" key={index}>
+                                                    <div class="freelancer col-md-2 col-xs-12 col-sm-6 col-lg-2 col-xl-2">
+                                                        <div class="freelancer-overview">
+                                                            <div class="freelancer-overview-inner">
+                                                                
                                                             
-                                                        
-                                                            <span class="bookmark-icon"></span>
-                                                            
-                                                            
-                                                            <div class="freelancer-avatar">
-                                                                <div class="verified-badge"></div>
-                                                                <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
-                                                            </div>
+                                                                <span class="bookmark-icon"></span>
+                                                                
+                                                                
+                                                                <div class="freelancer-avatar">
+                                                                    <div class="verified-badge"></div>
+                                                                    <a href="/"><img src={`https://s3.us-west-1.wasabisys.com/software-gateway-platform/${user.profilePics[user.profilePics.length - 1].picture}`} alt=""/></a>
+                                                                </div>
 
-                                                        
-                                                            <div class="freelancer-name">
-                                                                <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
-                                                                <span>{user.freelancerData.main_service_offered}</span>
-                                                            </div>
+                                                            
+                                                                <div class="freelancer-name">
+                                                                    <h4><a href="/">{user.username} <img class="flag" src="/images/flags/gb.svg" alt="" title="United Kingdom" data-tippy-placement="top"/></a></h4>
+                                                                    <span>{user.freelancerData.main_service_offered}</span>
+                                                                </div>
 
-                                                            <div class="freelancer-rating">
-                                                                <div class="star-rating" data-rating="4.9"></div>
+                                                                <div class="freelancer-rating">
+                                                                    <div class="star-rating" data-rating="4.9"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                        
                                                     
-                                                
-                                                    <div class="freelancer-details">
-                                                        <div class="freelancer-details-list">
-                                                            <ul>
-                                                                {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
-                                                                <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
-                                                                <li>Job Success <strong>95%</strong></li>
-                                                            </ul>
+                                                        <div class="freelancer-details">
+                                                            <div class="freelancer-details-list">
+                                                                <ul>
+                                                                    {user.freelancerData.location ? <li>Location <strong><i class="icon-material-outline-location-on"></i> {user.freelancerData.location.city + ", " + user.freelancerData.location.country}</strong></li> : <li>Location <strong><i class="icon-material-outline-location-on"></i>Location Not Provided</strong></li>}
+                                                                    <li>Rate <strong>{`${user.hourlyCurrency} ${user.hourlyRate}`} / hr</strong></li>
+                                                                    <li>Job Success <strong>95%</strong></li>
+                                                                </ul>
+                                                            </div>
+                                                            <button onClick={() => {
+                                                                this.redirectPage(user);
+                                                            }} class="button button-sliding-icon ripple-effect blue-btn full-mobile">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
                                                         </div>
-                                                        <button onClick={() => {
-                                                            this.redirectPage(user);
-                                                        }} class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></button>
                                                     </div>
                                                 </div>
                                             );
-                                    }
-                                }) : null}
-
-                                {/* <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-
-                                  
-                                    <div class="freelancer-overview">
-                                        <div class="freelancer-overview-inner">
-                                      
-                                            <span class="bookmark-icon"></span>
-                                            
-                                          
-                                            <div class="freelancer-avatar">
-                                                <div class="verified-badge"></div>
-                                                <a href="/"><img src="/images/user-avatar-big-02.jpg" alt=""/></a>
-                                            </div>
-
-                                       
-                                            <div class="freelancer-name">
-                                                <h4><a href="#">David Peterson <img class="flag" src="/images/flags/de.svg" alt="" title="Germany" data-tippy-placement="top"/></a></h4>
-                                                <span>iOS Expert + Node Dev</span>
-                                            </div>
-
-                                            
-                                            <div class="freelancer-rating">
-                                                <div class="star-rating" data-rating="4.2"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> Berlin</strong></li>
-                                                <li>Rate <strong>$40 / hr</strong></li>
-                                                <li>Job Success <strong>88%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
+                                        }
+                                    }) : null}
                                 </div>
-                          
-
-                       
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-
-                               
-                                    <div class="freelancer-overview">
-                                        <div class="freelancer-overview-inner">
-                                            
-                                            <span class="bookmark-icon"></span>
-                                            
-                                    
-                                            <div class="freelancer-avatar">
-                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
-                                            </div>
-
-                                            
-                                            <div class="freelancer-name">
-                                                <h4><a href="#">Marcin Kowalski <img class="flag" src="/images/flags/pl.svg" alt="" title="Poland" data-tippy-placement="top"/></a></h4>
-                                                <span>Front-End Developer</span>
-                                            </div>
-
-                                            <span class="company-not-rated margin-bottom-5">Minimum of 3 votes required</span>
-                                        </div>
-                                    </div>
-                                    
-                                   
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> Warsaw</strong></li>
-                                                <li>Rate <strong>$50 / hr</strong></li>
-                                                <li>Job Success <strong>100%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
-                                </div>
-                        
-
-                               
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-
-                                  
-                                    <div class="freelancer-overview">
-                                            <div class="freelancer-overview-inner">
-                                         
-                                            <span class="bookmark-icon"></span>
-                                            
-                                          
-                                            <div class="freelancer-avatar">
-                                                <div class="verified-badge"></div>
-                                                <a href="/"><img src="/images/user-avatar-big-03.jpg" alt=""/></a>
-                                            </div>
-
-                                          
-                                            <div class="freelancer-name">
-                                                <h4><a href="#">Sindy Forest <img class="flag" src="/images/flags/au.svg" alt="" title="Australia" data-tippy-placement="top" /></a></h4>
-                                                <span>Magento Certified Developer</span>
-                                            </div>
-
-                                            <div class="freelancer-rating">
-                                                <div class="star-rating" data-rating="5.0"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                   
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> Brisbane</strong></li>
-                                                <li>Rate <strong>$70 / hr</strong></li>
-                                                <li>Job Success <strong>100%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
-                                </div>
-                              
-                         
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-
-                             
-                                    <div class="freelancer-overview">
-                                            <div class="freelancer-overview-inner">
-                                   
-                                            <span class="bookmark-icon"></span>
-                                            
-                                           
-                                            <div class="freelancer-avatar">
-                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
-                                            </div>
-
-                                      
-                                            <div class="freelancer-name">
-                                                <h4><a href="#">Sebastiano Piccio <img class="flag" src="/images/flags/it.svg" alt="" title="Italy" data-tippy-placement="top"/></a></h4>
-                                                <span>Laravel Dev</span>
-                                            </div>
-
-                                            
-                                            <div class="freelancer-rating">
-                                                <div class="star-rating" data-rating="4.5"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                  
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> Milan</strong></li>
-                                                <li>Rate <strong>$80 / hr</strong></li>
-                                                <li>Job Success <strong>89%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
-                                </div>
-                              
-                                            
-                           
-                                <div class="freelancer col-md-3 col-xs-12 col-sm-6 col-lg-3 col-xl-3">
-
-                               
-                                    <div class="freelancer-overview">
-                                            <div class="freelancer-overview-inner">
-                                          
-                                            <span class="bookmark-icon"></span>
-                                            
-                                          
-                                            <div class="freelancer-avatar">
-                                                <a href="/"><img src="/images/user-avatar-placeholder.png" alt=""/></a>
-                                            </div>
-
-                                           
-                                            <div class="freelancer-name">
-                                                <h4><a href="#">Gabriel Lagueux <img class="flag" src="/images/flags/fr.svg" alt="" title="France" data-tippy-placement="top"/></a></h4>
-                                                <span>WordPress Expert</span>
-                                            </div>
-
-                                            
-                                            <div class="freelancer-rating">
-                                                <div class="star-rating" data-rating="5.0"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                              
-                                    <div class="freelancer-details">
-                                        <div class="freelancer-details-list">
-                                            <ul>
-                                                <li>Location <strong><i class="icon-material-outline-location-on"></i> Paris</strong></li>
-                                                <li>Rate <strong>$50 / hr</strong></li>
-                                                <li>Job Success <strong>100%</strong></li>
-                                            </ul>
-                                        </div>
-                                        <a href="/" class="button button-sliding-icon ripple-effect blue-btn">View Profile <i class="icon-material-outline-arrow-right-alt"></i></a>
-                                    </div>
-                                </div> */}
-                              
-
                             </div>
                           
 
@@ -489,7 +553,7 @@ constructor(props) {
 
                         </div>
                     </div>
-                  
+                    
 
                     </div>
 
