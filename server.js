@@ -114,6 +114,7 @@ app.use("/create/video/room", require("./routes/public_apis/twillio/video-call/c
 app.use("/send/stream/recieving/user", require("./routes/public_apis/twillio/video-call/sendStreamOther.js"));
 app.use("/get/freelancers/location/state", require("./routes/freelancers/search_queries/searchLocationState.js"));
 app.use("/location/gather", require("./routes/API_places/gatherLocation.js"));
+app.use("/filter/freelancers/service", require("./routes/freelancers/search_queries/filterByService.js"));
 
 // blockchain stuff start
 app.use("/gather/blockchain/blocks", require("./routes/blockchain/chain/getChain.js"));

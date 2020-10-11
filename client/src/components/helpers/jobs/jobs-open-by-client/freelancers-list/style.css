@@ -84,3 +84,6 @@
         margin-bottom: -700px;
     }
 }
+.full-page-content-container, .full-page-sidebar {
+    min-height: 2800px;
+}

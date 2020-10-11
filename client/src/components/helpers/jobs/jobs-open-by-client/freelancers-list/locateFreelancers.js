@@ -271,6 +271,25 @@ constructor(props) {
             })
         }
     }
+    handleServiceSubmission = () => {
+        const { serviceOffered } = this.state;
+
+        console.log("clicked handleServicesubmission...");
+
+        axios.post("/filter/freelancers/service", {
+            service_offered: serviceOffered
+        }).then((res) => {
+            console.log(res.data);
+
+            this.setState({
+                user_chunk_one: res.data.users.slice(0, 15),
+                user_chunk_two: res.data.users.slice(16, 30),
+                user_chunk_three: res.data.users.slice(31, 45)
+            })
+        }).catch((err) => {
+            console.log(err);
+        })
+    }
     render() {
         const { volume } = this.state;
 
@@ -289,9 +308,13 @@ constructor(props) {
             
                     <div class="full-page-sidebar">
                         <div class="full-page-sidebar-inner" data-simplebar>
+                        
                             <div class="sidebar-container">
                                 
                                 <div class="sidebar-widget">
+                                {/* <div>
+                                    <button style={{ marginBottom: "30px", width: "100%" }} class="button blue-btn ripple-effect">Search</button>
+                                </div> */}
                                     <h3>Location</h3>
                                     <div class="input-with-icon">
                                         <div id="autocomplete-container">
@@ -303,17 +326,24 @@ constructor(props) {
 
                                 <div class="sidebar-widget">
                                     <h3>Category</h3>
-                                    <select class="form-control" multiple data-selected-text-format="count" data-size="7" title="All Categories" >
-                                        <option>Admin Support</option>
-                                        <option>Customer Service</option>
-                                        <option>Data Analytics</option>
-                                        <option>Design & Creative</option>
-                                        <option>Legal</option>
-                                        <option>Software Developing</option>
-                                        <option>IT & Networking</option>
-                                        <option>Writing</option>
-                                        <option>Translation</option>
-                                        <option>Sales & Marketing</option>
+                                    <select class="form-control" onChange={(e) => {
+                                        this.setState({
+                                            serviceOffered: e.target.value
+                                        }, () => {
+                                            this.handleServiceSubmission();
+                                        })
+                                    }} data-size="7" title="Select Category">
+                                        <option value={"dev-ops"}>DevOps</option>
+                                        <option value={"mobile-app-development"}>Mobile-app Development</option>
+                                        <option value={"data-analytics"}>Data Analytics</option>
+                                        <option value={"design-creative"}>Design & Creative</option>
+                                        <option value={"back-end-development"}>Back-End Development</option>
+                                        <option value={"software-development"}>Software Developing</option>
+                                        <option value={"networking"}>IT & Networking</option>
+                                        <option value={"writing"}>Writing</option>
+                                        <option value={"translation"}>Translation</option>
+                                        <option value={"full-stack-development"}>Full-Stack Development</option>
+                                        <option value={"front-end-development"}>Front-End Development</option>
                                     </select>
                                 </div>
 
@@ -396,7 +426,7 @@ constructor(props) {
 
                         
                             <div class="sidebar-search-button-container">
-                                <button class="button ripple-effect">Search</button>
+                                <button class="button blue-btn ripple-effect">Search</button>
                             </div>
                            
 
@@ -436,6 +466,7 @@ constructor(props) {
                                     {typeof this.state.user_chunk_one !== "undefined" && this.state.user_chunk_one.length !== 0 ? <Carousel ref={(el) => (this.Carousel = el)} arrows={true} slidesToSlide={1} containerClass="carousel-container" responsive={responsive} itemClass="itemmm">
                                             {this.renderSliderOne()}
                                         </Carousel> : null}
+                                        <h1 className="text-center">hello world</h1>
                                     </div>
                                     <div className="spacer">
                                         {/* <h1 style={{ color: "blue" }} className="text-center"><strong>Front-End</strong> Developers (Client-Side/Visual Development)</h1> */}
