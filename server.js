@@ -36,8 +36,8 @@ mongoDB();
 
 paypal.configure({
 	'mode': 'sandbox', //sandbox or live
-	'client_id': 'AatWS7bPUsaanCxASstt_DROXJgWESP5-qDnlAwM_J0JFp596UlChQvchiHwH6AU6oIEDVbJKunHu5pX',
-	'client_secret': 'EGNFNDTQg9SNZcnYLQG10A73TQaH9DLVaYwMuLyev8o0r8nC4zKGEeE_WFGTZnRb5jwPQPxP2DursFDz'
+	'client_id': '',
+	'client_secret': ''
 });
 
 app.use('*', cors());
